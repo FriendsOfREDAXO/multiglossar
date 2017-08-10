@@ -5,6 +5,9 @@ if (!rex::isBackend()) :
     $cur_lang = rex_clang::getCurrentId();
     
     $glossarId = rex_addon::exists('url') ? UrlGenerator::getId() : 0;
+    if (!$glossarId) {
+        $glossarId = rex_get('id','int',0);
+    }
     $where = '';
     $detail = false;
     if ($glossarId) {
@@ -15,7 +18,7 @@ if (!rex::isBackend()) :
 //  Skripte
     $sql = rex_sql::factory()->setDebug(0)->setQuery('
         SELECT g.* 
-        FROM rex_glossar AS g  
+        FROM rex_multiglossar AS g  
         WHERE g.active = 1 AND g.clang_id = :cur_lang '.$where.' 
         ORDER BY g.term ASC', array(":cur_lang" => $cur_lang));
             $row_count = $sql->getRows();
