@@ -1,0 +1,48 @@
+glossar = Glossary
+glossar_title = Terms and definitions
+
+glossar_markitupinfo = Created by the Addon - Glossar -
+glossar_redactorinfo = Created by the Addon - Glossar -
+
+glossar_settings = Settings
+glossar_max_characters = Remaining characters:
+
+glossar_info = Info
+glossar_info_readme = Readme
+glossar_info_modules = Output (Modules, CSS, JS)
+glossar_info_changelog = Changelog
+glossar_info_licence = Licence
+
+glossar_info_readme_title = Readme
+glossar_info_cangelog_title = Changelog
+glossar_info_licence_title = Licence
+glossar_info_modules_title = Output (Modules, CSS, JS)
+
+glossar_status_activated = Entry was activated
+glossar_status_deactivated = Entry was disabled
+
+glossar_info_settings_title = Settings
+
+glossar_func_header = Status / functions
+
+glossar_add =  add
+glossar_edit = edit
+glossar_delete = delete
+
+glossar_title_edit = edit
+glossar_title_add = add
+
+glossar_label_status = Status
+glossar_label_term = Term
+glossar_label_definition = Definition
+glossar_label_description = Description
+
+glossar_status_aktiviert = activated
+glossar_status_deaktiviert = disabled
+
+glossar_error_empty_term = Please insert the term.
+glossar_error_empty_definition = Please insert the definition.
+
+perm_general_glossar[general] = Glossary
+perm_general_glossar[settings] = Glossary: Settings
+perm_general_glossar[info] = Glossary: Infos

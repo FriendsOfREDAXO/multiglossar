@@ -1,0 +1,1 @@
+<p>Keine Eingabe notwendig. Hier werden alle Glossareinträge ausgegeben, die den Status "online" aufweisen.</p>

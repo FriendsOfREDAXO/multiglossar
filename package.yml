@@ -1,0 +1,16 @@
+package: multiglossar
+version: '2.0.0-beta3'
+author: Thomas Blum, Oliver Kreischer, Wolfgang Bund
+supportpage: ''
+compile: 0
+
+page:
+  title: 'translate:glossar'
+  perm: glossar[general]
+  pjax: true
+  icon: rex-icon fa-font
+  subpages:
+        main: { title: 'translate:glossar' }
+
+requires:
+  redaxo: '>=5.1.0'
