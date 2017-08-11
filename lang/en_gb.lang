@@ -1,6 +1,7 @@
 glossar = Glossary
 glossar_title = Terms and definitions
-
+config = Configuration
+config_saved = Configuration saved
 glossar_markitupinfo = Created by the Addon - Glossar -
 glossar_redactorinfo = Created by the Addon - Glossar -
 
@@ -46,3 +47,4 @@ glossar_error_empty_definition = Please insert the definition.
 perm_general_glossar[general] = Glossary
 perm_general_glossar[settings] = Glossary: Settings
 perm_general_glossar[info] = Glossary: Infos
+
