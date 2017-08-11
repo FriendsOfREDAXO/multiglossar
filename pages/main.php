@@ -25,7 +25,7 @@ $message  = '';
 $pid      = rex_request('pid', 'int');
 $term_id  = rex_request('term_id', 'int');
 $func     = rex_request('func', 'string');
-$clang_id = (int)str_replace('clang', '', rex_be_controller::getCurrentPagePart(3));
+$clang_id = rex_clang::getCurrentId(); 
 $oid      = rex_request('oid', 'int', -1);
 
 $error = '';
@@ -115,7 +115,6 @@ if ($func == '') {
   }
 
   $content .= $list->get();
-
   $fragment = new rex_fragment();
   $fragment->setVar('title', $title);
   $fragment->setVar('content', $content, false);
@@ -194,3 +193,4 @@ function limitText(limitField, limitCount, limitNum) {
     }
 }
 </script>
+
