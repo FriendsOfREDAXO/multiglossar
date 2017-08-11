@@ -139,7 +139,7 @@ if (rex::isBackend() && rex::getUser()) {
 
         $count_languages = \rex_clang::getAll();
         // echo count($count_languages);
-        if (rex::getUser()->isAdmin() || rex::getUser()->hasPerm('multiglossar[general]')) {
+        if (rex::getUser()->isAdmin() || rex::getUser()->getComplexPerm('clang')->hasAll()) {
             $page = \rex_be_controller::getPageObject('multiglossar/main');
             $clang_id = \rex_clang::getCurrentId();
             $clang_name = \rex_clang::get($clang_id)->getName();
@@ -184,3 +184,5 @@ if (rex::isBackend() && rex::getUser()) {
                     $content = preg_replace($regEx, '\1\2xxx\3xxx\4', $content);
                      * 
                      */
+
+
