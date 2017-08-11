@@ -28,7 +28,7 @@ $func     = rex_request('func', 'string');
 $clang_id = (int)str_replace('clang', '', rex_be_controller::getCurrentPagePart(3));
 if ($clang_id=='')
 	{
-		$clang_id='clang1';
+		$clang_id='1';
 	}
 $oid      = rex_request('oid', 'int', -1);
 
