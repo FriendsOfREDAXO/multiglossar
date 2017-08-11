@@ -2,18 +2,18 @@
 $editor = '';
 //  Redactor2
 if (rex_addon::get('redactor2')->isAvailable()) {
-  if (!redactor2::profileExists('simple')) {
-    redactor2::insertProfile('simple', $this->i18n('glossar_redactorinfo'), '300', '800', 'relative','bold, italic, underline, deleted, sub, sup,  unorderedlist, orderedlist, grouplink[email|external|internal|media], cleaner');
+  if (!redactor2::profileExists('multiglossar')) {
+    redactor2::insertProfile('multiglossar', $this->i18n('glossar_redactorinfo'), '300', '800', 'relative','bold, italic, underline, deleted, sub, sup,  unorderedlist, orderedlist, grouplink[email|external|internal|media], cleaner');
   }
-  $editor = 'redactorEditor2-simple';
+  $editor = 'redactorEditor2-multiglossar';
 }
 
 //  MarkItUp
-if(rex_addon::get('rex_markitup')->isAvailable()) {
-  if (!rex_markitup::profileExists('simple')) {
-  rex_markitup::insertProfile ('simple', $this->i18n('glossar_markitupinfo'), 'textile', 300, 800, 'relative', 'bold,italic,underline,deleted,quote,sub,sup,code,unorderedlist,grouplink[internal|external|mailto]');
+if(rex_addon::get('markitup')->isAvailable()) {
+  if (!markitup::profileExists('multiglossar')) {
+  markitup::insertProfile ('multiglossar', $this->i18n('glossar_markitupinfo'), 'textile', 300, 800, 'relative', 'bold,italic,underline,deleted,quote,sub,sup,code,unorderedlist,grouplink[internal|external|mailto]');
   }
-  $editor = 'markitupEditor-simple';
+  $editor = 'markitupEditor-multiglossar';
 }
 
 $editor .= ' '.$this->getConfig('textfield_css');
@@ -34,7 +34,7 @@ $success = '';
 // delete
 if ($func == 'delete' && $term_id > 0) {
   $deleteTerm = rex_sql::factory();
-  $deleteTerm->setQuery('DELETE FROM ' . rex::getTable('multiglossar') . ' WHERE id=?', [$term_id]);
+  $deleteTerm->setQuery('DELETE FROM ' . rex::getTable("multiglossar") . ' WHERE id=?', [$term_id]);
   $success = $this->i18n('term_deleted');
   $func = '';
   unset($term_id);
@@ -193,4 +193,3 @@ function limitText(limitField, limitCount, limitNum) {
     }
 }
 </script>
-
