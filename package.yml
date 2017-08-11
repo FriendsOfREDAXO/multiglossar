@@ -6,7 +6,7 @@ compile: 0
 
 page:
   title: 'translate:glossar'
-  perm: glossar[general]
+  perm: multiglossar[general]
   pjax: true
   icon: rex-icon fa-font
   subpages:
