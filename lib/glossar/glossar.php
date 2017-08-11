@@ -52,7 +52,7 @@ class Extension {
      */
     public static function setMarker($tags, $source, $search) {
         
-        $tags = array_merge($tags,explode(',',\rex_config::get('multiglossar', 'glossar_ignoretags')));
+        $tags = array_merge($tags,explode(',',\rex_config::get('glossar', 'glossar_ignoretags')));
         
         $header = '<html><head><meta content="text/html; charset=utf-8" http-equiv="Content-Type"></head><body>';
         $dom = new \DOMDocument();
