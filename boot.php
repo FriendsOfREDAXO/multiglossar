@@ -143,16 +143,15 @@ if (rex::isBackend() && rex::getUser()) {
             $page = \rex_be_controller::getPageObject('multiglossar/main');
             $clang_id = \rex_clang::getCurrentId();
             $clang_name = \rex_clang::get($clang_id)->getName();
-
             $page->setSubPath(rex_path::addon('multiglossar', 'pages/main.php'));
             $current_page = rex_be_controller::getCurrentPage();
-			$clang_id2 = (int)str_replace('clang', '', rex_be_controller::getCurrentPagePart(3));
+	    $current_lang_id = (int)str_replace('clang', '', rex_be_controller::getCurrentPagePart(3));
             if (count($count_languages) != 1) {
                 foreach (\rex_clang::getAll() as $id => $clang) {
                     if (rex::getUser()->getComplexPerm('clang')->hasPerm($id)) {
                         $page->addSubpage((new rex_be_page('clang' . $id, $clang->getName()))
                                         ->setSubPath(rex_path::addon('multiglossar', 'pages/main.php'))
-                                        ->setIsActive($id == $clang_id2));
+                                        ->setIsActive($id == $current_lang_id));
                     }
                 }
             } else {
