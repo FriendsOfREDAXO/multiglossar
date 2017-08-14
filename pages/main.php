@@ -52,11 +52,11 @@ if ($func == 'delete' && $term_id > 0) {
 if ($func == 'setstatus') {
   $sql = rex_sql::factory();
   $status = (rex_request('oldstatus', 'int') + 1) % 2;
-  $sql->setQuery("SELECT `term`, `active` FROM " . rex::getTable('multiglossar') . " WHERE `pid` =?, [$oid]");
+  $sql->setQuery("SELECT `term`, `active` FROM " . rex::getTable('multiglossar') . " WHERE `pid` =?", [$oid]);
 		
   if ($sql->getRows() == 1) {
     $term = $sql->getValue('term');
-    $sql->setQuery("UPDATE " . rex::getTable('multiglossar') . "  SET `active` = '$status' WHERE `pid` =?, [$oid]");
+    $sql->setQuery("UPDATE " . rex::getTable('multiglossar') . "  SET `active` = '$status' WHERE `pid` =?", [$oid]);
   }
 	
   $msg = $status == 1 ? 'glossar_status_activated' : 'glossar_status_deactivated';
