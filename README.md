@@ -17,7 +17,7 @@ Zu jeder Sprache kann ein Begriff mit einer kurzen Definition und einer etwas l�
 
 ### Ausgabe auf der Webseite
 
-Da die Nutzung dieser Daten für jede Webseite individuell ist wird hier nicht näher auf die Ausgabemöglichkeiten eingegangen.
+Da die Nutzung dieser Daten für jede Webseite individuell ist, wird hier nicht näher auf die Ausgabemöglichkeiten eingegangen.
 
 _Für weitere Informationen kontaktieren Sie Ihren Webmaster_
 
