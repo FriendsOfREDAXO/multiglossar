@@ -1,5 +1,4 @@
 <?php
-<?php
 $editor = '';
 
 //  MarkItUp
