@@ -1,6 +1,15 @@
 
 ### Changelog ###
 
+
+### 14.08.2017 Version 2.0.0 beta4 ###
+
+- Editoren können nun per CSS konfiguriert werden
+- Code-Optimierungen
+- Fehlerbehebungen
+- UI
+- Eigene CSS-Classes für Redactor und Markitup
+
 ### 10.08.2017 Version 2.0.0 beta3 ###
 
 Datentabelle in multiglossar umbenannt.
