@@ -1,6 +1,6 @@
 package: multiglossar
-version: '2.0.0-beta3'
-author: Thomas Blum, Oliver Kreischer, Wolfgang Bund
+version: '2.0.0-beta4'
+author: Friends Of REDAXO
 supportpage: ''
 compile: 0
 
@@ -13,4 +13,4 @@ page:
         main: { title: 'translate:glossar' }
 
 requires:
-  redaxo: '>=5.1.0'
+  redaxo: '^5.1.0'
