@@ -56,4 +56,5 @@ Zusätzlich zum Hauptbegriff können alternative Begriffe angegeben werden. Dies
 Dieses Addon basiert auf dem Addon [Sprog](https://github.com/tbaddade/redaxo_sprog) von [Thomas Blum](https://github.com/tbaddade)
 
 Idee und Realisierung: [concedra.de / Oliver Kreischer](http://concedra.de)
-Weiterentwicklung: [Wolfgang Bund](http://agile-websites.de)
+
+Projekt-Lead: [Wolfgang Bund](http://agile-websites.de)
