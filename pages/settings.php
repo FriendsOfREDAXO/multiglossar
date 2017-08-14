@@ -165,7 +165,9 @@ $content .= $fragment->parse('core/form/container.php');
 $formElements = [];
 $n = [];
 $n['label'] = '<label for="glossar_textfield_css">' . $this->i18n('textfield_css_label') . '</label>';
-$n['field'] = '<input class="form-control" type="text" id="glossar_textfield_css" name="config[textfield_css]" value="' . $this->getConfig('textfield_css') . '"/>';
+$n['field'] = '<input class="form-control" type="text" id="glossar_textfield_css" name="config[textfield_css]" value="' . $this->getConfig('textfield_css') . '"/>
+<p>Hier kann eine geeignete CSS-Class hinterlegt werden um den gewünschten Editor auszuwählen und die aktuelle Einstellung zu überschreiben.z.B. markitupEditor-multiglossar oder redactorEditor2-multiglossar</p>
+';
 $formElements[] = $n;
 $fragment = new rex_fragment();
 $fragment->setVar('elements', $formElements, false);

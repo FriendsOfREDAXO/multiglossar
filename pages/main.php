@@ -1,12 +1,5 @@
 <?php
 $editor = '';
-//  Redactor2
-if (rex_addon::get('redactor2')->isAvailable()) {
-  if (!redactor2::profileExists('multiglossar')) {
-    redactor2::insertProfile('multiglossar', $this->i18n('glossar_redactorinfo'), '300', '800', 'relative','bold, italic, underline, deleted, sub, sup,  unorderedlist, orderedlist, grouplink[email|external|internal|media], cleaner');
-  }
-  $editor = 'redactorEditor2-multiglossar';
-}
 
 //  MarkItUp
 if(rex_addon::get('markitup')->isAvailable()) {
@@ -16,8 +9,19 @@ if(rex_addon::get('markitup')->isAvailable()) {
   $editor = 'markitupEditor-multiglossar';
 }
 
-$editor .= ' '.$this->getConfig('textfield_css');
+//  Redactor2
+if (rex_addon::get('redactor2')->isAvailable()) {
+  if (!redactor2::profileExists('multiglossar')) {
+    redactor2::insertProfile('multiglossar', $this->i18n('glossar_redactorinfo'), '300', '800', 'relative','bold, italic, underline, deleted, sub, sup,  unorderedlist, orderedlist, grouplink[email|external|internal|media], cleaner');
+  }
+  $editor = 'redactorEditor2-multiglossar';
+}
 
+// Editor überschreiben
+if ($this->getConfig('textfield_css')!='')
+{
+$editor = $this->getConfig('textfield_css');
+}
 $editor = trim($editor);
 
 $content  = '';
