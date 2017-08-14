@@ -48,13 +48,13 @@ if ($func == 'delete' && $term_id > 0) {
 if ($func == 'setstatus') {
   $sql = rex_sql::factory();
   $status = (rex_request('oldstatus', 'int') + 1) % 2;
-  $query = "SELECT `term`, `active` FROM " . rex::getTable('multiglossar') . " WHERE `pid` ='" . addslashes($oid) . "' ";
-  $sql->setQuery($query);
+  $sql->setQuery("SELECT `term`, `active` FROM " . rex::getTable('multiglossar') . " WHERE `pid` =?, [$oid]");
+		
   if ($sql->getRows() == 1) {
     $term = $sql->getValue('term');
-    $query = "UPDATE  " . rex::getTable('multiglossar') . "  SET `active` = '$status' WHERE `pid` ='" . addslashes($oid) . "' ";
-    $sql->setQuery($query);
+    $sql->setQuery("UPDATE " . rex::getTable('multiglossar') . "  SET `active` = '$status' WHERE `pid` =?, [$oid]");
   }
+	
   $msg = $status == 1 ? 'glossar_status_activated' : 'glossar_status_deactivated';
   echo rex_view::success($this->i18n($msg));
   $func = '';
@@ -69,7 +69,7 @@ if ($func == '') {
 
   $tdIcon = '<i class="rex-icon fa-file-text-o"></i>';
   $thIcon = rex::getUser()->getComplexPerm('clang')->hasAll() ? '<a href="' . $list->getUrl(['func' => 'add']) . '#term"' . rex::getAccesskey($this->i18n('add'), 'add') . '><i class="rex-icon rex-icon-add-article"></i></a>' : '';
-      $list->addColumn($thIcon, $tdIcon, 0, ['<th class="rex-table-icon">###VALUE###</th>', '<td class="rex-table-icon">###VALUE###</td>']);
+  $list->addColumn($thIcon, $tdIcon, 0, ['<th class="rex-table-icon">###VALUE###</th>', '<td class="rex-table-icon">###VALUE###</td>']);
   $list->setColumnParams($thIcon, ['func' => 'edit', 'pid' => '###pid###']);
 
   $list->removeColumn('pid');
@@ -197,5 +197,6 @@ function limitText(limitField, limitCount, limitNum) {
     }
 }
 </script>
+
 
 
