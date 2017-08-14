@@ -1,4 +1,4 @@
-## REDAXO-AddOn: MultiGlossar###
+## REDAXO-AddOn: MultiGlossar
 
 Zu jeder Sprache kann ein Begriff mit einer kurzen Definition und einer etwas längeren Beschreibung angegeben werden.
 
