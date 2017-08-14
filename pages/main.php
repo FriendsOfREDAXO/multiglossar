@@ -18,8 +18,10 @@ if (rex_addon::get('redactor2')->isAvailable()) {
 }
 
 // Editor überschreiben
+if ($this->getConfig('textfield_css')!='')
+{
 $editor = $this->getConfig('textfield_css');
-
+}
 $editor = trim($editor);
 
 $content  = '';
