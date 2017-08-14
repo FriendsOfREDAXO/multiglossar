@@ -1,7 +1,7 @@
 package: multiglossar
 version: '2.0.0-beta4'
 author: Friends Of REDAXO
-supportpage: ''
+supportpage: https://github.com/FriendsOfREDAXO/multiglossar
 compile: 0
 
 page:
