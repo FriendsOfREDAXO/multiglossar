@@ -12,8 +12,11 @@ Zu jeder Sprache kann ein Begriff mit einer kurzen Definition und einer etwas l�
 - Durch Klick auf die Tabellenbezeichner "ID" oder "Begriff" wird die Reihenfolge der Tabelle umsortiert.
 - Der gewünschte WYSIWYG-Editor kann per CSS-Class definiert werden. 
 
+### Installation
 
----
+1. Über Installer laden oder Zip-Datei im AddOn-Ordner entpacken, der Ordner muss „multiglossar“ heißen.
+2. AddOn installieren und aktivieren.
+3. Rechte definieren
 
 ### Ausgabe auf der Webseite
 
