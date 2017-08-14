@@ -1,4 +1,4 @@
-###REDAXO-AddOn: Glossar###
+###REDAXO-AddOn: MultiGlossar###
 ---
 
 Zu jeder Sprache kann ein Begriff mit einer kurzen Definition und einer etwas längeren Beschreibung angegeben werden.
@@ -11,6 +11,7 @@ Zu jeder Sprache kann ein Begriff mit einer kurzen Definition und einer etwas l�
 * Sofern eine Sprache glöscht wird werden auch alle Einträge der Glossar Tabelle für diese Sprache gelöscht.
 * Wird eine Sprache hinzugefügt werden alle Glossar Einträge der "Hauptsprache" kopiert und inaktiv gesetzt.
 * Durch Klick auf die Tabellenbezeichner "ID" oder "Begriff" wird die Reihenfolge der Tabelle umsortiert.
+* Der gewünschte WYSIWYG-Editor kann per CSS-Class definiert werden. 
 
 
 ---
