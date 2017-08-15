@@ -39,6 +39,6 @@ if (rex_addon::get('redactor2')->isAvailable()) {
 
 if (!$this->hasConfig()) {
     $this->setConfig('status','deaktiviert');
-    $this->setConfig('textfield_css','$editor');  
+    $this->setConfig('textfield_css', $editor);  
 }
 
