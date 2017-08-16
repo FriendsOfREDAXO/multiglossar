@@ -64,7 +64,7 @@ if (!rex::isBackend()) {
                     $search = str_replace(['(',')'],['',''],$search);
                     $search_term = $search;
 
-                    $replace = '<dfn class="glossarlink" title="' . $sql->getValue('definition') . '" rel="tooltip"><a href="' . rex_getUrl($glossar_id,'',['id'=>$sql->getValue('pid')]) . '">' . $search_term . '</a></dfn>';
+                    $replace = '<dfn class="glossarlink" title="' . $sql->getValue('definition') . '" data-toggle="tooltip" rel="tooltip"><a href="' . rex_getUrl($glossar_id,'',['id'=>$sql->getValue('pid')]) . '">' . $search_term . '</a></dfn>';
 
 /*                    
                     if (strpos($search, ' ')) {
