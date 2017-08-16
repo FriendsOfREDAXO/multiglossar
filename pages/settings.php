@@ -39,10 +39,7 @@ if (rex_post('formsubmit', 'string') == '1') {
         ['glossar_ignoretags', 'string'],
     ]));
     
-    
-    
-    
-    echo rex_view::success($this->i18n('config_saved'));
+    echo rex_view::success($this->i18n('glossar_config_saved'));
 }
 
 $content .= '<fieldset><legend>' . $this->i18n('glossar_info_settings_title') . '</legend>';
@@ -193,7 +190,7 @@ $buttons = '
 // Ausgabe Formular
 $fragment = new rex_fragment();
 $fragment->setVar('class', 'edit');
-$fragment->setVar('title', $this->i18n('config'));
+$fragment->setVar('title', $this->i18n('glossar_config'));
 $fragment->setVar('body', $content, false);
 $fragment->setVar('buttons', $buttons, false);
 $output = $fragment->parse('core/page/section.php');
