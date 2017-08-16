@@ -1,7 +1,7 @@
 glossar = Glossary
 glossar_title = Terms and definitions
-config = Configuration
-config_saved = Configuration saved
+glossar_config = Configuration
+glossar_config_saved = Configuration saved
 glossar_markitupinfo = Created by the Addon - Glossar -
 glossar_redactorinfo = Created by the Addon - Glossar -
 
