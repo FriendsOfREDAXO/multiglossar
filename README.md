@@ -57,6 +57,23 @@ Glossarbegriffe werden immer nur in einem Teil des Dokumentes markiert. Dies ist
 Die Definition, welcher Bereich für das Glossar berücksichtigt wird, wird auf der Seite "Konfiguration" eingestellt. Reguläre Ausdrücke sind zulässig. Es lassen sich auch Kommentare als Start- und Stopmarkierung definieren. Ein übliches Vorgehen ist es, im Template vor der Ausgabe des Artikels einen Kommentar, beispielsweise <!--glossar_start--> und nach der Ausgabe des Artikels den Kommentar <!--glossar_stop--> zu setzen und diese Kommentare als Start- und Stopmarkierung in den Einstellungen zu setzen.
 Es ist nur ein Bereich möglich.
 
+#### Ausgabe-Code eines Glossar-Links
+
+Im erzeugten Link stehen die CSS-Class glossarlink und weitere Attribute für die Gestaltung und JS-Programmierung zur Verfügung. Auf dieser Basis lassen sich leicht entsprechende Lösungen für eine Tooltip-Darstellung realisieren. Die (Kurz-)Definition findet sich im Title-Attribut. 
+
+`<dfn class="glossarlink" title="Definitionstext" data-toggle="tooltip" rel="tooltip"><a href="/link/zum/artikel">Begriff</a></dfn>`
+
+**Beispiel für Bootstrap-Nutzer**
+
+Zur automatischen Darstellung der Bootstrap-Tooltips einfach folgenden JS-Code verwenden. 
+```
+<script>
+$(document).ready(function(){
+    $('[data-toggle="tooltip"]').tooltip(); 
+});
+</script>
+```
+
 
 ### Credits
 
