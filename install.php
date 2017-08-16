@@ -19,6 +19,7 @@ CREATE TABLE IF NOT EXISTS `rex_multiglossar` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 ');
 
+$editor = '';
 
 //  MarkItUp
 if(rex_addon::get('markitup')->isAvailable()) {
