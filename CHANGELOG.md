@@ -2,6 +2,14 @@
 ### Changelog ###
 
 
+### 16.08.2017 Version 2.0.0 beta5 ###
+
+- Editor-Profile werden direkt bei der Installation erstellt
+- CSS des Editor-Profils wird vorausgefüllt angeboten
+- data-toggle-Attribut hinzugefügt
+- Readme umgebaut, neu strukturiert
+- Diverse Korrekturen
+
 ### 14.08.2017 Version 2.0.0 beta4 ###
 
 - Editoren können nun per CSS konfiguriert werden
