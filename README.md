@@ -54,7 +54,7 @@ Standardmäßig werden Glossarbegriffe in den Tags h1 bis h6, a und figcaption n
 In den Einstellungen können *zusätzliche Tags* angegeben werden, in denen Glossarbegriffe nicht markiert werden. Beispielsweise ul,aside,nav usw.
 
 Glossarbegriffe werden immer nur in einem Teil des Dokumentes markiert. Dies ist standardmäßig innerhalb des body-Tags. Es kann aber auch ein anderer Bereich definiert werden. Der Bereich muss allerdings eindeutig sein.
-Die Definition, welcher Bereich für das Glossar berücksichtigt wird, wird auf der Seite "Konfiguration" eingestellt. Reguläre Ausdrücke sind zulässig. Es lassen sich auch Kommentare als Start- und Stopmarkierung definieren. Ein übliches Vorgehen ist es, im Template vor der Ausgabe des Artikels einen Kommentar, beispielsweise <!--glossar_start--> und nach der Ausgabe des Artikels den Kommentar <!--glossar_stop--> zu setzen und diese Kommentare als Start- und Stopmarkierung in den Einstellungen zu setzen.
+Die Definition, welcher Bereich für das Glossar berücksichtigt wird, wird auf der Seite "Konfiguration" eingestellt. Reguläre Ausdrücke sind zulässig. Es lassen sich auch Kommentare als Start- und Stopmarkierung definieren. Ein übliches Vorgehen ist es, im Template vor der Ausgabe des Artikels einen Kommentar, beispielsweise `<!--glossar_start-->` und nach der Ausgabe des Artikels den Kommentar `<!--glossar_stop-->` zu setzen und diese Kommentare als Start- und Stopmarkierung in den Einstellungen zu setzen.
 Es ist nur ein Bereich möglich.
 
 #### Ausgabe-Code eines Glossar-Links
