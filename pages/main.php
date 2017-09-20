@@ -5,6 +5,7 @@ $message  = '';
 $pid      = rex_request('pid', 'int');
 $term_id  = rex_request('term_id', 'int');
 $func     = rex_request('func', 'string');
+$start    = rex_request('start', 'int'); // Pagination
 $clang_id = (int)str_replace('clang', '', rex_be_controller::getCurrentPagePart(3));
 if ($clang_id=='')
 	{
@@ -70,7 +71,7 @@ if ($func == '') {
 
   $list->setColumnSortable('active');
   $list->setColumnLabel('active', $this->i18n('glossar_func_header'));
-  $list->setColumnParams('active', ['func' => 'setstatus', 'oldstatus' => '###active###', 'oid' => '###pid###']);
+  $list->setColumnParams('active', ['func' => 'setstatus', 'oldstatus' => '###active###', 'start' => $start, 'oid' => '###pid###']);
   $list->setColumnLayout('active', ['<th colspan="2">###VALUE###</th>', '<td class="rex-table-action" nowrap="nowrap" >###VALUE###</td>']);
   $list->setColumnFormat('active', 'custom', function($params) {
   $list = $params['list'];
