@@ -31,7 +31,7 @@ if (!rex::isBackend()) {
         $endpos = strpos($content,$endtag);
         $header = substr($content, 0, $startpos);
         $footer = substr($content, $endpos+strlen($endtag));
-        $content = substr($content,$startpos+strlen($starttag),$endpos-$startpos);        
+        $content = substr($content,$startpos+strlen($starttag),$endpos-$startpos-strlen($endtag));
 
         $query = "SELECT * FROM rex_multiglossar WHERE active = '1' ORDER BY term ASC ";
         $sql = rex_sql::factory();
