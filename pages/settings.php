@@ -148,7 +148,7 @@ $content .= $fragment->parse('core/form/container.php');
 $formElements = [];
 $n = [];
 $n['label'] = '<label></label>';
-$n['field'] = '<p>Hier können zusätzlich zu ignorierende Tags angegeben werden (z.B. ul, aside). Standardmäßig werden Begriffe in a, h1...h6 und figcaption ignoriert. Weitere Tags bitte mit Komma trennen.</p>';
+$n['field'] = '<p>Hier können zusätzlich zu ignorierende Tags angegeben werden (z.B. ul, aside). Standardmäßig werden Begriffe in a, h1...h6 und figcaption ignoriert. Weitere Tags bitte mit Komma trennen. Es können auch zu ignorierende Klassen angegeben werden, wie z.B. .glossignore</p>';
 $formElements[] = $n;
 $fragment = new rex_fragment();
 $fragment->setVar('elements', $formElements, false);
