@@ -43,7 +43,7 @@ class Extension {
     }
 
     /**
-     * Markiert die Fundstellen mit !!!xFundstellex!!!
+     * Markiert die Fundstellen für zu ignorierende Stellen mit !!!xFundstellex!!!
      * 
      * @param type $start
      * @param type $end
@@ -51,6 +51,7 @@ class Extension {
      * @param type $search
      */
     public static function setMarker($tags, $source, $search) {
+        
         
         // zu ignorierende Tags einlesen
         $tags = array_merge($tags,explode(',',\rex_config::get('multiglossar', 'glossar_ignoretags')));
@@ -69,16 +70,16 @@ class Extension {
         
 
         $search = '~'.$search.'~si';
-  //      dump($search); exit;
         
         foreach ($tags as $tag) {
-            if (strpos($tag,'.') !== false) {
+            if (strpos($tag,'.') === false) {
                 $nodes = $dom->getElementsByTagName(trim($tag));
             } else {
                 $finder = new \DomXPath($dom);
-                $classname=str_replace('.','',trim($tag));
+                $classname=trim($tag,'. ');
                 $nodes = $finder->query("//*[contains(@class, '$classname')]");
             }
+            
 
             foreach ($nodes as $node) {
                 self::domTextReplace($search,'m!a!r!k\1m!a!r!k',$node,true);
@@ -111,7 +112,7 @@ class Extension {
                     if ($isRegEx) {
                         $newText = preg_replace($search, $replace, $oldText);
                         /*
-                        if (strpos($search,'UNH') && strpos($newText,'UNH')) {
+                        if (strpos($search,'PIUS') && strpos($newText,'PIUS')) {
                             dump($search);
                             dump($replace);
                             dump($newText);
