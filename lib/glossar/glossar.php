@@ -52,7 +52,8 @@ class Extension {
      */
     public static function setMarker($tags, $source, $search) {
         
-        $tags = array_merge($tags,explode(',',\rex_config::get('glossar', 'glossar_ignoretags')));
+        // zu ignorierende Tags einlesen
+        $tags = array_merge($tags,explode(',',\rex_config::get('multiglossar', 'glossar_ignoretags')));
         
         $header = '<html><head><meta content="text/html; charset=utf-8" http-equiv="Content-Type"></head><body>';
         $dom = new \DOMDocument();
@@ -71,7 +72,13 @@ class Extension {
   //      dump($search); exit;
         
         foreach ($tags as $tag) {
-            $nodes = $dom->getElementsByTagName($tag);
+            if (strpos($tag,'.') !== false) {
+                $nodes = $dom->getElementsByTagName(trim($tag));
+            } else {
+                $finder = new \DomXPath($dom);
+                $classname=str_replace('.','',trim($tag));
+                $nodes = $finder->query("//*[contains(@class, '$classname')]");
+            }
 
             foreach ($nodes as $node) {
                 self::domTextReplace($search,'m!a!r!k\1m!a!r!k',$node,true);
