@@ -33,10 +33,10 @@ if (!rex::isBackend()) {
         $footer = mb_substr($content, $endpos+strlen($endtag));
         $content = mb_substr($content,$startpos+strlen($starttag),$endpos-$startpos-strlen($endtag));        
 
-        $query = "SELECT * FROM rex_multiglossar WHERE active = '1' ORDER BY term ASC ";
+        $query = "SELECT * FROM rex_multiglossar WHERE active = :active AND clang_id = :clang_id ORDER BY term ASC ";
         $sql = rex_sql::factory();
 //    $sql->setDebug(1);
-        $sql->setQuery($query);
+        $sql->setQuery($query,['active'=>1,'clang_id'=>rex_clang::getCurrentId()]);
         
         // Alle Kommentare <!--exclude--> werden zu Tags
         $content = str_replace('<!--exclude-->','<exclude>',$content);

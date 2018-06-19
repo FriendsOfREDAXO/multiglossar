@@ -28,6 +28,9 @@ if (rex_post('formsubmit', 'string') == '1') {
         ['textfield_css', 'string'],
     ]));
     $this->setConfig(rex_post('config', [
+        ['deffield_css', 'string'],
+    ]));
+    $this->setConfig(rex_post('config', [
         ['glossar_starttag', 'string'],
     ]));
     
@@ -163,6 +166,18 @@ $formElements = [];
 $n = [];
 $n['label'] = '<label for="glossar_textfield_css">' . $this->i18n('textfield_css_label') . '</label>';
 $n['field'] = '<input class="form-control" type="text" id="glossar_textfield_css" name="config[textfield_css]" value="' . $this->getConfig('textfield_css') . '"/>
+<p>Hier kann eine geeignete CSS-Class hinterlegt werden um den gewünschten Editor auszuwählen und die aktuelle Einstellung zu überschreiben.z.B. markitupEditor-multiglossar oder redactorEditor2-multiglossar</p>
+';
+$formElements[] = $n;
+$fragment = new rex_fragment();
+$fragment->setVar('elements', $formElements, false);
+$content .= $fragment->parse('core/form/container.php');
+
+// Css Class für Definition Feld
+$formElements = [];
+$n = [];
+$n['label'] = '<label for="glossar_deffield_css">' . $this->i18n('deffield_css_label') . '</label>';
+$n['field'] = '<input class="form-control" type="text" id="glossar_deffield_css" name="config[deffield_css]" value="' . $this->getConfig('deffield_css') . '"/>
 <p>Hier kann eine geeignete CSS-Class hinterlegt werden um den gewünschten Editor auszuwählen und die aktuelle Einstellung zu überschreiben.z.B. markitupEditor-multiglossar oder redactorEditor2-multiglossar</p>
 ';
 $formElements[] = $n;

@@ -1,5 +1,6 @@
 <?php
 $editor = $this->getConfig('textfield_css');
+$def_field_class = $this->getConfig('deffield_css');
 $content  = '';
 $message  = '';
 $pid      = rex_request('pid', 'int');
@@ -134,6 +135,7 @@ if ($func == '') {
   $field->setAttribute('onKeyDown', 'limitText(this,this.form.countdown,250)');
   $field->setAttribute('onKeyUp', 'limitText(this,this.form.countdown,250)');
   $field->setAttribute('id', 'def');
+  $field->setAttribute('class', $def_field_class);
   $field->setPrefix('<span class="maxcharacters">'.$this->i18n('glossar_max_characters').' <input readonly type="text" name="countdown" size="3" value="250" readonly="readonly" id="remain"></span>');
   $field->getValidator()->add('notEmpty', $this->i18n('glossar_error_empty_definition'));
 
