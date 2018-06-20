@@ -1,5 +1,51 @@
 <?php
 
+if (rex::isBackend()) {
+        $extensionPoints = [
+            'CAT_UPDATED',   'CAT_DELETED', 'CAT_STATUS',
+            'ART_UPDATED',   'ART_DELETED', 'ART_STATUS',
+//            'CLANG_UPDATED', 'CLANG_DELETED',
+//            'ARTICLE_GENERATED'
+            'SLICE_ADDED',  'SLICE_DELETED', 'SLICE_MOVE', 'SLICE_UPDATED',
+
+        ];
+        foreach ($extensionPoints as $extensionPoint) {
+            rex_extension::register($extensionPoint, function (rex_extension_point $ep) {
+                $params = $ep->getParams();
+                $params['subject'] = $ep->getSubject();
+                $params['extension_point'] = $ep->getName();
+//                dump($params); exit;
+                $sql_cache = rex_sql::factory()
+//                        ->setDebug()
+                        ->setTable(rex::getTable('multiglossar_cache'));
+                if (strpos($params['extension_point'],'SLICE') === 0) {
+                    $sql_cache->setWhere(
+                        'article_id = :article_id AND clang_id = :clang_id',[
+                            'article_id'=>$params['article_id'],
+                            'clang_id'=>$params['clang']
+                        ]
+                    );                    
+                } else {
+                    $sql_cache->setWhere(
+                        'article_id = :article_id AND clang_id = :clang_id',[
+                            'article_id'=>$params['id'],
+                            'clang_id'=>$params['clang']
+                        ]
+                    );                    
+                }
+                $sql_cache->delete();
+//                exit;
+            });
+        }
+        
+        
+        rex_extension::register('CACHE_DELETED', function (rex_extension_point $ep) {
+            $sql_cache = rex_sql::factory()->setTable(rex::getTable('multiglossar_cache'));
+            $sql_cache->delete();
+        });
+    
+}
+
 
 if (!rex::isBackend()) {
     //if ($this->getConfig('status') != 'deaktiviert') {
@@ -13,10 +59,31 @@ if (!rex::isBackend()) {
         } else {
             $glossar_id = $this->getConfig('article');
         }
+        
+        $sql_cache = rex_sql::factory()->setTable(rex::getTable('multiglossar_cache'));
+        
+        if (!$_POST) {
+            $sql_cache->setWhere(
+                    'article_id = :article_id AND clang_id = :clang_id AND query_string = :query_string AND url = :url',[
+                        'article_id'=>rex_article::getCurrentId(),
+                        'clang_id'=>rex_clang::getCurrentId(),
+                        'query_string'=>$_SERVER['QUERY_STRING'],
+                        'url'=>$_SERVER['REDIRECT_URL']
+                    ]
+                );
+            $sql_cache->select('content');
+    //        dump($_REQUEST); exit;
+//            dump($_POST);
+  //          dump($_SERVER['QUERY_STRING']); exit;
+//            echo phpinfo(); exit;
+            if ($sql_cache->getRows()) {
+                return $sql_cache->getValue('content');
+            }            
+        }
+        
 
 
         $content = $ep->getSubject();
-        
         
         $starttag = $this->getConfig('glossar_starttag') ? $this->getConfig('glossar_starttag') : '<body.*?>';
         $endtag = $this->getConfig('glossar_endtag') ? $this->getConfig('glossar_endtag') : '</body>';
@@ -31,7 +98,7 @@ if (!rex::isBackend()) {
         $endpos = mb_strpos($content,$endtag);
         $header = mb_substr($content, 0, $startpos);
         $footer = mb_substr($content, $endpos+strlen($endtag));
-        $content = mb_substr($content,$startpos+strlen($starttag),$endpos-$startpos-strlen($endtag));        
+        $content = mb_substr($content,$startpos+strlen($starttag),$endpos-$startpos-strlen($endtag));
 
         $query = "SELECT * FROM rex_multiglossar WHERE active = :active AND clang_id = :clang_id ORDER BY term ASC ";
         $sql = rex_sql::factory();
@@ -42,48 +109,31 @@ if (!rex::isBackend()) {
         $content = str_replace('<!--exclude-->','<exclude>',$content);
         $content = str_replace('<!--endexclude-->','</exclude>',$content);
         
-
         if ($sql->getRows() > 0) {
             for ($i = 0; $i < $sql->getRows(); $i ++) {
                 $marker = $sql->getValue('term');
-                /*
-                  $url =  ""; //url_generate::getUrlById('rex_glossar', $sql->getValue('id'));
-                  $replace = '<a href="#hidden_content" class="boxer small button">'.$sql->getValue('begriff').'</a><div id="hidden_content" style="display: none;"><div class="inline_content"><h2>'.$sql->getValue('begriff').'</h2>'.$sql->getValue('text').'</div></div>';
-                  $replace = '<a href="'.rex_getUrl(43).'?tag_id=' . $sql->getValue('id') . '"><abbr class="glossarlink" title="<b>'.$sql->getValue('term').'</b><br/>'.$sql->getValue('definition').'" rel="tooltip">'.$sql->getValue('term').'</abbr></a>';
-                 * rex_getUrl(93, 0, ['id' => {n}])
-                 */
+//                dump($glossar_id); exit;
                 $markers = explode('|', trim($marker));
                 $search_term = $markers[0];
                 $markers = array_merge($markers, preg_split('/\R/', trim($sql->getValue('term_alt'))));
-                
-//                dump($markers); exit;
-
                 foreach ($markers as $search) {
                     if (!$search)
                         continue;
                     $search = str_replace(['(',')'],['',''],$search);
                     $search_term = $search;
-
-                    $replace = '<dfn class="glossarlink" title="' . $sql->getValue('definition') . '" data-toggle="tooltip" rel="tooltip"><a href="' . rex_getUrl($glossar_id,'',['id'=>$sql->getValue('pid')]) . '">' . $search_term . '</a></dfn>';
-
-/*                    
-                    if (strpos($search, ' ')) {
-                        $search = '(\s)('.$search.')';
-                    } else {
-                        $search = '(\s)(' . $search . ')(\s)';
-                    }
- * 
- */
-//                    $search = '(\s)(' . $search . ')';
-                    $search = '\b' . $search . '\b([^äüöß])';
                     
-//                    dump($search); exit;
+                    $replace = '<dfn class="glossarlink" title="' . $sql->getValue('definition') . '" data-toggle="tooltip" rel="tooltip"><a href="' . rex_getUrl('','',['gloss_id'=>$sql->getValue('pid')]) . '">' . $search_term . '</a></dfn>';
+
+                    $search = '\b' . $search . '\b([^äüöß])';
                     
                     $regEx ='~(?!((<.*?)))'.$search.'(?!(([^<>]*?)>))~si';
                     $content = Glossar\Extension::setMarker(['a','h1','h2','h3','h4','h5','h6','figcaption','exclude'],$content,$search_term);
-//                    $content = preg_replace($regEx, '\3'.$replace, $content, 1);
+//                    dump($regEx);
+//                    dump($replace);
+                    
                     $content = preg_replace($regEx, $replace.'\3', $content, 1);
                     $content = str_replace('m!a!r!k','',$content);
+                    
 
                     
 
@@ -94,8 +144,22 @@ if (!rex::isBackend()) {
         // Alle Tags werden wieder zu Kommentaren
        $content = str_replace('<exclude>','<!--exclude-->',$content);
         $content = str_replace('</exclude>','<!--endexclude-->',$content);
+        $content = $header . $starttag . $content . $endtag . $footer;
         
-        return $header . $starttag . $content . $endtag . $footer;
+        
+        if (!$_POST && rex_get('search_it_build_index','string','') == '') {
+            $sql_cache->setTable(rex::getTable('multiglossar_cache'));
+            $sql_cache->setValues([
+                'article_id'=>rex_article::getCurrentId(),
+                'clang_id'=>rex_clang::getCurrentId(),
+                'content'=>$content,
+                'query_string'=>$_SERVER['QUERY_STRING'],
+                'url'=>$_SERVER['REDIRECT_URL']
+                ]);
+            $sql_cache->insert();
+        }      
+        
+        return $content;
     });
 }
 
@@ -150,38 +214,18 @@ if (rex::isBackend() && rex::getUser()) {
                 foreach (\rex_clang::getAll() as $id => $clang) {
                     if (rex::getUser()->getComplexPerm('clang')->hasPerm($id)) {
                         $page->addSubpage((new rex_be_page('clang' . $id, $clang->getName()))
-                                        ->setSubPath(rex_path::addon('multiglossar', 'pages/main.php'))
-                                        ->setIsActive($id == $current_lang_id));
+                            ->setSubPath(rex_path::addon('multiglossar', 'pages/main.php'))
+                            ->setIsActive($id == $current_lang_id));
                     }
                 }
             } else {
                 if (rex::getUser()->getComplexPerm('clang')->hasPerm($clang_id)) {
                     $page->addSubpage((new rex_be_page('clang' . $clang_id, $clang_name))
-                                    ->setSubPath(rex_path::addon('multiglossar', 'pages/main.php'))
-                                    ->setHidden(true));
+                        ->setSubPath(rex_path::addon('multiglossar', 'pages/main.php'))
+                        ->setHidden(true));
                 }
             }
         }
     });
 }
-
-
-
-//          $search = addcslashes(trim($search),'()');
-                    // Original
-                    /* $regEx ='\'(?!((<.*?)|((<a.*?)|(<h.*?))))('. $search .')(?!(([^<>]*?)>)|([^>]*?(</a>|</h.*?>)))\'si'; */
-
-
-                    // Tag korrekt, h - korrekt, a korrekt
-//          $regEx = '/(?!((<.*?)|((<a.*?)|(<h.*?))))('.$search.')(?!(([^<>]*?)>)|([^>]*?(.*?<\/a>|<\/h.>)))/si';
-                    // Exclude funktioniert
-//         $regEx = '/(?!((<.*?)|(--exclude--.*?)))('.$search.')(?!(([^<>]*?)>)|([^>]*?(.*?--endexclude--)))/si';
-//         
-                    // a
-                    /*
-                    $regEx = '~(<a.*?>)(.*?)' . $search . '(.*?</a>)~si';
-                    $content = preg_replace($regEx, '\1\2xxx\3xxx\4', $content);
-                     * 
-                     */
-
 

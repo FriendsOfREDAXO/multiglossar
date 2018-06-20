@@ -19,6 +19,17 @@ CREATE TABLE IF NOT EXISTS `rex_multiglossar` (
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 ');
 
+$sql->setQuery('
+CREATE TABLE `rex_multiglossar_cache` (
+	`article_id` INT(11) NOT NULL,
+	`clang_id` INT(11) NOT NULL,
+	`content` TEXT NOT NULL,
+	`url` TEXT NOT NULL,
+	`query_string` TEXT NOT NULL
+)
+ENGINE=InnoDB DEFAULT CHARSET=utf8;
+');
+
 $editor = '';
 
 //  MarkItUp

@@ -122,6 +122,7 @@ if ($func == '') {
   $field = $form->addTextField('term', rex_request('term', 'string', null));
   $field->setLabel($this->i18n('glossar_label_term'));
   $field->getValidator()->add('notEmpty', $this->i18n('glossar_error_empty_term'));
+  $field->setNotice($this->i18n('notice_term_field'));
   
   
   $field = $form->addTextAreaField('term_alt');

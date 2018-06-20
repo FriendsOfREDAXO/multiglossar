@@ -62,3 +62,6 @@ glossar_ignoretags = Tags ausschließen
 config_save = Speichern
 
 textfield_css_label = CSS Klasse für Textfeld
+deffield_css_label = CSS Klasse für Definition Feld
+
+notice_term_field = Begriffe können auch HTML Tags enthalten und müssen exakt so eingetragen werden, wie sie auf der Seite vorkommen. z.B. CO<sub>2</sub>-Bilanzierung. Im Feld alternative Begriffe können Varianten eingetragen werden.

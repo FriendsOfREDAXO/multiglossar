@@ -1,6 +1,9 @@
 
 ### Changelog ###
 
+### 20.06.2018 Version 2.0.0 beta6 ###
+
+- Cache hinzugefügt
 
 ### 16.08.2017 Version 2.0.0 beta5 ###
 

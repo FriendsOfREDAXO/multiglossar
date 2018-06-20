@@ -2,8 +2,8 @@ glossar = Glossary
 glossar_title = Terms and definitions
 glossar_config = Configuration
 glossar_config_saved = Configuration saved
-glossar_markitupinfo = Created by the AddOn - Glossar -
-glossar_redactorinfo = Created by the AddOn - Glossar -
+glossar_markitupinfo = Created by the Addon - Glossar -
+glossar_redactorinfo = Created by the Addon - Glossar -
 
 glossar_settings = Settings
 glossar_max_characters = Remaining characters:
@@ -18,7 +18,6 @@ glossar_info_readme_title = Readme
 glossar_info_cangelog_title = Changelog
 glossar_info_licence_title = Licence
 glossar_info_modules_title = Output (Modules, CSS, JS)
-
 
 glossar_status_activated = Entry was activated
 glossar_status_deactivated = Entry was disabled
@@ -48,18 +47,4 @@ glossar_error_empty_definition = Please insert the definition.
 perm_general_glossar[general] = Glossary
 perm_general_glossar[settings] = Glossary: Settings
 perm_general_glossar[info] = Glossary: Infos
-
-
-glossar_term_alt_description = Alternative terms
-
-config_article = Glossary article
-
-glossar_starttag = Start tag
-glossar_endtag = End tag
-
-glossar_ignoretags = Exclude tags
-
-config_save = Save
-
-textfield_css_label = css class for texarea
 
