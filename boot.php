@@ -40,9 +40,17 @@ if (rex::isBackend()) {
         
         
         rex_extension::register('CACHE_DELETED', function (rex_extension_point $ep) {
-            $sql_cache = rex_sql::factory()->setTable(rex::getTable('multiglossar_cache'));
-            $sql_cache->delete();
+            glossar_cache::clear_cache();
         });
+        
+        // Änderungen im Glossar - Cache immer löschen
+        rex_extension::register('REX_FORM_SAVED', function (rex_extension_point $ep) {
+            if (strpos(rex_get('page','string'),'multiglossar/main') === 0) {
+                glossar_cache::clear_cache();                
+            }
+        });
+        
+        
     
 }
 
@@ -61,14 +69,17 @@ if (!rex::isBackend()) {
         }
         
         $sql_cache = rex_sql::factory()->setTable(rex::getTable('multiglossar_cache'));
+        $cache_url = $_SERVER['REDIRECT_URL'] ?: '';
+        $cache_exclude_articles = explode(',',$this->getConfig('cache_exclude_articles'));
         
-        if (!$_POST) {
+        if ($this->getConfig('use_cache') && !$_POST && !in_array(rex_article::getCurrentId(),$cache_exclude_articles)) {
+            
             $sql_cache->setWhere(
                     'article_id = :article_id AND clang_id = :clang_id AND query_string = :query_string AND url = :url',[
                         'article_id'=>rex_article::getCurrentId(),
                         'clang_id'=>rex_clang::getCurrentId(),
                         'query_string'=>$_SERVER['QUERY_STRING'],
-                        'url'=>$_SERVER['REDIRECT_URL']
+                        'url'=>$cache_url
                     ]
                 );
             $sql_cache->select('content');
@@ -147,14 +158,19 @@ if (!rex::isBackend()) {
         $content = $header . $starttag . $content . $endtag . $footer;
         
         
-        if (!$_POST && rex_get('search_it_build_index','string','') == '') {
+        if (
+                $this->getConfig('use_cache')
+                && !$_POST
+                && !in_array(rex_article::getCurrentId(),$cache_exclude_articles)
+                && rex_get('search_it_build_index','string','') == ''
+                ) {
             $sql_cache->setTable(rex::getTable('multiglossar_cache'));
             $sql_cache->setValues([
                 'article_id'=>rex_article::getCurrentId(),
                 'clang_id'=>rex_clang::getCurrentId(),
                 'content'=>$content,
                 'query_string'=>$_SERVER['QUERY_STRING'],
-                'url'=>$_SERVER['REDIRECT_URL']
+                'url'=>$cache_url
                 ]);
             $sql_cache->insert();
         }      

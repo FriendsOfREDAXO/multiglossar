@@ -42,6 +42,15 @@ if (rex_post('formsubmit', 'string') == '1') {
         ['glossar_ignoretags', 'string'],
     ]));
     
+    $this->setConfig(rex_post('config', [
+        ['use_cache', 'string'],
+    ]));
+    $this->setConfig(rex_post('config', [
+        ['cache_exclude_articles', 'string'],
+    ]));
+    
+    glossar_cache::clear_cache();
+    
     echo rex_view::success($this->i18n('glossar_config_saved'));
 }
 
@@ -123,41 +132,24 @@ $formElements = [];
 $n = [];
 $n['label'] = '<label for="glossar_endtag">' . $this->i18n('glossar_endtag') . '</label>';
 $n['field'] = '<input class="form-control" type="text" id="glossar_endtag" name="config[glossar_endtag]" value="' . $this->getConfig('glossar_endtag') . '"/>';
+$n['note'] = 'Start- und Endtag können reguläre Ausdrücke enthalten. Z.B. &lt;body.*?&gt;. Sie müssen eindeutig sein und werden im Quelltext wieder eingesetzt.';
 $formElements[] = $n;
 $fragment = new rex_fragment();
 $fragment->setVar('elements', $formElements, false);
 $content .= $fragment->parse('core/form/container.php');
 
 
-$formElements = [];
-$n = [];
-$n['label'] = '<label></label>';
-$n['field'] = '<p>Start- und Endtag können reguläre Ausdrücke enthalten. Z.B. &lt;body.*?&gt;. Sie müssen eindeutig sein und werden im Quelltext wieder eingesetzt.</p>';
-$formElements[] = $n;
-$fragment = new rex_fragment();
-$fragment->setVar('elements', $formElements, false);
-$content .= $fragment->parse('core/form/container.php');
 
 // Zusätzlich zu ignorierende Elemente (z.B. ul, aside, ...)
 $formElements = [];
 $n = [];
 $n['label'] = '<label for="glossar_ignoretags">' . $this->i18n('glossar_ignoretags') . '</label>';
 $n['field'] = '<input class="form-control" type="text" id="glossar_ignoretags" name="config[glossar_ignoretags]" value="' . $this->getConfig('glossar_ignoretags') . '"/>';
+$n['note'] = 'Hier können zusätzlich zu ignorierende Tags angegeben werden (z.B. ul, aside). Standardmäßig werden Begriffe in a, h1...h6 und figcaption ignoriert. Weitere Tags bitte mit Komma trennen. Es können auch zu ignorierende Klassen angegeben werden, wie z.B. .glossignore';
 $formElements[] = $n;
 $fragment = new rex_fragment();
 $fragment->setVar('elements', $formElements, false);
 $content .= $fragment->parse('core/form/container.php');
-
-$formElements = [];
-$n = [];
-$n['label'] = '<label></label>';
-$n['field'] = '<p>Hier können zusätzlich zu ignorierende Tags angegeben werden (z.B. ul, aside). Standardmäßig werden Begriffe in a, h1...h6 und figcaption ignoriert. Weitere Tags bitte mit Komma trennen. Es können auch zu ignorierende Klassen angegeben werden, wie z.B. .glossignore</p>';
-$formElements[] = $n;
-$fragment = new rex_fragment();
-$fragment->setVar('elements', $formElements, false);
-$content .= $fragment->parse('core/form/container.php');
-
-
 
 
 
@@ -165,9 +157,8 @@ $content .= $fragment->parse('core/form/container.php');
 $formElements = [];
 $n = [];
 $n['label'] = '<label for="glossar_textfield_css">' . $this->i18n('textfield_css_label') . '</label>';
-$n['field'] = '<input class="form-control" type="text" id="glossar_textfield_css" name="config[textfield_css]" value="' . $this->getConfig('textfield_css') . '"/>
-<p>Hier kann eine geeignete CSS-Class hinterlegt werden um den gewünschten Editor auszuwählen und die aktuelle Einstellung zu überschreiben.z.B. markitupEditor-multiglossar oder redactorEditor2-multiglossar</p>
-';
+$n['field'] = '<input class="form-control" type="text" id="glossar_textfield_css" name="config[textfield_css]" value="' . $this->getConfig('textfield_css') . '"/>';
+$n['note'] = 'Hier kann eine geeignete CSS-Class hinterlegt werden um den gewünschten Editor auszuwählen und die aktuelle Einstellung zu überschreiben.z.B. markitupEditor-multiglossar oder redactorEditor2-multiglossar';
 $formElements[] = $n;
 $fragment = new rex_fragment();
 $fragment->setVar('elements', $formElements, false);
@@ -177,14 +168,37 @@ $content .= $fragment->parse('core/form/container.php');
 $formElements = [];
 $n = [];
 $n['label'] = '<label for="glossar_deffield_css">' . $this->i18n('deffield_css_label') . '</label>';
-$n['field'] = '<input class="form-control" type="text" id="glossar_deffield_css" name="config[deffield_css]" value="' . $this->getConfig('deffield_css') . '"/>
-<p>Hier kann eine geeignete CSS-Class hinterlegt werden um den gewünschten Editor auszuwählen und die aktuelle Einstellung zu überschreiben.z.B. markitupEditor-multiglossar oder redactorEditor2-multiglossar</p>
-';
+$n['field'] = '<input class="form-control" type="text" id="glossar_deffield_css" name="config[deffield_css]" value="' . $this->getConfig('deffield_css') . '"/>';
+$n['note'] = 'Hier kann eine geeignete CSS-Class hinterlegt werden um den gewünschten Editor auszuwählen und die aktuelle Einstellung zu überschreiben.z.B. markitupEditor-multiglossar oder redactorEditor2-multiglossar';
 $formElements[] = $n;
 $fragment = new rex_fragment();
 $fragment->setVar('elements', $formElements, false);
 $content .= $fragment->parse('core/form/container.php');
 
+// Cache benutzen
+$formElements = [];
+$n = [];
+$n['label'] = '<label for="glossar_use_cache">' . $this->i18n('glossar_use_cache_label') . '</label>';
+$n['field'] = '<input type="checkbox" id="glossar_use_cache" name="config[use_cache]" value="1" '.($this->getConfig('use_cache') == 1 ? ' checked="checked"' : '').' />';
+$n['note'] = $this->i18n('use_cache_infotext');
+$formElements[] = $n;
+$fragment = new rex_fragment();
+$fragment->setVar('elements', $formElements, false);
+$content .= $fragment->parse('core/form/checkbox.php');
+
+
+
+// Artikel von Glossar ausschließen (z.B. 404er, Formulare, Suche)
+
+$formElements = [];
+$n = [];
+$n['label'] = '<label>Artikel vom Cache ausschließen</label>';
+$n['field'] = rex_var_linklist::getWidget(1, 'config[cache_exclude_articles]',$this->getConfig('cache_exclude_articles'));
+$n['note'] = 'Hier sollten Artikel angegeben werden, die vom Cache ausgenommen werden sollen. Insbesondere die 404-Seite, Suchergebnisseiten usw.';
+$formElements[] = $n;
+$fragment = new rex_fragment();
+$fragment->setVar('elements', $formElements, false);
+$content .= $fragment->parse('core/form/container.php');
 
 
 // Save-Button

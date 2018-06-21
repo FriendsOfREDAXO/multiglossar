@@ -74,6 +74,15 @@ $(document).ready(function(){
 </script>
 ```
 
+### Cache
+
+Bei vielen Glossareinträgen und/oder komplexen Websites kann das Glossar zu Verzögerungen im Seitenaufbau führen. Diese Verzögerungen können verhindert werden, indem der Glossarcache aktiviert wird. Im Glossarcache wird der Seiteninhalt komplett abgelegt. Der Glossarcache hat im Moment noch Entwicklungsstatus, sollte also in Produktivseiten noch nicht eingesetzt werden.
+
+Generell werden keine Seiten im Glossarcache abgelegt, die mit POST Parametern aufgerufen werden. Get Parameter werden vom Cache berücksichtigt. Von der Indexierung durch search-it aufgerufene Seiten werden nicht gecached.
+
+In den Einstellungen können Seiten angegeben werden, die vom Glossarcache ausgenommen werden. Hier sollten auf jeden Fall die Fehlerseiten eingetragen werden. Ebenso Suchergebnisseiten.
+
+Der Cache wird für einzelne Seiten regeneriert, wenn Seiten bearbeitet oder der Status geändert wird. Ebenso wird der Cache gelöscht, wenn der REDAXO Cache über das System gelöscht wird. Der Cache wird ebenfalls komplett gelöscht, wenn Glossareinträge bearbeitet werden. Es empfiehlt sich also im Livebetrieb Glossareinträge en Block zu bearbeiten.
 
 ### Credits
 

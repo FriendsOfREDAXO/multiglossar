@@ -65,3 +65,6 @@ textfield_css_label = CSS Klasse für Textfeld
 deffield_css_label = CSS Klasse für Definition Feld
 
 notice_term_field = Begriffe können auch HTML Tags enthalten und müssen exakt so eingetragen werden, wie sie auf der Seite vorkommen. z.B. CO<sub>2</sub>-Bilanzierung. Im Feld alternative Begriffe können Varianten eingetragen werden.
+
+glossar_use_cache_label = Glossarcache verwenden
+use_cache_infotext = Die Aktivierung des Cache kann den Seitenaufbau beschleunigen. Seiten mit POST Parametern werden nicht gecached. Der Glossarcache wird über die Funktion "Cache löschen" im REDAXO System zurückgesetzt.
