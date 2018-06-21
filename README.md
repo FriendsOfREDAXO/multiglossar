@@ -66,7 +66,7 @@ Im erzeugten Link stehen die CSS-Class glossarlink und weitere Attribute für di
 **Beispiel für Bootstrap-Nutzer**
 
 Zur automatischen Darstellung der Bootstrap-Tooltips einfach folgenden JS-Code verwenden. 
-```
+```javascript
 <script>
 $(document).ready(function(){
     $('[data-toggle="tooltip"]').tooltip(); 
