@@ -66,10 +66,10 @@ if (!rex::isBackend()) {
             $glossar_id = $this->getConfig('article_' . $domain_id);
         } else {
             $glossar_id = $this->getConfig('article');
-        }
+        }        
         
         $sql_cache = rex_sql::factory()->setTable(rex::getTable('multiglossar_cache'));
-        $cache_url = $_SERVER['REDIRECT_URL'] ?: '';
+        $cache_url = isset($_SERVER['REDIRECT_URL']) && $_SERVER['REDIRECT_URL'] ? $_SERVER['REDIRECT_URL'] : '';
         $cache_exclude_articles = explode(',',$this->getConfig('cache_exclude_articles'));
         
         $content = $ep->getSubject();
@@ -106,10 +106,6 @@ if (!rex::isBackend()) {
                     ]
                 );
             $sql_cache->select('content');
-    //        dump($_REQUEST); exit;
-//            dump($_POST);
-  //          dump($_SERVER['QUERY_STRING']); exit;
-//            echo phpinfo(); exit;
             if ($sql_cache->getRows()) {
                 return $sql_cache->getValue('content');
             }            
@@ -118,14 +114,16 @@ if (!rex::isBackend()) {
         $starttag = $this->getConfig('glossar_starttag') ? $this->getConfig('glossar_starttag') : '<body.*?>';
         $endtag = $this->getConfig('glossar_endtag') ? $this->getConfig('glossar_endtag') : '</body>';
         
+        
         preg_match('|'.$starttag.'|',$content, $starttag);
         preg_match('|'.$endtag.'|',$content, $endtag);
         
         $starttag = $starttag[0];
         $endtag = $endtag[0];
-        
-        $startpos = $startag ? mb_strpos($content,$starttag) : 0;
+
+        $startpos = $starttag ? mb_strpos($content,$starttag) : 0;
         $endpos = $endtag ? mb_strpos($content,$endtag) : 0;
+        
         $header = mb_substr($content, 0, $startpos);
         $footer = mb_substr($content, $endpos+strlen($endtag));
         $content = mb_substr($content,$startpos+strlen($starttag),$endpos-$startpos-strlen($endtag));
@@ -193,7 +191,6 @@ if (!rex::isBackend()) {
                 ]);
             $sql_cache->insert();
         }      
-        
         return $content;
     });
 }
