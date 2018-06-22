@@ -66,13 +66,17 @@ Im erzeugten Link stehen die CSS-Class glossarlink und weitere Attribute für di
 **Beispiel für Bootstrap-Nutzer**
 
 Zur automatischen Darstellung der Bootstrap-Tooltips einfach folgenden JS-Code verwenden. 
-```
+```javascript
 <script>
 $(document).ready(function(){
     $('[data-toggle="tooltip"]').tooltip(); 
 });
 </script>
 ```
+
+### Metainfo
+
+Es ist möglich einzelne Artikel gezielt von der Kennzeichnung mit Glossarbegriffen auszunehmen. Das ist sinnvoll bei AGBs, dem Impressum, Formularseiten usw. Wenn dies gewünscht ist, kann eine Artikel-Metainfo angelegt werden, die einen beliebigen Wert zurückgeben kann. Die Definition, wie der Wert ausgewertet wird, erfolgt in den Einstellungen des AddOns. Möglich sind hier <0, =0 oder >0. Wenn die Bedingung erfüllt ist, wird der Artikel von der Kennzeichnung der Glossarbegriffe ausgenommen.
 
 ### Cache
 

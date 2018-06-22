@@ -12,10 +12,5 @@ class glossar_cache {
     public static function clear_cache () {
         self::$sql_cache = rex_sql::factory()->setTable(rex::getTable(self::$table));
         self::$sql_cache->delete();
-    }
-    
-    
-    
-    
-    
+    }    
 }

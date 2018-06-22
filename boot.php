@@ -72,6 +72,29 @@ if (!rex::isBackend()) {
         $cache_url = $_SERVER['REDIRECT_URL'] ?: '';
         $cache_exclude_articles = explode(',',$this->getConfig('cache_exclude_articles'));
         
+        $content = $ep->getSubject();
+        
+        // Anhand der Metainfo im Artikel prüfen, ob der Artikel mit Glossarbegriffen versehen werden soll
+        if ($this->getConfig('exclude_by_meta_field')) {
+            $meta_field = $this->getConfig('exclude_by_meta_field');
+            $meta_condition = $this->getConfig('exclude_by_meta_condition');
+            $meta_value = rex_article::getCurrent()->{$meta_field};
+            switch ($meta_condition) {
+                case '<0':
+                    if ($meta_value < 0)
+                        return $content;
+                    break;
+                case '=0':
+                    if ($meta_value == 0)
+                        return $content;
+                    break;
+                case '>0':
+                    if ($meta_value > 0)
+                        return $content;
+                    break;
+            }
+        }
+        
         if ($this->getConfig('use_cache') && !$_POST && !in_array(rex_article::getCurrentId(),$cache_exclude_articles)) {
             
             $sql_cache->setWhere(
@@ -91,10 +114,6 @@ if (!rex::isBackend()) {
                 return $sql_cache->getValue('content');
             }            
         }
-        
-
-
-        $content = $ep->getSubject();
         
         $starttag = $this->getConfig('glossar_starttag') ? $this->getConfig('glossar_starttag') : '<body.*?>';
         $endtag = $this->getConfig('glossar_endtag') ? $this->getConfig('glossar_endtag') : '</body>';
