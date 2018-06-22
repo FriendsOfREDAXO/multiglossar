@@ -124,8 +124,8 @@ if (!rex::isBackend()) {
         $starttag = $starttag[0];
         $endtag = $endtag[0];
         
-        $startpos = mb_strpos($content,$starttag);
-        $endpos = mb_strpos($content,$endtag);
+        $startpos = $startag ? mb_strpos($content,$starttag) : 0;
+        $endpos = $endtag ? mb_strpos($content,$endtag) : 0;
         $header = mb_substr($content, 0, $startpos);
         $footer = mb_substr($content, $endpos+strlen($endtag));
         $content = mb_substr($content,$startpos+strlen($starttag),$endpos-$startpos-strlen($endtag));
@@ -152,7 +152,7 @@ if (!rex::isBackend()) {
                     $search = str_replace(['(',')'],['',''],$search);
                     $search_term = $search;
                     
-                    $replace = '<dfn class="glossarlink" title="' . $sql->getValue('definition') . '" data-toggle="tooltip" rel="tooltip"><a href="' . rex_getUrl('','',['gloss_id'=>$sql->getValue('pid')]) . '">' . $search_term . '</a></dfn>';
+                    $replace = '<dfn class="glossarlink" title="' . $sql->getValue('definition') . '" data-toggle="tooltip" rel="tooltip"><a href="' . rex_getUrl($glossar_id,'',['gloss_id'=>$sql->getValue('pid')]) . '">' . $search_term . '</a></dfn>';
 
                     $search = '\b' . $search . '\b([^äüöß])';
                     
