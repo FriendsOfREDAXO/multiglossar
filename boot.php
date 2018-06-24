@@ -60,7 +60,7 @@ if (!rex::isBackend()) {
 
 
     rex_extension::register('OUTPUT_FILTER', function(rex_extension_point $ep) {
-
+        
         if (rex_addon::exists('yrewrite')) {
             $domain_id = rex_yrewrite::getCurrentDomain()->getId();
             $glossar_id = $this->getConfig('article_' . $domain_id);
@@ -73,6 +73,11 @@ if (!rex::isBackend()) {
         $cache_exclude_articles = explode(',',$this->getConfig('cache_exclude_articles'));
         
         $content = $ep->getSubject();
+        
+        // Fehlerartikel immer ausschließen
+        if (rex_article::getCurrentId() == rex_article::getNotfoundArticleId()) {
+            return $content;                
+        }        
         
         // Anhand der Metainfo im Artikel prüfen, ob der Artikel mit Glossarbegriffen versehen werden soll
         if ($this->getConfig('exclude_by_meta_field')) {
@@ -114,6 +119,7 @@ if (!rex::isBackend()) {
         $starttag = $this->getConfig('glossar_starttag') ? $this->getConfig('glossar_starttag') : '<body.*?>';
         $endtag = $this->getConfig('glossar_endtag') ? $this->getConfig('glossar_endtag') : '</body>';
         
+//        dump($starttag); exit;
         
         preg_match('|'.$starttag.'|',$content, $starttag);
         preg_match('|'.$endtag.'|',$content, $endtag);
@@ -172,6 +178,7 @@ if (!rex::isBackend()) {
         // Alle Tags werden wieder zu Kommentaren
        $content = str_replace('<exclude>','<!--exclude-->',$content);
         $content = str_replace('</exclude>','<!--endexclude-->',$content);
+//        dump($header); exit;
         $content = $header . $starttag . $content . $endtag . $footer;
         
         

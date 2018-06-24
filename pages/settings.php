@@ -226,7 +226,7 @@ $fragment = new rex_fragment();
 $fragment->setVar('elements', $formElements, false);
 $content .= $fragment->parse('core/form/checkbox.php');
 
-// Artikel von Glossar Cache ausschließen (z.B. 404er, Formulare, Suche)
+// Artikel von Glossar Cache ausschließen (z.B. Formulare, Suche)
 $formElements = [];
 $n = [];
 $n['label'] = '<label>'.$this->i18n('glossar_cache_exclude_articles_label').'</label>';
