@@ -85,7 +85,7 @@ class Extension {
                 self::domTextReplace($search,'m!a!r!k\1m!a!r!k',$node,true);
             }
         }
-        $out = substr($dom->saveHTML(),strlen($header));
+        $out = trim(substr($dom->saveHTML(),strlen($header)));
         $out = str_replace('</body></html>','',$out);
         return $out;
     }

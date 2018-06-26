@@ -1,6 +1,10 @@
 
 ### Changelog ###
 
+### 25.06.2018 Version 2.0.0 beta7 ###
+
+- Initiale Contenterkennung auf regex umgestellt
+
 ### 20.06.2018 Version 2.0.0 beta6 ###
 
 - Cache hinzugefügt

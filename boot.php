@@ -72,11 +72,11 @@ if (!rex::isBackend()) {
         $cache_url = isset($_SERVER['REDIRECT_URL']) && $_SERVER['REDIRECT_URL'] ? $_SERVER['REDIRECT_URL'] : '';
         $cache_exclude_articles = explode(',',$this->getConfig('cache_exclude_articles'));
         
-        $content = $ep->getSubject();
+        $source = $ep->getSubject();
         
         // Fehlerartikel immer ausschließen
         if (rex_article::getCurrentId() == rex_article::getNotfoundArticleId()) {
-            return $content;                
+            return $source;
         }        
         
         // Anhand der Metainfo im Artikel prüfen, ob der Artikel mit Glossarbegriffen versehen werden soll
@@ -87,15 +87,15 @@ if (!rex::isBackend()) {
             switch ($meta_condition) {
                 case '<0':
                     if ($meta_value < 0)
-                        return $content;
+                        return $source;
                     break;
                 case '=0':
                     if ($meta_value == 0)
-                        return $content;
+                        return $source;
                     break;
                 case '>0':
                     if ($meta_value > 0)
-                        return $content;
+                        return $source;
                     break;
             }
         }
@@ -121,18 +121,28 @@ if (!rex::isBackend()) {
         
 //        dump($starttag); exit;
         
-        preg_match('|'.$starttag.'|',$content, $starttag);
-        preg_match('|'.$endtag.'|',$content, $endtag);
+        preg_match('|'.$starttag.'|',$source, $starttag);
+        preg_match('|'.$endtag.'|',$source, $endtag);
         
         $starttag = $starttag[0];
         $endtag = $endtag[0];
-
-        $startpos = $starttag ? mb_strpos($content,$starttag) : 0;
-        $endpos = $endtag ? mb_strpos($content,$endtag) : 0;
         
-        $header = mb_substr($content, 0, $startpos);
-        $footer = mb_substr($content, $endpos+strlen($endtag));
-        $content = mb_substr($content,$startpos+strlen($starttag),$endpos-$startpos-strlen($endtag));
+        preg_match('%(.*?)('.$starttag.')(.*?)'.$endtag.'%s',$source,$matches);
+        $header = $matches[1];
+        $content = $matches[3];
+        preg_match('%'.$endtag.'(.*)%s',$source,$matches);
+        $footer = $matches[1];
+
+//        $startpos = $starttag ? mb_strpos($content,$starttag) : 0;
+//        $endpos = $endtag ? mb_strpos($content,$endtag) : 0;
+        
+//        $header = mb_substr($content, 0, $startpos);
+//        $footer = mb_substr($content, $endpos+strlen($endtag));
+//        $content = mb_substr($content,$startpos+strlen($starttag),$endpos-$startpos-strlen($endtag));
+        
+//        print_r($header);
+//        print_r($footer);
+//        print_r($content); exit;
 
         $query = "SELECT * FROM rex_multiglossar WHERE active = :active AND clang_id = :clang_id ORDER BY term ASC ";
         $sql = rex_sql::factory();
