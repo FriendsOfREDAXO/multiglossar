@@ -90,3 +90,6 @@ glossar_exclude_by_meta_field_label = Metainfo für Ausschluss von der Kennzeich
 glossar_exclude_by_meta_condition_label = Kondition für den Ausschluss von Artikeln
 
 glossar_cache_title = Glossar Cache
+
+glossar_exclude_by_template_label = Templates für Ausschluss von der Kennzeichnung mit Glossarbegriffen 
+glossar_exclude_by_template_note = Artikel, die als Ausgabetemplate eines der gewählten Templates haben, werden nicht mit Glossarbegriffen versehen.

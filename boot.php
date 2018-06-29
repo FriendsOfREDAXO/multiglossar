@@ -77,7 +77,14 @@ if (!rex::isBackend()) {
         // Fehlerartikel immer ausschließen
         if (rex_article::getCurrentId() == rex_article::getNotfoundArticleId()) {
             return $source;
-        }        
+        }
+        
+        // Template prüfen und ggf. Artikel ausschließen
+        if ($this->getConfig('exclude_by_template')) {
+            if (in_array(rex_article::getCurrent()->getTemplateId(),$this->getConfig('exclude_by_template'))) {
+                return $source;
+            }
+        }
         
         // Anhand der Metainfo im Artikel prüfen, ob der Artikel mit Glossarbegriffen versehen werden soll
         if ($this->getConfig('exclude_by_meta_field')) {
@@ -254,25 +261,27 @@ if (rex::isBackend() && rex::getUser()) {
         // echo count($count_languages);
         if (rex::getUser()->isAdmin() || rex::getUser()->getComplexPerm('clang')->hasAll()) {
             $page = \rex_be_controller::getPageObject('multiglossar/main');
-            $clang_id = \rex_clang::getCurrentId();
-            $clang_name = \rex_clang::get($clang_id)->getName();
-            $page->setSubPath(rex_path::addon('multiglossar', 'pages/main.php'));
-            $current_page = rex_be_controller::getCurrentPage();
-            $current_lang_id = (int)str_replace('clang', '', rex_be_controller::getCurrentPagePart(3));
-            if (count($count_languages) != 1) {
-                foreach (\rex_clang::getAll() as $id => $clang) {
-                    if (rex::getUser()->getComplexPerm('clang')->hasPerm($id)) {
-                        $page->addSubpage((new rex_be_page('clang' . $id, $clang->getName()))
-                            ->setSubPath(rex_path::addon('multiglossar', 'pages/main.php'))
-                            ->setIsActive($id == $current_lang_id));
+            if ($page instanceof rex_be_page) {
+                $clang_id = \rex_clang::getCurrentId();
+                $clang_name = \rex_clang::get($clang_id)->getName();
+                $page->setSubPath(rex_path::addon('multiglossar', 'pages/main.php'));
+                $current_page = rex_be_controller::getCurrentPage();
+                $current_lang_id = (int)str_replace('clang', '', rex_be_controller::getCurrentPagePart(3));
+                if (count($count_languages) != 1) {
+                    foreach (\rex_clang::getAll() as $id => $clang) {
+                        if (rex::getUser()->getComplexPerm('clang')->hasPerm($id)) {
+                            $page->addSubpage((new rex_be_page('clang' . $id, $clang->getName()))
+                                ->setSubPath(rex_path::addon('multiglossar', 'pages/main.php'))
+                                ->setIsActive($id == $current_lang_id));
+                        }
                     }
-                }
-            } else {
-                if (rex::getUser()->getComplexPerm('clang')->hasPerm($clang_id)) {
-                    $page->addSubpage((new rex_be_page('clang' . $clang_id, $clang_name))
-                        ->setSubPath(rex_path::addon('multiglossar', 'pages/main.php'))
-                        ->setHidden(true));
-                }
+                } else {
+                    if (rex::getUser()->getComplexPerm('clang')->hasPerm($clang_id)) {
+                        $page->addSubpage((new rex_be_page('clang' . $clang_id, $clang_name))
+                            ->setSubPath(rex_path::addon('multiglossar', 'pages/main.php'))
+                            ->setHidden(true));
+                    }
+                }                
             }
         }
     });

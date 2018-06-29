@@ -52,6 +52,9 @@ if (rex_post('formsubmit', 'string') == '1') {
         ['exclude_by_meta_field', 'string'],
     ]));
     $this->setConfig(rex_post('config', [
+        ['exclude_by_template', 'array'],
+    ]));
+    $this->setConfig(rex_post('config', [
         ['exclude_by_meta_condition', 'string'],
     ]));
     
@@ -178,6 +181,22 @@ $fragment = new rex_fragment();
 $fragment->setVar('elements', $formElements, false);
 $content .= $fragment->parse('core/form/container.php');
 
+// Template vom Glossar ausschließen
+$formElements = [];
+$n = [];
+$n['label'] = '<label for="glossar_exclude_by_template">' . $this->i18n('glossar_exclude_by_template_label') . '</label>';
+$n['field'] = '<select id="glossar_exclude_by_template" name="config[exclude_by_template][]" class="selectpicker" multiple="multiple">';
+$options = rex_sql::factory()->getArray('SELECT name, id FROM '.rex::getTable('template'));
+foreach ($options as $opt) {
+    $n['field'] .= '<option value="'.$opt['id'].'"'.(in_array($opt['id'],$this->getConfig('exclude_by_template')) ? ' selected="selected"' : '').'>'.$opt['name'].' - ['.$opt['id'].']</option>';
+}
+$n['field'] .= '</select>';
+$n['note'] = $this->i18n('glossar_exclude_by_template_note');
+$formElements[] = $n;
+$fragment = new rex_fragment();
+$fragment->setVar('elements', $formElements, false);
+$content .= $fragment->parse('core/form/container.php');
+
 // Artikel vom Glossar ausschließen
 $formElements = [];
 $n = [];
@@ -193,6 +212,8 @@ $formElements[] = $n;
 $fragment = new rex_fragment();
 $fragment->setVar('elements', $formElements, false);
 $content .= $fragment->parse('core/form/container.php');
+
+
 
 // Bedingung, die erfüllt sein muss damit der Artikel nicht mit Glossarbegriffen dekoriert wird
 $formElements = [];

@@ -1,6 +1,11 @@
 
 ### Changelog ###
 
+### 29.06.2018 Version 2.0.0 beta8 ###
+
+- Bugfix Call to a member function setSubPath() on null
+- Templates können ausgeschlossen werden
+
 ### 25.06.2018 Version 2.0.0 beta7 ###
 
 - Initiale Contenterkennung auf regex umgestellt
