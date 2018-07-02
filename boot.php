@@ -1,57 +1,36 @@
 <?php
 
 if (rex::isBackend()) {
-        $extensionPoints = [
-            'CAT_UPDATED',   'CAT_DELETED', 'CAT_STATUS',
-            'ART_UPDATED',   'ART_DELETED', 'ART_STATUS',
+    $extensionPoints = [
+        'CAT_UPDATED',   'CAT_DELETED', 'CAT_STATUS',
+        'ART_UPDATED',   'ART_DELETED', 'ART_STATUS',
 //            'CLANG_UPDATED', 'CLANG_DELETED',
 //            'ARTICLE_GENERATED'
-            'SLICE_ADDED',  'SLICE_DELETED', 'SLICE_MOVE', 'SLICE_UPDATED',
+        'SLICE_ADDED',  'SLICE_DELETED', 'SLICE_MOVE', 'SLICE_UPDATED',
 
-        ];
-        foreach ($extensionPoints as $extensionPoint) {
-            rex_extension::register($extensionPoint, function (rex_extension_point $ep) {
-                $params = $ep->getParams();
-                $params['subject'] = $ep->getSubject();
-                $params['extension_point'] = $ep->getName();
-//                dump($params); exit;
-                $sql_cache = rex_sql::factory()
-//                        ->setDebug()
-                        ->setTable(rex::getTable('multiglossar_cache'));
-                if (strpos($params['extension_point'],'SLICE') === 0) {
-                    $sql_cache->setWhere(
-                        'article_id = :article_id AND clang_id = :clang_id',[
-                            'article_id'=>$params['article_id'],
-                            'clang_id'=>$params['clang']
-                        ]
-                    );                    
-                } else {
-                    $sql_cache->setWhere(
-                        'article_id = :article_id AND clang_id = :clang_id',[
-                            'article_id'=>$params['id'],
-                            'clang_id'=>$params['clang']
-                        ]
-                    );                    
-                }
-                $sql_cache->delete();
-//                exit;
-            });
+    ];
+    foreach ($extensionPoints as $extensionPoint) {
+        rex_extension::register($extensionPoint,  'glossar_cache::refresh_article');
+    }
+
+
+    rex_extension::register('CACHE_DELETED', function (rex_extension_point $ep) {
+        glossar_cache::clear();
+    });
+
+    // Änderungen im Glossar - Cache immer löschen
+    rex_extension::register('REX_FORM_SAVED', function (rex_extension_point $ep) {
+        if (strpos(rex_get('page','string'),'multiglossar/main') === 0) {
+            glossar_cache::clear();                
         }
-        
-        
-        rex_extension::register('CACHE_DELETED', function (rex_extension_point $ep) {
-            glossar_cache::clear();
-        });
-        
-        // Änderungen im Glossar - Cache immer löschen
-        rex_extension::register('REX_FORM_SAVED', function (rex_extension_point $ep) {
-            if (strpos(rex_get('page','string'),'multiglossar/main') === 0) {
-                glossar_cache::clear();                
-            }
-        });
-        
-        
-    
+    });
+
+    if (rex_addon::exists('yform') && rex_addon::exists('url')) {
+        $e_points = ['REX_YFORM_SAVED','YFORM_DATA_DELETED'];
+        foreach ($e_points as $ep_name) {
+            rex_extension::register($ep_name,'glossar_cache::data_changed');
+        }
+    }    
 }
 
 
@@ -187,6 +166,8 @@ if (!rex::isBackend()) {
 }
 
 if (rex::isBackend() && rex::getUser()) {
+    
+    
     rex_extension::register('PACKAGES_INCLUDED', function () {
         if (rex::getUser() && $this->getProperty('compile')) {
 

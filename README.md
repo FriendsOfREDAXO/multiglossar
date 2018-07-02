@@ -98,6 +98,14 @@ Der Turbocache ist ein experimenteller Cache, der auf der gleichen Technik beruh
 
 Die Regeln für den Neuaufbau des Turbocache sind vergleichbar mit denen des REDAXO Cache. Wenn also ein Artikel bearbeitet, verschoben oder gelöscht wird, wird auch der Cache dieses Artikels bei einem neuen Aufruf der Seite regeneriert.
 
+### YForm und url
+
+Wenn Datensätze einer YForm Tabelle geändert oder gelöscht werden, wird geprüft, ob das Url AddOn vorhanden ist und ob die Tabelle des geänderten Datensatzes mit einem Redaxo Artikel in Verbindung steht. Ist dies der Fall, wird für diesen Artikel der Cache regeneriert.
+
+### Für Programmierer: Cache selbst leeren
+
+Der Glossarcache kann in eigenen Aktionen gelöscht werden. `glossar_cache::clear()` löscht den gesamten Glossarcache. `glossar_cache::clear(27)` löscht den Glossarcache für den Artikel mit der Id 27 in allen Sprachen. `glossar_cache::clear(29,1)` löscht den Glossarcache für den Artikel mit der Id 29 der ersten Sprache. 
+
 
 ### Credits
 

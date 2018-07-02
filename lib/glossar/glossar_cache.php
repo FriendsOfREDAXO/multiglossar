@@ -2,12 +2,16 @@
 
 class glossar_cache {
     
-    private static $table = 'multiglossar_cache';
-    private static $sql_cache;
     
-    public static function clear () {
-        self::$sql_cache = rex_sql::factory()->setTable(rex::getTable(self::$table));
-        self::$sql_cache->delete();
+    public static function clear ($article_id = 0, $clang_id = 0) {
+        $sql = rex_sql::factory()->setTable(rex::getTable('multiglossar_cache'));
+        if ($article_id) {
+            $sql->setWhere('article_id = :article_id',['article_id'=>$article_id]);
+        }
+        if ($clang_id) {
+            $sql->setWhere('clang_id = :clang_id',['clang_id'=>$clang_id]);
+        }
+        $sql->delete();
     }
     
     
@@ -94,6 +98,53 @@ class glossar_cache {
             $sql_cache->insert();
         }      
         
-    }    
+    }
+    
+    /**
+     * Prüft, wenn Datensätze in yform geändert wurden, ob es eine Verbindung zum url Addon gibt und löscht die betroffenen Artikel aus dem Glossarcache
+     * 
+     * @param type $ep
+     */
+    public static function data_changed ($ep) {
+        $table_name = '';
+        if ($ep->getName() == 'YFORM_DATA_DELETED') {
+            $params = $ep->getParams();
+            $table_name = $params['table']->getTableName();
+        } elseif ($ep->getName() == 'REX_YFORM_SAVED') {
+            $params = $ep->getParams();
+            $table_name = $params['table'];
+        }
+        if ($table_name) {
+            $res = rex_sql::factory()->getArray('SELECT article_id FROM '.rex::getTable('url_generate').' WHERE `table` LIKE "%'.$table_name.'%"');
+            foreach ($res as $art) {
+                $sql_cache = rex_sql::factory()
+//                        ->setDebug()
+                        ->setTable(rex::getTable('multiglossar_cache'));
+                    $sql_cache->setWhere(
+                        'article_id = :article_id',[
+                            'article_id'=>$art['article_id']
+                        ]
+                    );                    
+                $sql_cache->delete();
+            }
+        }
+    }
+    
+    /**
+     * 
+     * @param type $ep
+     */
+    public static function refresh_article ($ep) {
+        $params = $ep->getParams();
+        $params['extension_point'] = $ep->getName();
+        
+        if (strpos($params['extension_point'],'SLICE') === 0) {
+            $article_id = $params['article_id'];
+        } else {
+            $article_id = $params['id'];
+        }        
+        self::clear($article_id, $params['clang']);
+        
+    }
     
 }
