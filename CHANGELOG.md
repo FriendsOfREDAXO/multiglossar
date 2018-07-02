@@ -1,6 +1,10 @@
 
 ### Changelog ###
 
+### 02.07.2018 Version 2.0.0 beta9 ###
+
+- Turbocache implementiert (experimentell!)
+
 ### 29.06.2018 Version 2.0.0 beta8 ###
 
 - Bugfix Call to a member function setSubPath() on null

@@ -40,13 +40,13 @@ if (rex::isBackend()) {
         
         
         rex_extension::register('CACHE_DELETED', function (rex_extension_point $ep) {
-            glossar_cache::clear_cache();
+            glossar_cache::clear();
         });
         
         // Änderungen im Glossar - Cache immer löschen
         rex_extension::register('REX_FORM_SAVED', function (rex_extension_point $ep) {
             if (strpos(rex_get('page','string'),'multiglossar/main') === 0) {
-                glossar_cache::clear_cache();                
+                glossar_cache::clear();                
             }
         });
         
@@ -58,7 +58,11 @@ if (rex::isBackend()) {
 if (!rex::isBackend()) {
     //if ($this->getConfig('status') != 'deaktiviert') {
 
-
+    // Turbocache - Blitzcache - Cache+ ???
+    if ($this->getConfig('use_turbocache')) {
+        rex_extension::register('PACKAGES_INCLUDED', 'glossar_cache::read');
+    }    
+    
     rex_extension::register('OUTPUT_FILTER', function(rex_extension_point $ep) {
         
         if (rex_addon::exists('yrewrite')) {
@@ -67,10 +71,6 @@ if (!rex::isBackend()) {
         } else {
             $glossar_id = $this->getConfig('article');
         }        
-        
-        $sql_cache = rex_sql::factory()->setTable(rex::getTable('multiglossar_cache'));
-        $cache_url = isset($_SERVER['REDIRECT_URL']) && $_SERVER['REDIRECT_URL'] ? $_SERVER['REDIRECT_URL'] : '';
-        $cache_exclude_articles = explode(',',$this->getConfig('cache_exclude_articles'));
         
         $source = $ep->getSubject();
         
@@ -107,19 +107,10 @@ if (!rex::isBackend()) {
             }
         }
         
-        if ($this->getConfig('use_cache') && !$_POST && !in_array(rex_article::getCurrentId(),$cache_exclude_articles)) {
-            
-            $sql_cache->setWhere(
-                    'article_id = :article_id AND clang_id = :clang_id AND query_string = :query_string AND url = :url',[
-                        'article_id'=>rex_article::getCurrentId(),
-                        'clang_id'=>rex_clang::getCurrentId(),
-                        'query_string'=>$_SERVER['QUERY_STRING'],
-                        'url'=>$cache_url
-                    ]
-                );
-            $sql_cache->select('content');
-            if ($sql_cache->getRows()) {
-                return $sql_cache->getValue('content');
+        // Cache prüfen und ausgeben falls vorhanden
+        if ($this->getConfig('use_cache')) {
+            if (glossar_cache::read($ep)) {
+                return glossar_cache::read($ep);
             }            
         }
         
@@ -140,20 +131,8 @@ if (!rex::isBackend()) {
         preg_match('%'.$endtag.'(.*)%s',$source,$matches);
         $footer = $matches[1];
 
-//        $startpos = $starttag ? mb_strpos($content,$starttag) : 0;
-//        $endpos = $endtag ? mb_strpos($content,$endtag) : 0;
-        
-//        $header = mb_substr($content, 0, $startpos);
-//        $footer = mb_substr($content, $endpos+strlen($endtag));
-//        $content = mb_substr($content,$startpos+strlen($starttag),$endpos-$startpos-strlen($endtag));
-        
-//        print_r($header);
-//        print_r($footer);
-//        print_r($content); exit;
-
         $query = "SELECT * FROM rex_multiglossar WHERE active = :active AND clang_id = :clang_id ORDER BY term ASC ";
         $sql = rex_sql::factory();
-//    $sql->setDebug(1);
         $sql->setQuery($query,['active'=>1,'clang_id'=>rex_clang::getCurrentId()]);
         
         // Alle Kommentare <!--exclude--> werden zu Tags
@@ -199,24 +178,12 @@ if (!rex::isBackend()) {
         $content = $header . $starttag . $content . $endtag . $footer;
         
         
-        if (
-                $this->getConfig('use_cache')
-                && !$_POST
-                && !in_array(rex_article::getCurrentId(),$cache_exclude_articles)
-                && rex_get('search_it_build_index','string','') == ''
-                ) {
-            $sql_cache->setTable(rex::getTable('multiglossar_cache'));
-            $sql_cache->setValues([
-                'article_id'=>rex_article::getCurrentId(),
-                'clang_id'=>rex_clang::getCurrentId(),
-                'content'=>$content,
-                'query_string'=>$_SERVER['QUERY_STRING'],
-                'url'=>$cache_url
-                ]);
-            $sql_cache->insert();
-        }      
+        if ($this->getConfig('use_cache')) {
+            glossar_cache::write($content);
+        }
+        
         return $content;
-    });
+    }, rex_extension::LATE);
 }
 
 if (rex::isBackend() && rex::getUser()) {

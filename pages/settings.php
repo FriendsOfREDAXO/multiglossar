@@ -46,6 +46,9 @@ if (rex_post('formsubmit', 'string') == '1') {
         ['use_cache', 'string'],
     ]));
     $this->setConfig(rex_post('config', [
+        ['use_turbocache', 'string'],
+    ]));
+    $this->setConfig(rex_post('config', [
         ['cache_exclude_articles', 'string'],
     ]));
     $this->setConfig(rex_post('config', [
@@ -58,7 +61,7 @@ if (rex_post('formsubmit', 'string') == '1') {
         ['exclude_by_meta_condition', 'string'],
     ]));
     
-    glossar_cache::clear_cache();
+    glossar_cache::clear();
     
     echo rex_view::success($this->i18n('glossar_config_saved'));
 }
@@ -257,6 +260,18 @@ $formElements[] = $n;
 $fragment = new rex_fragment();
 $fragment->setVar('elements', $formElements, false);
 $content .= $fragment->parse('core/form/container.php');
+
+// Turbocache benutzen
+$formElements = [];
+$n = [];
+$n['label'] = '<label for="glossar_use_turbocache">' . $this->i18n('glossar_use_turbocache_label') . '</label>';
+$n['field'] = '<input type="checkbox" id="glossar_use_turbocache" name="config[use_turbocache]" value="1" '.($this->getConfig('use_turbocache') == 1 ? ' checked="checked"' : '').' />';
+$n['note'] = $this->i18n('use_turbocache_infotext');
+$formElements[] = $n;
+$fragment = new rex_fragment();
+$fragment->setVar('elements', $formElements, false);
+$content .= $fragment->parse('core/form/checkbox.php');
+
 
 // Save-Button
 $formElements = [];

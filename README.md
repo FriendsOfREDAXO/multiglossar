@@ -90,13 +90,22 @@ In den Einstellungen können Seiten angegeben werden, die vom Glossarcache ausge
 
 Der Cache wird für einzelne Seiten regeneriert, wenn Seiten bearbeitet oder der Status geändert wird. Ebenso wird der Cache gelöscht, wenn der REDAXO Cache über das System gelöscht wird. Der Cache wird ebenfalls komplett gelöscht, wenn Glossareinträge bearbeitet werden. Es empfiehlt sich also im Livebetrieb Glossareinträge en Block zu bearbeiten.
 
+Der Cache sollte bei der Entwicklung immer ausgeschaltet sein, da eventuelle Codeänderungen sonst keine Wirkung haben.
+
+### Turbocache
+
+Der Turbocache ist ein experimenteller Cache, der auf der gleichen Technik beruht wie der Glossarcache selbst. Allerdings wird er früher aktiviert. Bereits am Extensionpoint PACKAGES_INCLUDED wird geprüft, ob für den Artikel ein Cachedatensatz existiert. Wenn dies der Fall ist, wird der Datensatz ausgegeben und die weitere Bearbeitung abgebrochen (exit). Dadurch werden auch Modulinhalte gecached. Der Cache beschleunigt nicht nur die Ausgabe des Glossars sondern jegliche Ausgabe von REDAXO Artikeln. Der Glossarcache wird per rex_extension::LATE generiert. Daher ist beispielsweise sprog (rex_extension::NORMAL) bereits durchgelaufen und wird mit gecached.
+
+Die Regeln für den Neuaufbau des Turbocache sind vergleichbar mit denen des REDAXO Cache. Wenn also ein Artikel bearbeitet, verschoben oder gelöscht wird, wird auch der Cache dieses Artikels bei einem neuen Aufruf der Seite regeneriert.
+
+
 ### Credits
 
 * [Friends Of REDAXO](https://github.com/FriendsOfREDAXO) Gemeinsame REDAXO-Entwicklung!
 * [Thomas Blum](https://github.com/tbaddade) für die vielen Tipps und Sprog
 * [Andreas Eberhard ](https://github.com/aeberhard) für den XOutputFilter
 * [Oliver Kreischer ](http://concedra.de)
-* [Thomas Skerbis ](http://klxm.de) Dokumentation und Debugging
+* [Thomas Skerbis ](http://klxm.de) Support, Installation, Dokumentation und Debugging
 
 ---
 
