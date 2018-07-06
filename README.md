@@ -61,8 +61,9 @@ Es ist nur ein Bereich möglich.
 
 Im erzeugten Link stehen die CSS-Class glossarlink und weitere Attribute für die Gestaltung und JS-Programmierung zur Verfügung. Auf dieser Basis lassen sich leicht entsprechende Lösungen für eine Tooltip-Darstellung realisieren. Die (Kurz-)Definition findet sich im Title-Attribut. 
 
-`<dfn class="glossarlink" title="Definitionstext" data-toggle="tooltip" rel="tooltip"><a href="/link/zum/artikel">Begriff</a></dfn>`
-
+```html
+<dfn class="glossarlink" title="Definitionstext" data-toggle="tooltip" rel="tooltip"><a href="/link/zum/artikel">Begriff</a></dfn>
+```
 **Beispiel für Bootstrap-Nutzer**
 
 Zur automatischen Darstellung der Bootstrap-Tooltips einfach folgenden JS-Code verwenden. 
