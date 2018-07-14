@@ -1,34 +1,5 @@
 <?php
-$sql = rex_sql::factory();
-$sql->setQuery('
-CREATE TABLE IF NOT EXISTS `rex_multiglossar` (
-    `pid` int(10) unsigned NOT NULL AUTO_INCREMENT,
-    `id` int(10) unsigned NOT NULL,
-    `clang_id` int(10) unsigned NOT NULL,
-    `active` int(1) DEFAULT NULL,
-    `term` varchar(255) DEFAULT NULL,
-    `term_alt` text,
-    `definition` text,
-    `description` text,
-    `createuser` varchar(255) NOT NULL,
-    `updateuser` varchar(255) NOT NULL,
-    `createdate` datetime NOT NULL,
-    `updatedate` datetime NOT NULL,
-    `revision` int(10) unsigned NOT NULL,
-    PRIMARY KEY (`pid`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
-');
-
-$sql->setQuery('
-CREATE TABLE `rex_multiglossar_cache` (
-	`article_id` INT(11) NOT NULL,
-	`clang_id` INT(11) NOT NULL,
-	`content` TEXT NOT NULL,
-	`url` TEXT NOT NULL,
-	`query_string` TEXT NOT NULL
-)
-ENGINE=InnoDB DEFAULT CHARSET=utf8;
-');
+require_once('update.php');
 
 $editor = '';
 
