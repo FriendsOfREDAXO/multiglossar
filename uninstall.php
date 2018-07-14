@@ -1,3 +1,3 @@
 <?php
-rex_sql_table::drop('rex_multiglossar');
-rex_sql_table::drop('rex_multiglossar_cache');
+rex_sql_table::get(rex::getTable('multiglossar'))->drop();
+rex_sql_table::get(rex::getTable('multiglossar_cache'))->drop();
