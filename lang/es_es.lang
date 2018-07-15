@@ -1,0 +1,64 @@
+glossar = Glosario
+glossar_title = Condiciones
+glossar_config = Ajustes
+glossar_config_saved = Ajustes guardados
+glossar_markitupinfo = Creado por el complemento - Glosario -
+glossar_redactorinfo = Creado por el complemento - Glosario -
+
+glossar_settings = Configuración
+glossar_max_characters = Personajes restantes:
+
+glossar_info = Info
+glossar_info_readme = Léame
+glossar_info_modules = Problemas (módulos, CSS, JS)
+glossar_info_changelog = Cambios
+glossar_info_licence = Licencia
+
+glossar_info_readme_title = Léame
+glossar_info_cangelog_title = Cambios
+glossar_info_licence_title = Licencia
+glossar_info_modules_title = Problemas (módulos, CSS, JS)
+
+
+glossar_status_activated = La entrada ha sido activada
+glossar_status_deactivated = La entrada ha sido desactivada
+
+glossar_info_settings_title = Configuración
+
+glossar_func_header = Estado / funciones
+
+glossar_add =   añadir
+glossar_edit = editar
+glossar_delete = borrar
+
+glossar_title_edit = Editar entrada
+glossar_title_add = Agregar entrada
+
+glossar_label_status = Estado
+glossar_label_term = Plazo
+glossar_label_definition = Definición
+glossar_label_description = Descripción
+
+glossar_status_aktiviert = Activado
+glossar_status_deaktiviert = Desactivado
+
+glossar_error_empty_term = Por favor ingrese un término
+glossar_error_empty_definition = Por favor ingrese una definición.
+
+perm_general_glossar[general] = glosario
+perm_general_glossar[settings] = Glosario: Configuración
+perm_general_glossar[info] = Glosario: Información
+
+
+glossar_term_alt_description = Términos alternativos
+
+config_article = Artículo del glosario
+
+glossar_starttag = Día de inicio
+glossar_endtag = Día de finalización
+
+glossar_ignoretags = Excluir etiquetas
+
+config_save = Guardar
+
+textfield_css_label = Clase CSS para cuadro de texto
