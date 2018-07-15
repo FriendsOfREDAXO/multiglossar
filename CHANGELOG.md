@@ -1,6 +1,10 @@
 
 ### Changelog ###
 
+### 14.07.2018 Version 2.0.0 beta 10
+
+- Die Tabellen werden jetzt mit rex_sql_table:: angelegt und sichergestellt.
+
 ### 02.07.2018 Version 2.0.0 beta9 ###
 
 - Turbocache implementiert (experimentell!)
