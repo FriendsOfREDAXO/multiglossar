@@ -1,6 +1,26 @@
 
 ### Changelog ###
 
+### 14.07.2018 Version 2.0.0 beta 10
+
+- Die Tabellen werden jetzt mit rex_sql_table:: angelegt und sichergestellt.
+
+### 02.07.2018 Version 2.0.0 beta9 ###
+
+- Turbocache implementiert (experimentell!)
+
+### 29.06.2018 Version 2.0.0 beta8 ###
+
+- Bugfix Call to a member function setSubPath() on null
+- Templates können ausgeschlossen werden
+
+### 25.06.2018 Version 2.0.0 beta7 ###
+
+- Initiale Contenterkennung auf regex umgestellt
+
+### 20.06.2018 Version 2.0.0 beta6 ###
+
+- Cache hinzugefügt
 
 ### 16.08.2017 Version 2.0.0 beta5 ###
 

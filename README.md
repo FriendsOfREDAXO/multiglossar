@@ -54,7 +54,7 @@ Standardmäßig werden Glossarbegriffe in den Tags h1 bis h6, a und figcaption n
 In den Einstellungen können *zusätzliche Tags* angegeben werden, in denen Glossarbegriffe nicht markiert werden. Beispielsweise ul,aside,nav usw.
 
 Glossarbegriffe werden immer nur in einem Teil des Dokumentes markiert. Dies ist standardmäßig innerhalb des body-Tags. Es kann aber auch ein anderer Bereich definiert werden. Der Bereich muss allerdings eindeutig sein.
-Die Definition, welcher Bereich für das Glossar berücksichtigt wird, wird auf der Seite "Konfiguration" eingestellt. Reguläre Ausdrücke sind zulässig. Es lassen sich auch Kommentare als Start- und Stopmarkierung definieren. Ein übliches Vorgehen ist es, im Template vor der Ausgabe des Artikels einen Kommentar, beispielsweise `<!--glossar_start-->` und nach der Ausgabe des Artikels den Kommentar `<!--glossar_stop-->` zu setzen und diese Kommentare als Start- und Stopmarkierung in den Einstellungen zu setzen.
+Die Definition, welcher Bereich für das Glossar berücksichtigt wird, wird auf der Seite "Konfiguration" eingestellt. Reguläre Ausdrücke sind zulässig. Es lassen sich auch Kommentare als Start- und Stopmarkierung definieren. Ein übliches Vorgehen ist es, im Template vor der Ausgabe des Artikels einen Kommentar, beispielsweise <!--glossar_start--> und nach der Ausgabe des Artikels den Kommentar <!--glossar_stop--> zu setzen und diese Kommentare als Start- und Stopmarkierung in den Einstellungen zu setzen.
 Es ist nur ein Bereich möglich.
 
 #### Ausgabe-Code eines Glossar-Links
@@ -75,6 +75,38 @@ $(document).ready(function(){
 </script>
 ```
 
+### Metainfo
+
+Es ist möglich einzelne Artikel gezielt von der Kennzeichnung mit Glossarbegriffen auszunehmen. Das ist sinnvoll bei AGBs, dem Impressum, Formularseiten usw. Wenn dies gewünscht ist, kann eine Artikel-Metainfo angelegt werden, die einen beliebigen Wert zurückgeben kann. Die Definition, wie der Wert ausgewertet wird, erfolgt in den Einstellungen des AddOns. Möglich sind hier <0, =0 oder >0. Wenn die Bedingung erfüllt ist, wird der Artikel von der Kennzeichnung der Glossarbegriffe ausgenommen.
+
+Die über das System oder yrewrite definierten 404-Seiten werden immer vom Glossar ausgenommen.
+
+### Cache
+
+Bei vielen Glossareinträgen und/oder komplexen Websites kann das Glossar zu Verzögerungen im Seitenaufbau führen. Diese Verzögerungen können verhindert werden, indem der Glossarcache aktiviert wird. Im Glossarcache wird der Seiteninhalt komplett abgelegt. Der Glossarcache hat im Moment noch Entwicklungsstatus, sollte also in Produktivseiten noch nicht eingesetzt werden.
+
+Generell werden keine Seiten im Glossarcache abgelegt, die mit POST Parametern aufgerufen werden. Get Parameter werden vom Cache berücksichtigt. Von der Indexierung durch search-it aufgerufene Seiten werden nicht gecached.
+
+In den Einstellungen können Seiten angegeben werden, die vom Glossarcache ausgenommen werden. Hier sollten auf jeden Fall die Fehlerseiten eingetragen werden. Ebenso Suchergebnisseiten.
+
+Der Cache wird für einzelne Seiten regeneriert, wenn Seiten bearbeitet oder der Status geändert wird. Ebenso wird der Cache gelöscht, wenn der REDAXO Cache über das System gelöscht wird. Der Cache wird ebenfalls komplett gelöscht, wenn Glossareinträge bearbeitet werden. Es empfiehlt sich also im Livebetrieb Glossareinträge en Block zu bearbeiten.
+
+Der Cache sollte bei der Entwicklung immer ausgeschaltet sein, da eventuelle Codeänderungen sonst keine Wirkung haben.
+
+### Turbocache
+
+Der Turbocache ist ein experimenteller Cache, der auf der gleichen Technik beruht wie der Glossarcache selbst. Allerdings wird er früher aktiviert. Bereits am Extensionpoint PACKAGES_INCLUDED wird geprüft, ob für den Artikel ein Cachedatensatz existiert. Wenn dies der Fall ist, wird der Datensatz ausgegeben und die weitere Bearbeitung abgebrochen (exit). Dadurch werden auch Modulinhalte gecached. Der Cache beschleunigt nicht nur die Ausgabe des Glossars sondern jegliche Ausgabe von REDAXO Artikeln. Der Glossarcache wird per rex_extension::LATE generiert. Daher ist beispielsweise sprog (rex_extension::NORMAL) bereits durchgelaufen und wird mit gecached.
+
+Die Regeln für den Neuaufbau des Turbocache sind vergleichbar mit denen des REDAXO Cache. Wenn also ein Artikel bearbeitet, verschoben oder gelöscht wird, wird auch der Cache dieses Artikels bei einem neuen Aufruf der Seite regeneriert.
+
+### YForm und url
+
+Wenn Datensätze einer YForm Tabelle geändert oder gelöscht werden, wird geprüft, ob das Url AddOn vorhanden ist und ob die Tabelle des geänderten Datensatzes mit einem Redaxo Artikel in Verbindung steht. Ist dies der Fall, wird für diesen Artikel der Cache regeneriert.
+
+### Für Programmierer: Cache selbst leeren
+
+Der Glossarcache kann in eigenen Aktionen gelöscht werden. `glossar_cache::clear()` löscht den gesamten Glossarcache. `glossar_cache::clear(27)` löscht den Glossarcache für den Artikel mit der Id 27 in allen Sprachen. `glossar_cache::clear(29,1)` löscht den Glossarcache für den Artikel mit der Id 29 der ersten Sprache. 
+
 
 ### Credits
 
@@ -82,7 +114,7 @@ $(document).ready(function(){
 * [Thomas Blum](https://github.com/tbaddade) für die vielen Tipps und Sprog
 * [Andreas Eberhard ](https://github.com/aeberhard) für den XOutputFilter
 * [Oliver Kreischer ](http://concedra.de)
-* [Thomas Skerbis ](http://klxm.de) Dokumentation und Debugging
+* [Thomas Skerbis ](http://klxm.de) Support, Installation, Dokumentation und Debugging
 
 ---
 

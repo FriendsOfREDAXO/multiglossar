@@ -42,6 +42,27 @@ if (rex_post('formsubmit', 'string') == '1') {
         ['glossar_ignoretags', 'string'],
     ]));
     
+    $this->setConfig(rex_post('config', [
+        ['use_cache', 'string'],
+    ]));
+    $this->setConfig(rex_post('config', [
+        ['use_turbocache', 'string'],
+    ]));
+    $this->setConfig(rex_post('config', [
+        ['cache_exclude_articles', 'string'],
+    ]));
+    $this->setConfig(rex_post('config', [
+        ['exclude_by_meta_field', 'string'],
+    ]));
+    $this->setConfig(rex_post('config', [
+        ['exclude_by_template', 'array'],
+    ]));
+    $this->setConfig(rex_post('config', [
+        ['exclude_by_meta_condition', 'string'],
+    ]));
+    
+    glossar_cache::clear();
+    
     echo rex_view::success($this->i18n('glossar_config_saved'));
 }
 
@@ -123,16 +144,7 @@ $formElements = [];
 $n = [];
 $n['label'] = '<label for="glossar_endtag">' . $this->i18n('glossar_endtag') . '</label>';
 $n['field'] = '<input class="form-control" type="text" id="glossar_endtag" name="config[glossar_endtag]" value="' . $this->getConfig('glossar_endtag') . '"/>';
-$formElements[] = $n;
-$fragment = new rex_fragment();
-$fragment->setVar('elements', $formElements, false);
-$content .= $fragment->parse('core/form/container.php');
-
-
-$formElements = [];
-$n = [];
-$n['label'] = '<label></label>';
-$n['field'] = '<p>Start- und Endtag können reguläre Ausdrücke enthalten. Z.B. &lt;body.*?&gt;. Sie müssen eindeutig sein und werden im Quelltext wieder eingesetzt.</p>';
+$n['note'] = $this->i18n('glossar_endtag_note');
 $formElements[] = $n;
 $fragment = new rex_fragment();
 $fragment->setVar('elements', $formElements, false);
@@ -143,31 +155,19 @@ $formElements = [];
 $n = [];
 $n['label'] = '<label for="glossar_ignoretags">' . $this->i18n('glossar_ignoretags') . '</label>';
 $n['field'] = '<input class="form-control" type="text" id="glossar_ignoretags" name="config[glossar_ignoretags]" value="' . $this->getConfig('glossar_ignoretags') . '"/>';
+$n['note'] = $this->i18n('glossar_ignoretags_note');
 $formElements[] = $n;
 $fragment = new rex_fragment();
 $fragment->setVar('elements', $formElements, false);
 $content .= $fragment->parse('core/form/container.php');
-
-$formElements = [];
-$n = [];
-$n['label'] = '<label></label>';
-$n['field'] = '<p>Hier können zusätzlich zu ignorierende Tags angegeben werden (z.B. ul, aside). Standardmäßig werden Begriffe in a, h1...h6 und figcaption ignoriert. Weitere Tags bitte mit Komma trennen. Es können auch zu ignorierende Klassen angegeben werden, wie z.B. .glossignore</p>';
-$formElements[] = $n;
-$fragment = new rex_fragment();
-$fragment->setVar('elements', $formElements, false);
-$content .= $fragment->parse('core/form/container.php');
-
-
-
 
 
 // Css Class für Textfeld
 $formElements = [];
 $n = [];
 $n['label'] = '<label for="glossar_textfield_css">' . $this->i18n('textfield_css_label') . '</label>';
-$n['field'] = '<input class="form-control" type="text" id="glossar_textfield_css" name="config[textfield_css]" value="' . $this->getConfig('textfield_css') . '"/>
-<p>Hier kann eine geeignete CSS-Class hinterlegt werden um den gewünschten Editor auszuwählen und die aktuelle Einstellung zu überschreiben.z.B. markitupEditor-multiglossar oder redactorEditor2-multiglossar</p>
-';
+$n['field'] = '<input class="form-control" type="text" id="glossar_textfield_css" name="config[textfield_css]" value="' . $this->getConfig('textfield_css') . '"/>';
+$n['note'] = $this->i18n('glossar_textfield_css_note');
 $formElements[] = $n;
 $fragment = new rex_fragment();
 $fragment->setVar('elements', $formElements, false);
@@ -177,14 +177,100 @@ $content .= $fragment->parse('core/form/container.php');
 $formElements = [];
 $n = [];
 $n['label'] = '<label for="glossar_deffield_css">' . $this->i18n('deffield_css_label') . '</label>';
-$n['field'] = '<input class="form-control" type="text" id="glossar_deffield_css" name="config[deffield_css]" value="' . $this->getConfig('deffield_css') . '"/>
-<p>Hier kann eine geeignete CSS-Class hinterlegt werden um den gewünschten Editor auszuwählen und die aktuelle Einstellung zu überschreiben.z.B. markitupEditor-multiglossar oder redactorEditor2-multiglossar</p>
-';
+$n['field'] = '<input class="form-control" type="text" id="glossar_deffield_css" name="config[deffield_css]" value="' . $this->getConfig('deffield_css') . '"/>';
+$n['note'] = $this->i18n('glossar_deffield_css_note');
 $formElements[] = $n;
 $fragment = new rex_fragment();
 $fragment->setVar('elements', $formElements, false);
 $content .= $fragment->parse('core/form/container.php');
 
+// Template vom Glossar ausschließen
+$formElements = [];
+$n = [];
+$n['label'] = '<label for="glossar_exclude_by_template">' . $this->i18n('glossar_exclude_by_template_label') . '</label>';
+$n['field'] = '<select id="glossar_exclude_by_template" name="config[exclude_by_template][]" class="selectpicker" multiple="multiple">';
+$options = rex_sql::factory()->getArray('SELECT name, id FROM '.rex::getTable('template'));
+foreach ($options as $opt) {
+    $n['field'] .= '<option value="'.$opt['id'].'"'.(in_array($opt['id'],$this->getConfig('exclude_by_template')) ? ' selected="selected"' : '').'>'.$opt['name'].' - ['.$opt['id'].']</option>';
+}
+$n['field'] .= '</select>';
+$n['note'] = $this->i18n('glossar_exclude_by_template_note');
+$formElements[] = $n;
+$fragment = new rex_fragment();
+$fragment->setVar('elements', $formElements, false);
+$content .= $fragment->parse('core/form/container.php');
+
+// Artikel vom Glossar ausschließen
+$formElements = [];
+$n = [];
+$n['label'] = '<label for="glossar_exclude_by_meta_field">' . $this->i18n('glossar_exclude_by_meta_field_label') . '</label>';
+$n['field'] = '<select id="glossar_exclude_by_meta_field" name="config[exclude_by_meta_field]" class="selectpicker"><option value="">--- Bitte auswählen ---</option>';
+$options = rex_sql::factory()->getArray('SELECT name, title FROM '.rex::getTable('metainfo_field').' WHERE name LIKE :name',['name'=>'art_%']);
+foreach ($options as $opt) {
+    $n['field'] .= '<option value="'.$opt['name'].'"'.($opt['name'] == $this->getConfig('exclude_by_meta_field') ? ' selected="selected"' : '').'>'.$opt['title'].' - ['.$opt['name'].']</option>';
+}
+$n['field'] .= '</select>';
+$n['note'] = $this->i18n('glossar_exclude_by_meta_field_note');
+$formElements[] = $n;
+$fragment = new rex_fragment();
+$fragment->setVar('elements', $formElements, false);
+$content .= $fragment->parse('core/form/container.php');
+
+
+
+// Bedingung, die erfüllt sein muss damit der Artikel nicht mit Glossarbegriffen dekoriert wird
+$formElements = [];
+$n = [];
+$n['label'] = '<label for="glossar_exclude_by_meta_condition">' . $this->i18n('glossar_exclude_by_meta_condition_label') . '</label>';
+$n['field'] = '<select class="selectpicker" id="glossar_exclude_by_meta_condition" name="config[exclude_by_meta_condition]">';
+$options = ['kleiner 0'=>'<0','gleich 0'=>'=0','größer 0'=>'>0'];
+foreach ($options as $k=>$v) {
+    $n['field'] .= '<option value="'.$v.'"'.($v == $this->getConfig('exclude_by_meta_condition') ? ' selected="selected"' : '').'>'.$k.'</option>';
+}
+$n['field'] .= '</select>';
+
+$n['note'] = $this->i18n('glossar_exclude_by_meta_note');
+$formElements[] = $n;
+$fragment = new rex_fragment();
+$fragment->setVar('elements', $formElements, false);
+$content .= $fragment->parse('core/form/container.php');
+
+// ==================== Cache ===========================
+
+$content .= '</fieldset><fieldset><legend>' . $this->i18n('glossar_cache_title') . '</legend>';
+
+// Cache benutzen
+$formElements = [];
+$n = [];
+$n['label'] = '<label for="glossar_use_cache">' . $this->i18n('glossar_use_cache_label') . '</label>';
+$n['field'] = '<input type="checkbox" id="glossar_use_cache" name="config[use_cache]" value="1" '.($this->getConfig('use_cache') == 1 ? ' checked="checked"' : '').' />';
+$n['note'] = $this->i18n('use_cache_infotext');
+$formElements[] = $n;
+$fragment = new rex_fragment();
+$fragment->setVar('elements', $formElements, false);
+$content .= $fragment->parse('core/form/checkbox.php');
+
+// Artikel von Glossar Cache ausschließen (z.B. Formulare, Suche)
+$formElements = [];
+$n = [];
+$n['label'] = '<label>'.$this->i18n('glossar_cache_exclude_articles_label').'</label>';
+$n['field'] = rex_var_linklist::getWidget(1, 'config[cache_exclude_articles]',$this->getConfig('cache_exclude_articles'));
+$n['note'] = $this->i18n('glossar_cache_exclude_articles_note');
+$formElements[] = $n;
+$fragment = new rex_fragment();
+$fragment->setVar('elements', $formElements, false);
+$content .= $fragment->parse('core/form/container.php');
+
+// Turbocache benutzen
+$formElements = [];
+$n = [];
+$n['label'] = '<label for="glossar_use_turbocache">' . $this->i18n('glossar_use_turbocache_label') . '</label>';
+$n['field'] = '<input type="checkbox" id="glossar_use_turbocache" name="config[use_turbocache]" value="1" '.($this->getConfig('use_turbocache') == 1 ? ' checked="checked"' : '').' />';
+$n['note'] = $this->i18n('use_turbocache_infotext');
+$formElements[] = $n;
+$fragment = new rex_fragment();
+$fragment->setVar('elements', $formElements, false);
+$content .= $fragment->parse('core/form/checkbox.php');
 
 
 // Save-Button

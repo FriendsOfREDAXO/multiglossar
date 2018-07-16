@@ -62,3 +62,37 @@ glossar_ignoretags = Tags ausschließen
 config_save = Speichern
 
 textfield_css_label = CSS Klasse für Textfeld
+deffield_css_label = CSS Klasse für Definition Feld
+
+notice_term_field = Begriffe können auch HTML Tags enthalten und müssen exakt so eingetragen werden, wie sie auf der Seite vorkommen. z.B. CO<sub>2</sub>-Bilanzierung. Im Feld alternative Begriffe können Varianten eingetragen werden.
+
+glossar_use_cache_label = Glossarcache verwenden
+use_cache_infotext = Die Aktivierung des Cache kann den Seitenaufbau beschleunigen. Seiten mit POST Parametern werden nicht gecached. Der Glossarcache wird über die Funktion "Cache löschen" im REDAXO System zurückgesetzt.
+
+glossar_exclude_by_meta_field_note = Der Wert des ausgewählten Metainfo Feldes bestimmt, ob ein Artikel mit Glossarbegriffen versehen werden soll oder nicht. Die Angabe ist als Ausschlussangabe gedacht. Die Angabe ist optional. Wenn kein Artikel über die Metainfo ausgeschlossen werden soll hier einfach nichts auswählen. 404er Seiten (im System oder yrewrite gesetzt) werden automatisch von der Bearbeitung ausgenommen.
+
+glossar_deffield_css_note = Hier kann eine geeignete CSS-Class hinterlegt werden um den gewünschten Editor auszuwählen und die aktuelle Einstellung zu überschreiben.z.B. markitupEditor-multiglossar oder redactorEditor2-multiglossar
+
+glossar_cache_exclude_articles_label = Artikel vom Cache ausschließen
+
+glossar_cache_exclude_articles_note = Hier sollten Artikel angegeben werden, die vom Cache ausgenommen werden sollen. z.B. Suchergebnisseiten, Formularseiten usw.
+
+glossar_exclude_by_meta_note = Wenn die Bedingung erfüllt ist, wird der Artikel nicht mit Glossarbegriffen versehen.
+
+glossar_endtag_note = Start- und Endtag können reguläre Ausdrücke enthalten. Z.B. <body.*>. Sie müssen eindeutig sein und werden im Quelltext wieder eingesetzt.
+
+glossar_ignoretags_note = Hier können zusätzlich zu ignorierende Tags angegeben werden (z.B. ul, aside). Standardmäßig werden Begriffe in a, h1...h6 und figcaption ignoriert. Weitere Tags bitte mit Komma trennen. Es können auch zu ignorierende Klassen angegeben werden, wie z.B. .glossignore
+
+glossar_textfield_css_note = Hier kann eine geeignete CSS-Class hinterlegt werden um den gewünschten Editor auszuwählen und die aktuelle Einstellung zu überschreiben.z.B. markitupEditor-multiglossar oder redactorEditor2-multiglossar
+
+glossar_exclude_by_meta_field_label = Metainfo für Ausschluss von der Kennzeichnung mit Glossarbegriffen
+
+glossar_exclude_by_meta_condition_label = Kondition für den Ausschluss von Artikeln
+
+glossar_cache_title = Glossar Cache
+
+glossar_exclude_by_template_label = Templates für Ausschluss von der Kennzeichnung mit Glossarbegriffen 
+glossar_exclude_by_template_note = Artikel, die als Ausgabetemplate eines der gewählten Templates haben, werden nicht mit Glossarbegriffen versehen.
+
+glossar_use_turbocache_label = Turbocache verwenden
+use_turbocache_infotext = Der Turbocache ist ein experimenteller Cache, der auf der gleichen Technik beruht wie der Glossarcache selbst. Allerdings wird er früher aktiviert. Bereits am Extensionpoint PACKAGES_INCLUDED wird geprüft, ob für den Artikel ein Cachedatensatz existiert. Wenn dies der Fall ist, wird der Datensatz ausgegeben und die weitere Bearbeitung abgebrochen (exit). Dadurch werden auch Modulinhalte gecached. Der Cache beschleunigt nicht nur die Ausgabe des Glossars sondern jegliche Ausgabe von REDAXO Artikeln. Der Glossarcache wird per rex_extension::LATE generiert. Daher ist beispielsweise sprog (rex_extension::NORMAL) bereits durchgelaufen und wird mit gecached.
