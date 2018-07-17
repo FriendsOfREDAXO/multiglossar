@@ -24,7 +24,7 @@ if ($func == 'delete' && $term_id > 0) {
   $success = $this->i18n('term_deleted');
   $func = '';
   unset($term_id);
-  glossar_cache::clear_cache();  
+  glossar_cache::clear();  
 }
 
 // setstatus
@@ -41,7 +41,7 @@ if ($func == 'setstatus') {
   $msg = $status == 1 ? 'glossar_status_activated' : 'glossar_status_deactivated';
   echo rex_view::success($this->i18n($msg));
   $func = '';
-  glossar_cache::clear_cache();  
+  glossar_cache::clear();  
 }
 
 // ausgabe der einträge
