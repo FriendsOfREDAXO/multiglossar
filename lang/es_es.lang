@@ -27,7 +27,7 @@ glossar_info_settings_title = Configuración
 
 glossar_func_header = Estado / funciones
 
-glossar_add =   añadir
+glossar_add =    añadir
 glossar_edit = editar
 glossar_delete = borrar
 
@@ -62,3 +62,37 @@ glossar_ignoretags = Excluir etiquetas
 config_save = Guardar
 
 textfield_css_label = Clase CSS para cuadro de texto
+deffield_css_label = Clase de CSS para el campo de definición
+
+notice_term_field = Los términos también pueden contener etiquetas HTML y deben ingresarse exactamente como aparecen en la página. por ejemplo CO <sub>2</sub> equilibrio de aplicaciones. Las variantes se pueden ingresar en el campo Términos alternativos.
+
+glossar_use_cache_label = Usar la memoria caché del glosario
+use_cache_infotext = La activación de la memoria caché puede acelerar la configuración de la página. Las páginas con parámetros POST no se almacenan en caché. El caché del glosario se restablece utilizando la función "borrar caché" en el sistema REDAXO.
+
+glossar_exclude_by_meta_field_note = El valor del campo de Metainfo seleccionada determina si un artículo debe proporcionarse con términos del glosario o no. La información pretende ser una declaración de exclusión. La especificación es opcional. Si no se debe excluir ningún artículo sobre Metainfo, simplemente no seleccione nada. 404 páginas (establecidas en el sistema o yrewrite) se excluyen automáticamente de la edición.
+
+glossar_deffield_css_note = Aquí se puede depositar una clase CSS adecuada para seleccionar el editor deseado y sobrescribir la configuración actual. markitupEditor-multiglossar o redactorEditor2-multiglossar
+
+glossar_cache_exclude_articles_label = Excluir elementos de la búsqueda
+
+glossar_cache_exclude_articles_note = Aquí debe especificar los elementos que desea excluir de la memoria caché. por ejemplo Páginas de resultados de búsqueda, páginas de formularios, etc.
+
+glossar_exclude_by_meta_note = Si se cumple la condición, el artículo no se proporcionará con términos del glosario.
+
+glossar_endtag_note = Las etiquetas de inicio y final pueden contener expresiones regulares. Por ejemplo, <body.*>. Deben ser únicos y se usan nuevamente en el código fuente.
+
+glossar_ignoretags_note = Se pueden especificar etiquetas adicionales para ignorar aquí (por ejemplo, ul, a un lado). Por defecto, los términos en a, h1 ... h6 y figcaption son ignorados. Separe las etiquetas adicionales con una coma. También es posible especificar clases que se ignorarán, como .glossignore
+
+glossar_textfield_css_note = Aquí se puede depositar una clase CSS adecuada para seleccionar el editor deseado y sobrescribir la configuración actual. markitupEditor-multiglossar o redactorEditor2-multiglossar
+
+glossar_exclude_by_meta_field_label = Metainfo para la exclusión del etiquetado con términos del glosario
+
+glossar_exclude_by_meta_condition_label = Condición para la exclusión de artículos
+
+glossar_cache_title = Glosario Caché
+
+glossar_exclude_by_template_label = Plantillas para exclusión del etiquetado con términos del glosario
+glossar_exclude_by_template_note = Los artículos que tienen una plantilla de salida de una de las plantillas seleccionadas no se proporcionarán con términos de glosario.
+
+glossar_use_turbocache_label = Usa turbocache
+use_turbocache_infotext = El turbo caché es un caché experimental basado en la misma técnica que el caché del glosario en sí mismo. Sin embargo, se activó antes. Ya en el punto de extensión PACKAGES_INCLUDED, se verifica si existe un registro de datos de caché para el artículo. Si este es el caso, el registro de datos se emite y el procesamiento posterior se cancela (sale). Esto también almacena en caché el contenido del módulo. El caché no solo acelera la salida del glosario sino también cualquier salida de los artículos de REDAXO. El caché del glosario se genera a través de rex_extension::LATE. Por lo tanto, por ejemplo, sprog (rex_extension::NORMAL) ya se ha procesado y está en caché.
