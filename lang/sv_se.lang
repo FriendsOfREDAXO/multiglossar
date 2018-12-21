@@ -1,0 +1,98 @@
+glossar = Ordlista
+glossar_title = Begrepp
+glossar_config = Inställningar
+glossar_config_saved = Inställningar sparades
+glossar_markitupinfo = Skapat av addon - Ordlista -
+glossar_redactorinfo = Skapat av addon - Ordlista -
+
+glossar_settings = Konfiguration
+glossar_max_characters = Förblivande tecken:
+
+glossar_info = Info
+glossar_info_readme = Readme
+glossar_info_modules = Output (Modules, CSS, JS)
+glossar_info_changelog = Changelog
+glossar_info_licence = Licens
+
+glossar_info_readme_title = Readme
+glossar_info_cangelog_title = Changelog
+glossar_info_licence_title = Licens
+glossar_info_modules_title = Output (Modules, CSS, JS)
+
+
+glossar_status_activated = Bidrag aktiverades
+glossar_status_deactivated = Bidrag deaktiverades
+
+glossar_info_settings_title = Konfiguration
+
+glossar_func_header = Status / funktioner
+
+glossar_add =  tillfoga
+glossar_edit = bearbeta
+glossar_delete = radera
+
+glossar_title_edit = bearbeta bidrag
+glossar_title_add = tillfoga bidrag
+
+glossar_label_status = Status
+glossar_label_term = Begrepp
+glossar_label_definition = Defintion
+glossar_label_description = Beskrivning
+
+glossar_status_aktiviert = aktiverad
+glossar_status_deaktiviert = deaktiverad
+
+glossar_error_empty_term = Vänligen ange ett begrepp
+glossar_error_empty_definition = Vänligen ange en defintion
+
+perm_general_glossar[general] = Ordlista
+perm_general_glossar[settings] = Ordlista: Konfiguration
+perm_general_glossar[info] = Ordlista: Info
+
+
+glossar_term_alt_description = Alternativa begrepp
+
+config_article = Ordlista artikel
+
+glossar_starttag = Starttag
+glossar_endtag = Endtag
+
+glossar_ignoretags = Utesluta taggar
+
+config_save = Spara
+
+textfield_css_label = CSS klass till textfält
+deffield_css_label = CSS klass för definition fält
+
+notice_term_field = Villkoren kan också innehålla HTML-taggar och måste anges exakt som de visas på sidan. t.ex. CO <sub> 2 </ sub>bilansering applikationer. Varianter kan anges i fältet Alternativa termer.
+
+glossar_use_cache_label = Använd glossar cachen
+use_cache_infotext = Aktivering av cacheminnet kan påskynda sidinstallationen. Sidor med POST-parametrar caches inte. Glossary cachen återställs med funktionen "Clear Cache" i REDAXO-systemet.
+
+glossar_exclude_by_meta_field_note = Värdet av det valda metainfo-fältet bestämmer huruvida en artikel ska förses med ordlistor eller ej. Informationen är avsedd som ett uttalande om uteslutning. Specifikationen är valfri. Om ingen artikel om Metainfo ska uteslutas här väljer du ingenting. 404 sidor (sätt på i systemet eller yrewrite) utesluts automatiskt från redigering.
+
+glossar_deffield_css_note = Här kan en lämplig CSS-klass deponeras för att välja önskad redigerare och skriva över den aktuella inställningen. markitupEditor-multiglossar eller redactorEditor2-multiglossar
+
+glossar_cache_exclude_articles_label = Exkludera objekt från sökning
+
+glossar_cache_exclude_articles_note = Här bör du ange objekt som du vill utesluta från cacheminnet. t.ex. Sökresultatsidor, formulärsidor etc.
+
+glossar_exclude_by_meta_note = Om villkoret är uppfyllt kommer artikeln inte att tillhandahållas med ordlistor.
+
+glossar_endtag_note = Start- och slutkoder kan innehålla regelbundna uttryck. Till exempel, <Body.*>. De måste vara unika och används igen i källkoden.
+
+glossar_ignoretags_note = Ytterligare taggar som kan ignoreras kan anges här (t ex ul, aside). Som standard ignoreras termen i a, h1 ... h6 och figcaption. Separera ytterligare taggar med ett komma. Det är också möjligt att ange klasser som ska ignoreras, t.ex. .glossignore
+
+glossar_textfield_css_note = Här kan en lämplig CSS-klass deponeras för att välja önskad redigerare och skriva över den aktuella inställningen. markitupEditor-multiglossar eller redactorEditor2-multiglossar
+
+glossar_exclude_by_meta_field_label = Metainfo för uteslutning från märkning med ordlistor
+
+glossar_exclude_by_meta_condition_label = Villkor för uteslutning av artiklar
+
+glossar_cache_title = Glossar cache
+
+glossar_exclude_by_template_label = Mallar för uteslutning från etikettering med ordlistor
+glossar_exclude_by_template_note = Artiklar som har en mall för utmatning av en av de valda mallarna kommer inte att vara försedda med ordlistor.
+
+glossar_use_turbocache_label = Använda turbocachen
+use_turbocache_infotext = Turbo cachen är en experimentell cache baserat på samma teknik som glossary cachen själv. Den aktiveras dock tidigare. Redan vid tilläggspunktet PACKAGES_INCLUDED kontrolleras det om det finns en cacherdatapost för artikeln. Om så är fallet matas dataposten och den vidare bearbetningen avbryts (exit). Detta cachar modulen innehåll. Cacheminnet ökar inte bara ordalydelsen utan även eventuella utdata från REDAXO-artiklar. Glossary cachen genereras via rex_extension :: LATE. Därför har språk, rex_extension :: NORMAL, till exempel redan gått igenom och cachas.
