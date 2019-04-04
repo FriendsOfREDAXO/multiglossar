@@ -14,6 +14,7 @@ rex_sql_table::get(rex::getTable('multiglossar'))
     ->ensureColumn(new rex_sql_column('createdate', 'datetime'))
     ->ensureColumn(new rex_sql_column('updatedate', 'datetime'))
     ->ensureColumn(new rex_sql_column('revision', 'int(10) unsigned'))
+    ->ensureColumn(new rex_sql_column('casesensitive', 'varchar(255)'))
     ->setPrimaryKey('pid')
     ->ensure();
 // Cache

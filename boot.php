@@ -40,10 +40,13 @@ if (!rex::isBackend()) {
     // Turbocache - Blitzcache - Cache+ ???
     if ($this->getConfig('use_turbocache')) {
         rex_extension::register('PACKAGES_INCLUDED', 'glossar_cache::read');
-    }    
+    }
+    
     
     rex_extension::register('OUTPUT_FILTER', function(rex_extension_point $ep) {
         
+        $article_complete = explode(',',$this->getConfig('article_complete'));
+
         if (rex_addon::exists('yrewrite')) {
             $domain_id = rex_yrewrite::getCurrentDomain()->getId();
             $glossar_id = $this->getConfig('article_' . $domain_id);
@@ -121,6 +124,7 @@ if (!rex::isBackend()) {
         if ($sql->getRows() > 0) {
             for ($i = 0; $i < $sql->getRows(); $i ++) {
                 $marker = $sql->getValue('term');
+                $casesensitive = $sql->getValue('casesensitive');
 //                dump($glossar_id); exit;
                 $markers = explode('|', trim($marker));
                 $search_term = $markers[0];
@@ -135,12 +139,22 @@ if (!rex::isBackend()) {
 
                     $search = '\b' . $search . '\b([^äüöß])';
                     
-                    $regEx ='~(?!((<.*?)))'.$search.'(?!(([^<>]*?)>))~si';
+                    if (trim($casesensitive,'|') == 1) {
+                        $regEx ='~(?!((<.*?)))'.$search.'(?!(([^<>]*?)>))~s';
+                    } else {
+                        $regEx ='~(?!((<.*?)))'.$search.'(?!(([^<>]*?)>))~si';
+                    }
                     $content = Glossar\Extension::setMarker(['a','h1','h2','h3','h4','h5','h6','figcaption','exclude'],$content,$search_term);
 //                    dump($regEx);
 //                    dump($replace);
                     
-                    $content = preg_replace($regEx, $replace.'\3', $content, 1);
+                    // Wenn der ganze Artikel mit Glossarbegriffen versehen werden soll (Einstellung in Settings article_complete) alle Fundstellen ersetzen
+                    if (in_array(rex_article::getCurrentId(),$article_complete)) {
+                        $content = preg_replace($regEx, $replace.'\3', $content);
+                    } else {
+                        // Standard: nur die erste Stelle ersetzen
+                        $content = preg_replace($regEx, $replace.'\3', $content, 1);                        
+                    }
                     $content = str_replace('m!a!r!k','',$content);
                     
 

@@ -38,6 +38,7 @@ glossar_label_status = Status
 glossar_label_term = Begriff
 glossar_label_definition = Definition
 glossar_label_description = Beschreibung
+glossar_label_casesensitive = Groß-klein-Schreibung wird berücksichtigt
 
 glossar_status_aktiviert = aktiviert
 glossar_status_deaktiviert = deaktviert
@@ -96,3 +97,7 @@ glossar_exclude_by_template_note = Artikel, die als Ausgabetemplate eines der ge
 
 glossar_use_turbocache_label = Turbocache verwenden
 use_turbocache_infotext = Der Turbocache ist ein experimenteller Cache, der auf der gleichen Technik beruht wie der Glossarcache selbst. Allerdings wird er früher aktiviert. Bereits am Extensionpoint PACKAGES_INCLUDED wird geprüft, ob für den Artikel ein Cachedatensatz existiert. Wenn dies der Fall ist, wird der Datensatz ausgegeben und die weitere Bearbeitung abgebrochen (exit). Dadurch werden auch Modulinhalte gecached. Der Cache beschleunigt nicht nur die Ausgabe des Glossars sondern jegliche Ausgabe von REDAXO Artikeln. Der Glossarcache wird per rex_extension::LATE generiert. Daher ist beispielsweise sprog (rex_extension::NORMAL) bereits durchgelaufen und wird mit gecached.
+
+
+glossar_article_complete_label = Ganze Artikel mit Glossarbegriffen versehen
+glossar_article_complete_note = Hier können Artikel eingetragen werden, bei denen der gesamte Artikel mit Glossarbegriffen verlinkt werden soll.

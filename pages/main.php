@@ -115,17 +115,21 @@ if ($func == '') {
   $title = $func == 'edit' ? $this->i18n('glossar_title_edit') : $this->i18n('glossar_title_add');
 
   $form = rex_form::factory(rex::getTable('multiglossar'), '', 'pid = ' . $pid,'post', false);
+  
   $form->addParam('pid', $pid);
   $form->setApplyUrl(rex_url::currentBackendPage());
   $form->setLanguageSupport('id', 'clang_id');
 
   $form->setEditMode($func == 'edit');
-
+  
   $field = $form->addTextField('term', rex_request('term', 'string', null));
   $field->setLabel($this->i18n('glossar_label_term'));
   $field->getValidator()->add('notEmpty', $this->i18n('glossar_error_empty_term'));
-  $field->setNotice($this->i18n('notice_term_field'));
+  $field->setNotice($this->i18n('notice_term_field'));  
   
+  $field = $form->addCheckboxField('casesensitive');
+  $field->addOption($this->i18n('glossar_label_casesensitive'), "1");
+  $field->setLabel($this->i18n('glossar_label_casesensitive'));  
   
   $field = $form->addTextAreaField('term_alt');
   $field->setAttribute('style', 'width: 100%; padding: 10px;');
