@@ -19,6 +19,7 @@ glossar_info_cangelog_title = Changelog
 glossar_info_licence_title = Licence
 glossar_info_modules_title = Output (Modules, CSS, JS)
 
+
 glossar_status_activated = Entry was activated
 glossar_status_deactivated = Entry was disabled
 
@@ -48,3 +49,50 @@ perm_general_glossar[general] = Glossary
 perm_general_glossar[settings] = Glossary: Settings
 perm_general_glossar[info] = Glossary: Infos
 
+
+glossar_term_alt_description = Alternative terms
+
+config_article = Glossary article
+
+glossar_starttag = Start tag
+glossar_endtag = End tag
+
+glossar_ignoretags = Exclude tags
+
+config_save = Save
+
+textfield_css_label = CSS class for text field
+deffield_css_label = CSS class for definition field
+
+notice_term_field = Terms can include HTML tags and have to be entered exactly as they are displayed on a page. Ex. CO<sub>2</sub>-levels. In the alternative terms field variants can be entered.
+
+glossar_use_cache_label = Delete glossary cache
+use_cache_infotext = Activating the cache can accelerate page loading. Pages using POST parameters will not be cached. The glossary cached will be reset when using the "Delete cache" button found in REDAXO system settings.
+
+glossar_exclude_by_meta_field_note = The value of the selected Metainfo field defines if an article is parsed for glossary terms. If set, the article will not be parsed. Setting the value is optional. If no article should be excluded leave blank. 404 pages (set in system settings or in yrewrite) will be excluded automatically.
+
+glossar_deffield_css_note = Enter a CSS class to load a specific editor and to overwrite the current setting. Ex. markitupEditor-multiglossar or redactorEditor2-multiglossar
+
+glossar_cache_exclude_articles_label = Exclude articles from cache
+
+glossar_cache_exclude_articles_note = Enter articles to exclude from cache. Ex. search result pages, pages with forms etc.
+
+glossar_exclude_by_meta_note = If the condition is met the article will not be parsed for glossary terms.
+
+glossar_endtag_note = Start and end tags can contain regular expressions. Ex. <body.*>. These must be unique and will be replaced in the source code.
+
+glossar_ignoretags_note = Enter tags to be ignored (ex. ul, aside). By default terms inside a, h1...h6 and figcaption will be ignored. Additional tags can be entered comma separated. Classes to ignored can also be entered, ex. .glossignore
+
+glossar_textfield_css_note = Enter a CSS class to load a specific editor and to overwrite the current setting. Ex. markitupEditor-multiglossar or redactorEditor2-multiglossar
+
+glossar_exclude_by_meta_field_label = Metainfo to exclude from parsing for glossary terms
+
+glossar_exclude_by_meta_condition_label = Condition for exclusion of articles
+
+glossar_cache_title = Glossary cache
+
+glossar_exclude_by_template_label = Templates to exclude from parsing for glossary terms
+glossar_exclude_by_template_note = Articles using one of these templates will be excluded from parsing for glossary terms
+
+glossar_use_turbocache_label = Activate Turbocache
+use_turbocache_infotext = Turbocache is an experimental caching mechanism based on the default glossary cache. The difference being that Turbocache is activated sooner. Starting from the extension point PACKAGES_INCLUDED it checks if a cache entry for an article exists. If it does, the entry will be sent and the script terminated (exit). This way module contents are cached also. Turbocache accelerates all output, not just for the glossary, but for all REDAXO articles. The glossary cache is generated on rex_extension::LATE. Meaning that for example sprog (rex_extension::NORMAL) has run already and will be included in the cache.
