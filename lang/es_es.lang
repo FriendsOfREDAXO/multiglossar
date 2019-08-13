@@ -38,6 +38,7 @@ glossar_label_status = Estado
 glossar_label_term = Plazo
 glossar_label_definition = Definición
 glossar_label_description = Descripción
+glossar_label_casesensitive = Se toma en cuenta la ortografía grande y pequeña.
 
 glossar_status_aktiviert = Activado
 glossar_status_deaktiviert = Desactivado
@@ -96,3 +97,7 @@ glossar_exclude_by_template_note = Los artículos que tienen una plantilla de sa
 
 glossar_use_turbocache_label = Usa turbocache
 use_turbocache_infotext = El turbo caché es un caché experimental basado en la misma técnica que el caché del glosario en sí mismo. Sin embargo, se activó antes. Ya en el punto de extensión PACKAGES_INCLUDED, se verifica si existe un registro de datos de caché para el artículo. Si este es el caso, el registro de datos se emite y el procesamiento posterior se cancela (sale). Esto también almacena en caché el contenido del módulo. El caché no solo acelera la salida del glosario sino también cualquier salida de los artículos de REDAXO. El caché del glosario se genera a través de rex_extension::LATE. Por lo tanto, por ejemplo, sprog (rex_extension::NORMAL) ya se ha procesado y está en caché.
+
+
+glossar_article_complete_label = Artículos completos con tiradores de glosario.
+glossar_article_complete_note = Aquí puede introducir artículos en los que todo el artículo debe vincularse con los términos del glosario.
