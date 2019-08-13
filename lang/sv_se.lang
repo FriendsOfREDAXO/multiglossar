@@ -38,6 +38,7 @@ glossar_label_status = Status
 glossar_label_term = Begrepp
 glossar_label_definition = Defintion
 glossar_label_description = Beskrivning
+glossar_label_casesensitive = Stavning (versal/gemen) beaktas
 
 glossar_status_aktiviert = aktiverad
 glossar_status_deaktiviert = deaktiverad
@@ -96,3 +97,7 @@ glossar_exclude_by_template_note = Artiklar som har en mall för utmatning av en
 
 glossar_use_turbocache_label = Använda turbocachen
 use_turbocache_infotext = Turbo cachen är en experimentell cache baserat på samma teknik som glossary cachen själv. Den aktiveras dock tidigare. Redan vid tilläggspunktet PACKAGES_INCLUDED kontrolleras det om det finns en cacherdatapost för artikeln. Om så är fallet matas dataposten och den vidare bearbetningen avbryts (exit). Detta cachar modulen innehåll. Cacheminnet ökar inte bara ordalydelsen utan även eventuella utdata från REDAXO-artiklar. Glossary cachen genereras via rex_extension :: LATE. Därför har språk, rex_extension :: NORMAL, till exempel redan gått igenom och cachas.
+
+
+glossar_article_complete_label = Kompletta artiklar med glossor
+glossar_article_complete_note = Här kan du skriva in artiklar där hela artikeln ska kopplas till ordlistor.
