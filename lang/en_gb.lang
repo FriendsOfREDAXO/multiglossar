@@ -38,6 +38,7 @@ glossar_label_status = Status
 glossar_label_term = Term
 glossar_label_definition = Definition
 glossar_label_description = Description
+glossar_label_casesensitive = Case sensitive
 
 glossar_status_aktiviert = activated
 glossar_status_deaktiviert = disabled
@@ -96,3 +97,7 @@ glossar_exclude_by_template_note = Articles using one of these templates will be
 
 glossar_use_turbocache_label = Activate Turbocache
 use_turbocache_infotext = Turbocache is an experimental caching mechanism based on the default glossary cache. The difference being that Turbocache is activated sooner. Starting from the extension point PACKAGES_INCLUDED it checks if a cache entry for an article exists. If it does, the entry will be sent and the script terminated (exit). This way module contents are cached also. Turbocache accelerates all output, not just for the glossary, but for all REDAXO articles. The glossary cache is generated on rex_extension::LATE. Meaning that for example sprog (rex_extension::NORMAL) has run already and will be included in the cache.
+
+
+glossar_article_complete_label = Parse full article(s) for glossary terms
+glossar_article_complete_note = Enter the articles here, where the full article should be parsed for glossary terms
