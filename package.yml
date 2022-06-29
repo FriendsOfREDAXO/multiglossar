@@ -13,4 +13,4 @@ page:
         main: { title: 'translate:glossar' }
 
 requires:
-  redaxo: '^5.4'
+  redaxo: '^5.10'
