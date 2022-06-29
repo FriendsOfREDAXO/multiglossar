@@ -25,7 +25,7 @@ if (rex::isBackend()) {
         }
     });
 
-    if (rex_addon::exists('yform') && rex_addon::exists('url')) {
+    if (rex_addon::get('yform')->isAvailable() && rex_addon::get('url')->isAvailable()) {
         $e_points = ['REX_YFORM_SAVED','YFORM_DATA_DELETED'];
         foreach ($e_points as $ep_name) {
             rex_extension::register($ep_name,'glossar_cache::data_changed');
