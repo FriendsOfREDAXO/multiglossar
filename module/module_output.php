@@ -6,7 +6,7 @@ if (!rex::isBackend()) :
     
     $glossarId = 0;
     if(rex_addon::get('url')->isAvailable()) {
-        if(rex_version::compare(\rex_addon::get('url')->getVersion(), '2.0', '<') {
+        if(rex_version::compare(\rex_addon::get('url')->getVersion(), '2.0', '<')) {
             $glossarId = UrlGenerator::getId();
         }
         else {
