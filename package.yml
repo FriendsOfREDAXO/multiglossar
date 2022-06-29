@@ -14,3 +14,5 @@ page:
 
 requires:
   redaxo: '^5.4'
+  php:
+    version: '>=7.3'
