@@ -106,6 +106,10 @@ class glossar_cache {
      * @param type $ep
      */
     public static function data_changed ($ep) {
+        if(!rex_addon::get('url')->isAvailable()) {
+            return;
+        }
+        
         $table_name = '';
         if ($ep->getName() == 'YFORM_DATA_DELETED') {
             $params = $ep->getParams();
@@ -114,8 +118,15 @@ class glossar_cache {
             $params = $ep->getParams();
             $table_name = $params['table'];
         }
+        
         if ($table_name) {
-            $res = rex_sql::factory()->getArray('SELECT article_id FROM '.rex::getTable('url_generate').' WHERE `table` LIKE "%'.$table_name.'%"');
+            // Standard ist nun URL Addon Version 2
+            $query = 'SELECT article_id FROM '.rex::getTable('url_generator_profile').' WHERE `table_name` LIKE "%'.$table_name.'%"';
+            if(rex_version::compare(\rex_addon::get('url')->getVersion(), '2.0', '<')) {
+                // Kompatibilität mit URL Addon Version 1
+                $query = 'SELECT article_id FROM '.rex::getTable('url_generate').' WHERE `table` LIKE "%'.$table_name.'%"';
+            }
+            $res = rex_sql::factory()->getArray($query);
             foreach ($res as $art) {
                 $sql_cache = rex_sql::factory()
 //                        ->setDebug()
