@@ -5,14 +5,14 @@ $buttons = '';
 
 // Auf multiple Domain testen
 
-if (rex_addon::exists('yrewrite')) {
+if (rex_addon::get('yrewrite')->isAvailable()) {
     $yrewrite = new rex_yrewrite();
     $domains = $yrewrite::getDomains();
 }
 
 // Einstellungen speichern
 if (rex_post('formsubmit', 'string') == '1') {
-    if (rex_addon::exists('yrewrite')) {
+    if (rex_addon::get('yrewrite')->isAvailable()) {
         foreach ($domains as $domain) {
             if (!$domain->getId()) continue;
             $this->setConfig(rex_post('config', [
@@ -72,7 +72,7 @@ if (rex_post('formsubmit', 'string') == '1') {
 $content .= '<fieldset><legend>' . $this->i18n('glossar_info_settings_title') . '</legend>';
 
 
-if (rex_addon::exists('yrewrite')) {
+if (rex_addon::get('yrewrite')->isAvailable()) {
     foreach ($domains as $domain) {
   //      dump($domain->getId());
         
