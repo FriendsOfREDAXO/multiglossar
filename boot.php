@@ -47,7 +47,7 @@ if (!rex::isBackend()) {
         
         $article_complete = explode(',',$this->getConfig('article_complete'));
 
-        if (rex_addon::exists('yrewrite')) {
+        if (rex_addon::get('yrewrite')->isAvailable()) {
             $domain_id = rex_yrewrite::getCurrentDomain()->getId();
             $glossar_id = $this->getConfig('article_' . $domain_id);
         } else {
