@@ -194,7 +194,7 @@ $n['label'] = '<label for="glossar_exclude_by_template">' . $this->i18n('glossar
 $n['field'] = '<select id="glossar_exclude_by_template" name="config[exclude_by_template][]" class="selectpicker" multiple="multiple">';
 $options = rex_sql::factory()->getArray('SELECT name, id FROM '.rex::getTable('template'));
 foreach ($options as $opt) {
-    $n['field'] .= '<option value="'.$opt['id'].'"'.(in_array($opt['id'],$this->getConfig('exclude_by_template')) ? ' selected="selected"' : '').'>'.$opt['name'].' - ['.$opt['id'].']</option>';
+    $n['field'] .= '<option value="'.$opt['id'].'"'.(in_array($opt['id'],is_array($this->getConfig('exclude_by_template')) ? $this->getConfig('exclude_by_template') : [$this->getConfig('exclude_by_template')]) ? ' selected="selected"' : '').'>'.$opt['name'].' - ['.$opt['id'].']</option>';
 }
 $n['field'] .= '</select>';
 $n['note'] = $this->i18n('glossar_exclude_by_template_note');
