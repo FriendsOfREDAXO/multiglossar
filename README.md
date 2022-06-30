@@ -114,7 +114,6 @@ Der Glossarcache kann in eigenen Aktionen gelöscht werden. `glossar_cache::clea
 * [Thomas Blum](https://github.com/tbaddade) für die vielen Tipps und Sprog
 * [Andreas Eberhard ](https://github.com/aeberhard) für den XOutputFilter
 * [Oliver Kreischer ](http://concedra.de)
-* [Thomas Skerbis ](http://klxm.de) Support, Installation, Dokumentation und Debugging
 
 ---
 
