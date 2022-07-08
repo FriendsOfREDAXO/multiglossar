@@ -16,3 +16,6 @@ requires:
   redaxo: '^5.10'
   php:
     version: '>=7.3'
+
+installer_ignore:
+    - .github
