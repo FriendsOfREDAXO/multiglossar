@@ -114,7 +114,7 @@ if ($func == '') {
 
   $title = $func == 'edit' ? $this->i18n('glossar_title_edit') : $this->i18n('glossar_title_add');
 
-  $form = rex_form::factory(rex::getTable('multiglossar'), '', 'pid = ' . $pid,'post', true);
+  $form = rex_form::factory(rex::getTable('multiglossar'), '', 'pid = ' . $pid,'post', false);
   
   $form->addParam('pid', $pid);
   $form->setApplyUrl(rex_url::currentBackendPage());
