@@ -228,7 +228,7 @@ if (rex::isBackend() && rex::getUser()) {
                 $clang_name = \rex_clang::get($clang_id)->getName();
                 $page->setSubPath(rex_path::addon('multiglossar', 'pages/main.php'));
                 $current_page = rex_be_controller::getCurrentPage();
-                $current_lang_id = (int)str_replace('clang', '', rex_be_controller::getCurrentPagePart(3));
+                $current_lang_id = (int)str_replace('clang', '', (string) rex_be_controller::getCurrentPagePart(3));
                 if (count($count_languages) != 1) {
                     foreach (\rex_clang::getAll() as $id => $clang) {
                         if (rex::getUser()->getComplexPerm('clang')->hasPerm($id)) {
