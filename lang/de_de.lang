@@ -74,6 +74,10 @@ glossar_exclude_by_meta_field_note = Der Wert des ausgewählten Metainfo Feldes 
 
 glossar_deffield_css_note = Hier kann eine geeignete CSS-Class hinterlegt werden um den gewünschten Editor auszuwählen und die aktuelle Einstellung zu überschreiben.z.B. markitupEditor-multiglossar oder redactorEditor2-multiglossar
 
+glossar_replace_definition = Definition für den Ersetzungstext
+
+glossar_replace_definition_note = Hier wird der Ersetzungsstring mit Platzhaltern eingetragen z.B.: <code><dfn class="glossarlink" title="---DEFINITION---" data-toggle="tooltip" rel="tooltip"><a href="---URL---">---TERM---</a></dfn></code>. Das ist auch der Standardwert, der verwendet wird, wenn dies Feld hier leer bleibt.
+
 glossar_cache_exclude_articles_label = Artikel vom Cache ausschließen
 
 glossar_cache_exclude_articles_note = Hier sollten Artikel angegeben werden, die vom Cache ausgenommen werden sollen. z.B. Suchergebnisseiten, Formularseiten usw.
@@ -82,7 +86,7 @@ glossar_exclude_by_meta_note = Wenn die Bedingung erfüllt ist, wird der Artikel
 
 glossar_endtag_note = Start- und Endtag können reguläre Ausdrücke enthalten. Z.B. <body.*>. Sie müssen eindeutig sein und werden im Quelltext wieder eingesetzt.
 
-glossar_ignoretags_note = Hier können zusätzlich zu ignorierende Tags angegeben werden (z.B. ul, aside). Standardmäßig werden Begriffe in a, h1...h6 und figcaption ignoriert. Weitere Tags bitte mit Komma trennen. Es können auch zu ignorierende Klassen angegeben werden, wie z.B. .glossignore
+glossar_ignoretags_note = Hier können zusätzlich zu ignorierende Tags angegeben werden (z.B. ul, aside). Standardmäßig werden Begriffe in a, h1...h6, script, style, svg, dfn und figcaption ignoriert. Weitere Tags bitte mit Komma trennen. Es können auch zu ignorierende Klassen angegeben werden, wie z.B. .glossignore
 
 glossar_textfield_css_note = Hier kann eine geeignete CSS-Class hinterlegt werden um den gewünschten Editor auszuwählen und die aktuelle Einstellung zu überschreiben.z.B. markitupEditor-multiglossar oder redactorEditor2-multiglossar
 

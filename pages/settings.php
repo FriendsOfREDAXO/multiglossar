@@ -31,6 +31,9 @@ if (rex_post('formsubmit', 'string') == '1') {
         ['deffield_css', 'string'],
     ]));
     $this->setConfig(rex_post('config', [
+        ['replace_definition', 'string'],
+    ]));
+    $this->setConfig(rex_post('config', [
         ['glossar_starttag', 'string'],
     ]));
     
@@ -187,6 +190,17 @@ $fragment = new rex_fragment();
 $fragment->setVar('elements', $formElements, false);
 $content .= $fragment->parse('core/form/container.php');
 
+// Replace Text
+$formElements = [];
+$n = [];
+$n['label'] = '<label for="glossar_replace_definition">' . $this->i18n('glossar_replace_definition') . '</label>';
+$n['field'] = '<input class="form-control" type="text" id="glossar_replace_definition" name="config[replace_definition]" value=\'' . $this->getConfig('replace_definition') . '\'/>';
+$n['note'] = $this->i18n('glossar_replace_definition_note');
+$formElements[] = $n;
+$fragment = new rex_fragment();
+$fragment->setVar('elements', $formElements, false);
+$content .= $fragment->parse('core/form/container.php');
+
 // Template vom Glossar ausschließen
 $formElements = [];
 $n = [];
@@ -252,6 +266,8 @@ $content .= $fragment->parse('core/form/container.php');
 
 
 
+/*
+
 // ==================== Cache ===========================
 
 $content .= '</fieldset><fieldset><legend>' . $this->i18n('glossar_cache_title') . '</legend>';
@@ -288,6 +304,7 @@ $formElements[] = $n;
 $fragment = new rex_fragment();
 $fragment->setVar('elements', $formElements, false);
 $content .= $fragment->parse('core/form/checkbox.php');
+*/
 
 
 // Save-Button

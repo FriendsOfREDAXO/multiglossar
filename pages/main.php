@@ -136,19 +136,20 @@ if ($func == '') {
   $field->setLabel($this->i18n('glossar_term_alt_description'));
   $field->setNotice('Jeden alternativen Begriff in eine eigene Zeile schreiben.');
  
-
   $field = $form->addTextAreaField('definition');
   $field->setLabel($this->i18n('glossar_label_definition'));
   $field->setAttribute('onKeyDown', 'limitText(this,this.form.countdown,250)');
   $field->setAttribute('onKeyUp', 'limitText(this,this.form.countdown,250)');
   $field->setAttribute('id', 'def');
   $field->setAttribute('class', $def_field_class);
+    $field->setAttribute('style', 'width: 100%');
   $field->setPrefix('<span class="maxcharacters">'.$this->i18n('glossar_max_characters').' <input readonly type="text" name="countdown" size="3" value="250" readonly="readonly" id="remain"></span>');
   $field->getValidator()->add('notEmpty', $this->i18n('glossar_error_empty_definition'));
 
   $field = $form->addTextAreaField('description');
-  $field->setAttribute('class', $editor);
+  $field->setAttribute('class', $editor . ' tiny5-editor');
   $field->setAttribute('id', ' value-1');
+  $field->setAttribute('data-profile', 'text');
   $field->setAttribute('style', 'width: 100%; margin-top: -10px; padding: 10px;');
   $field->setLabel($this->i18n('glossar_label_description'));
 

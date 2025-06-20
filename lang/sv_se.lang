@@ -82,7 +82,7 @@ glossar_exclude_by_meta_note = Om villkoret är uppfyllt kommer artikeln inte at
 
 glossar_endtag_note = Start- och slutkoder kan innehålla regelbundna uttryck. Till exempel, <Body.*>. De måste vara unika och används igen i källkoden.
 
-glossar_ignoretags_note = Ytterligare taggar som kan ignoreras kan anges här (t ex ul, aside). Som standard ignoreras termen i a, h1 ... h6 och figcaption. Separera ytterligare taggar med ett komma. Det är också möjligt att ange klasser som ska ignoreras, t.ex. .glossignore
+glossar_ignoretags_note = Ytterligare taggar som kan ignoreras kan anges här (t ex ul, aside). Som standard ignoreras termen i a, h1 ... h6, script, style, svg, dfn och figcaption. Separera ytterligare taggar med ett komma. Det är också möjligt att ange klasser som ska ignoreras, t.ex. .glossignore
 
 glossar_textfield_css_note = Här kan en lämplig CSS-klass deponeras för att välja önskad redigerare och skriva över den aktuella inställningen. markitupEditor-multiglossar eller redactorEditor2-multiglossar
 

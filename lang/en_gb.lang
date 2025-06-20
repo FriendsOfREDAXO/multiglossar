@@ -82,7 +82,7 @@ glossar_exclude_by_meta_note = If the condition is met the article will not be p
 
 glossar_endtag_note = Start and end tags can contain regular expressions. Ex. <body.*>. These must be unique and will be replaced in the source code.
 
-glossar_ignoretags_note = Enter tags to be ignored (ex. ul, aside). By default terms inside a, h1...h6 and figcaption will be ignored. Additional tags can be entered comma separated. Classes to ignored can also be entered, ex. .glossignore
+glossar_ignoretags_note = Enter tags to be ignored (ex. ul, aside). By default terms inside a, h1...h6, script, style, svg, dfn and figcaption will be ignored. Additional tags can be entered comma separated. Classes to ignored can also be entered, ex. .glossignore
 
 glossar_textfield_css_note = Enter a CSS class to load a specific editor and to overwrite the current setting. Ex. markitupEditor-multiglossar or redactorEditor2-multiglossar
 

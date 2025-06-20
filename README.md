@@ -81,7 +81,7 @@ Es ist möglich einzelne Artikel gezielt von der Kennzeichnung mit Glossarbegrif
 
 Die über das System oder yrewrite definierten 404-Seiten werden immer vom Glossar ausgenommen.
 
-### Cache
+### Cache (in V3 entfernt)
 
 Bei vielen Glossareinträgen und/oder komplexen Websites kann das Glossar zu Verzögerungen im Seitenaufbau führen. Diese Verzögerungen können verhindert werden, indem der Glossarcache aktiviert wird. Im Glossarcache wird der Seiteninhalt komplett abgelegt. Der Glossarcache hat im Moment noch Entwicklungsstatus, sollte also in Produktivseiten noch nicht eingesetzt werden.
 
@@ -93,7 +93,7 @@ Der Cache wird für einzelne Seiten regeneriert, wenn Seiten bearbeitet oder der
 
 Der Cache sollte bei der Entwicklung immer ausgeschaltet sein, da eventuelle Codeänderungen sonst keine Wirkung haben.
 
-### Turbocache
+### Turbocache (in V3 entfernt)
 
 Der Turbocache ist ein experimenteller Cache, der auf der gleichen Technik beruht wie der Glossarcache selbst. Allerdings wird er früher aktiviert. Bereits am Extensionpoint PACKAGES_INCLUDED wird geprüft, ob für den Artikel ein Cachedatensatz existiert. Wenn dies der Fall ist, wird der Datensatz ausgegeben und die weitere Bearbeitung abgebrochen (exit). Dadurch werden auch Modulinhalte gecached. Der Cache beschleunigt nicht nur die Ausgabe des Glossars sondern jegliche Ausgabe von REDAXO Artikeln. Der Glossarcache wird per rex_extension::LATE generiert. Daher ist beispielsweise sprog (rex_extension::NORMAL) bereits durchgelaufen und wird mit gecached.
 
@@ -103,7 +103,7 @@ Die Regeln für den Neuaufbau des Turbocache sind vergleichbar mit denen des RED
 
 Wenn Datensätze einer YForm Tabelle geändert oder gelöscht werden, wird geprüft, ob das Url AddOn vorhanden ist und ob die Tabelle des geänderten Datensatzes mit einem Redaxo Artikel in Verbindung steht. Ist dies der Fall, wird für diesen Artikel der Cache regeneriert.
 
-### Für Programmierer: Cache selbst leeren
+### Für Programmierer: Cache selbst leeren (in V3 entfernt)
 
 Der Glossarcache kann in eigenen Aktionen gelöscht werden. `glossar_cache::clear()` löscht den gesamten Glossarcache. `glossar_cache::clear(27)` löscht den Glossarcache für den Artikel mit der Id 27 in allen Sprachen. `glossar_cache::clear(29,1)` löscht den Glossarcache für den Artikel mit der Id 29 der ersten Sprache. 
 

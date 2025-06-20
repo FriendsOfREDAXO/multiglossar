@@ -54,8 +54,8 @@ class Extension {
         
         
         // zu ignorierende Tags einlesen
-        $tags = array_merge($tags,explode(',',\rex_config::get('multiglossar', 'glossar_ignoretags')));
-        
+        $ignoreTags = \rex_config::get('multiglossar', 'glossar_ignoretags') ?: '';
+        $tags = array_merge($tags, explode(',', $ignoreTags));
         $header = '<html><head><meta content="text/html; charset=utf-8" http-equiv="Content-Type"></head><body>';
         $dom = new \DOMDocument();
         libxml_use_internal_errors(true);

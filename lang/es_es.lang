@@ -82,7 +82,7 @@ glossar_exclude_by_meta_note = Si se cumple la condición, el artículo no se pr
 
 glossar_endtag_note = Las etiquetas de inicio y final pueden contener expresiones regulares. Por ejemplo, <body.*>. Deben ser únicos y se usan nuevamente en el código fuente.
 
-glossar_ignoretags_note = Se pueden especificar etiquetas adicionales para ignorar aquí (por ejemplo, ul, a un lado). Por defecto, los términos en a, h1 ... h6 y figcaption son ignorados. Separe las etiquetas adicionales con una coma. También es posible especificar clases que se ignorarán, como .glossignore
+glossar_ignoretags_note = Se pueden especificar etiquetas adicionales para ignorar aquí (por ejemplo, ul, a un lado). Por defecto, los términos en a, h1 ... h6, script, style, svg, dfn y figcaption son ignorados. Separe las etiquetas adicionales con una coma. También es posible especificar clases que se ignorarán, como .glossignore
 
 glossar_textfield_css_note = Aquí se puede depositar una clase CSS adecuada para seleccionar el editor deseado y sobrescribir la configuración actual. markitupEditor-multiglossar o redactorEditor2-multiglossar
 

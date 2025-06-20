@@ -34,7 +34,7 @@ if (rex::isBackend()) {
 }
 
 
-if (!rex::isBackend()) {
+if (rex::isFrontend()) {
     //if ($this->getConfig('status') != 'deaktiviert') {
 
     // Turbocache - Blitzcache - Cache+ ???
@@ -95,87 +95,14 @@ if (!rex::isBackend()) {
                 return glossar_cache::read($ep);
             }            
         }
-        
-        $starttag = $this->getConfig('glossar_starttag') ? $this->getConfig('glossar_starttag') : '<body.*?>';
-        $endtag = $this->getConfig('glossar_endtag') ? $this->getConfig('glossar_endtag') : '</body>';
-        
-//        dump($starttag); exit;
-        
-        preg_match('|'.$starttag.'|',$source, $starttag);
-        preg_match('|'.$endtag.'|',$source, $endtag);
-        
-        $starttag = $starttag[0];
-        $endtag = $endtag[0];
-        
-        preg_match('%(.*?)('.$starttag.')(.*?)'.$endtag.'%s',$source,$matches);
-        $header = $matches[1];
-        $content = $matches[3];
-        preg_match('%'.$endtag.'(.*)%s',$source,$matches);
-        $footer = $matches[1];
 
-        $query = "SELECT * FROM rex_multiglossar WHERE active = :active AND clang_id = :clang_id ORDER BY term ASC ";
-        $sql = rex_sql::factory();
-        $sql->setQuery($query,['active'=>1,'clang_id'=>rex_clang::getCurrentId()]);
-        
-        // Alle Kommentare <!--exclude--> werden zu Tags
-        $content = str_replace('<!--exclude-->','<exclude>',$content);
-        $content = str_replace('<!--endexclude-->','</exclude>',$content);
-        
-        if ($sql->getRows() > 0) {
-            for ($i = 0; $i < $sql->getRows(); $i ++) {
-                $marker = $sql->getValue('term');
-                $casesensitive = $sql->getValue('casesensitive');
-//                dump($glossar_id); exit;
-                $markers = explode('|', trim($marker));
-                $search_term = $markers[0];
-                $markers = array_merge($markers, preg_split('/\R/', trim($sql->getValue('term_alt'))));
-                foreach ($markers as $search) {
-                    if (!$search)
-                        continue;
-                    $search = str_replace(['(',')'],['',''],$search);
-                    $search_term = $search;
-                    
-                    $replace = '<dfn class="glossarlink" title="' . $sql->getValue('definition') . '" data-toggle="tooltip" rel="tooltip"><a href="' . rex_getUrl($glossar_id,'',['gloss_id'=>$sql->getValue('pid')]) . '">' . $search_term . '</a></dfn>';
+        $parser = new \MultiGlossar\Parser();
+        $parser->init_dom($source);
+        $content = $parser->parse_dom();
 
-                    $search = '\b' . $search . '\b([^äüöß])';
-                    
-                    if (trim($casesensitive,'|') == 1) {
-                        $regEx ='~(?!((<.*?)))'.$search.'(?!(([^<>]*?)>))~s';
-                    } else {
-                        $regEx ='~(?!((<.*?)))'.$search.'(?!(([^<>]*?)>))~si';
-                    }
-                    $content = Glossar\Extension::setMarker(['a','h1','h2','h3','h4','h5','h6','figcaption','exclude'],$content,$search_term);
-//                    dump($regEx);
-//                    dump($replace);
-                    
-                    // Wenn der ganze Artikel mit Glossarbegriffen versehen werden soll (Einstellung in Settings article_complete) alle Fundstellen ersetzen
-                    if (in_array(rex_article::getCurrentId(),$article_complete)) {
-                        $content = preg_replace($regEx, $replace.'\3', $content);
-                    } else {
-                        // Standard: nur die erste Stelle ersetzen
-                        $content = preg_replace($regEx, $replace.'\3', $content, 1);                        
-                    }
-                    $content = str_replace('m!a!r!k','',$content);
-                    
-
-                    
-
-                }
-                $sql->next();
-            }
-        }
-        // Alle Tags werden wieder zu Kommentaren
-       $content = str_replace('<exclude>','<!--exclude-->',$content);
-        $content = str_replace('</exclude>','<!--endexclude-->',$content);
-//        dump($header); exit;
-        $content = $header . $starttag . $content . $endtag . $footer;
-        
-        
-        if ($this->getConfig('use_cache')) {
-            glossar_cache::write($content);
-        }
-        
         return $content;
+
+
     }, rex_extension::LATE);
 }
 
@@ -228,7 +155,7 @@ if (rex::isBackend() && rex::getUser()) {
                 $clang_name = \rex_clang::get($clang_id)->getName();
                 $page->setSubPath(rex_path::addon('multiglossar', 'pages/main.php'));
                 $current_page = rex_be_controller::getCurrentPage();
-                $current_lang_id = (int)str_replace('clang', '', (string) rex_be_controller::getCurrentPagePart(3));
+                $current_lang_id = (int) str_replace('clang', '', rex_be_controller::getCurrentPagePart(3) ?? '');
                 if (count($count_languages) != 1) {
                     foreach (\rex_clang::getAll() as $id => $clang) {
                         if (rex::getUser()->getComplexPerm('clang')->hasPerm($id)) {

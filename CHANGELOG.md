@@ -1,6 +1,13 @@
 
 ### Changelog ###
 
+### 20.06.2025 Version 3.0.0 beta 1
+
+- Der Parser wurde komplett neu geschrieben. Dadurch wurde die Verarbeitungsgeschwindigkeit erhöht. Der DOM wird nun pro Seite nur noch einmal durchlaufen und DOM Manipulationen auch nur dort ausgeführt, wo auch Ersetzungen erfolgen. Der Cache wurde entfernt. Der Turbocache natürlich auch.
+- Das Issue #21 von Ronny Kemmereit wurde umgesetzt (Danke an Wolfgang Bund). Das Ersetzungsmuster kann nun über die Settings definiert werden.
+- Diese Version sollte abwärtskompatibel sein, liefert aber in einigen Fällen leicht verbesserte Ersetzungsergebnis. Daher neue Main Version.
+- Die Arbeiten wurden zu einem großen Teil durch ein Kundenprojekt finanziert. (Danke!)
+
 ### 04.04.2019 Version 2.0.0 beta 12
 
 - Option Case sensitive hinzugefügt.
