@@ -45,21 +45,19 @@ if (rex::isFrontend()) {
     
     rex_extension::register('OUTPUT_FILTER', function(rex_extension_point $ep) {
         
-        $article_complete = explode(',',$this->getConfig('article_complete'));
-
-        if (rex_addon::get('yrewrite')->isAvailable()) {
-            $domain_id = rex_yrewrite::getCurrentDomain()->getId();
-            $glossar_id = $this->getConfig('article_' . $domain_id);
-        } else {
-            $glossar_id = $this->getConfig('article');
-        }        
-        
         $source = $ep->getSubject();
         
         // Fehlerartikel immer ausschließen
         if (rex_article::getCurrentId() == rex_article::getNotfoundArticleId()) {
             return $source;
         }
+
+        // Über Settings exkludierte Artikel ausschließen
+        if (in_array(rex_article::getCurrentId(),explode(',',$this->getConfig('articles_exclude')))) {
+            return $source;
+        }
+
+
         
         // Template prüfen und ggf. Artikel ausschließen
         if ($this->getConfig('exclude_by_template')) {

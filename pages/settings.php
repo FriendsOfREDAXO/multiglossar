@@ -58,6 +58,9 @@ if (rex_post('formsubmit', 'string') == '1') {
         ['article_complete', 'string'],
     ]));
     $this->setConfig(rex_post('config', [
+        ['articles_exclude', 'string'],
+    ]));
+    $this->setConfig(rex_post('config', [
         ['exclude_by_meta_field', 'string'],
     ]));
     $this->setConfig(rex_post('config', [
@@ -251,6 +254,18 @@ $formElements[] = $n;
 $fragment = new rex_fragment();
 $fragment->setVar('elements', $formElements, false);
 $content .= $fragment->parse('core/form/container.php');
+
+// Artikel vom Glossar ausschließen
+$formElements = [];
+$n = [];
+$n['label'] = '<label>'.$this->i18n('glossar_articles_exclude_label').'</label>';
+$n['field'] = rex_var_linklist::getWidget(1, 'config[articles_exclude]',$this->getConfig('articles_exclude'));
+$n['note'] = $this->i18n('glossar_articles_exclude_note');
+$formElements[] = $n;
+$fragment = new rex_fragment();
+$fragment->setVar('elements', $formElements, false);
+$content .= $fragment->parse('core/form/container.php');
+
 
 // Artikel, die komplett (also nicht nur 1x) mit Glossarbegriffen versehen werden sollen
 $formElements = [];

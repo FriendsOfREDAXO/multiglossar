@@ -17,6 +17,7 @@ class Parser
     private $glossar_id;
     private $header = '<?xml encoding="UTF-8"><html><head><meta content="text/html; charset=utf-8" http-equiv="Content-Type"></head><body>';
     private $footer = '</body></html>';
+    private $url_key = 'gloss_id';
 //    private $replace = true;
 
 
@@ -68,6 +69,13 @@ class Parser
         $sql->setQuery($query, ['active' => 1, 'clang_id' => \rex_clang::getCurrentId()]);
 
         $this->glossar = $sql->getArray();
+        $this->url_key = 'gloss_id_'.\rex_clang::getCurrentId();
+
+        foreach ($this->glossar as $i => $gloss) {
+            $this->glossar[$i]['gloss_url'] = rex_getUrl($this->glossar_id,'',[$this->url_key => $gloss['pid']]);
+        }
+
+//        dump($this->glossar); exit;
 
         // gesperrte Tags initialisieren
         // kann sowohl Elemente als auch css Klassen enthalten
@@ -202,7 +210,8 @@ class Parser
                 $search_term = $search;
 
                 $replace = str_replace(['---DEFINITION---','---URL---','---TERM---'],
-                    [$gloss_item['definition'],rex_getUrl($this->glossar_id, '', ['gloss_id' => $gloss_item['pid']]),$search_term],
+//                    [$gloss_item['definition'],rex_getUrl($this->glossar_id, '', [$this->url_key => $gloss_item['pid']]),$search_term],
+                    [$gloss_item['definition'],$gloss_item['gloss_url'],$search_term],
                      $dfn_template);
                     // '<dfn class="glossarlink" title="' . $gloss_item['definition'] . '" data-toggle="tooltip" rel="tooltip"><a href="' . rex_getUrl($this->glossar_id, '', ['gloss_id' => $gloss_item['pid']]) . '">' . $search_term . '</a></dfn>';
 
