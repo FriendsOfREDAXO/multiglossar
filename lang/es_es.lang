@@ -24,6 +24,10 @@ glossar_status_activated = La entrada ha sido activada
 glossar_status_deactivated = La entrada ha sido desactivada
 
 glossar_info_settings_title = Configuración
+glossar_settings_section_general = Configuración general
+glossar_settings_section_editor = Campos de entrada / editores
+glossar_settings_section_replace = Reemplazo
+glossar_settings_section_exclude = Exclusiones
 
 glossar_func_header = Estado / funciones
 
@@ -64,6 +68,8 @@ config_save = Guardar
 
 textfield_css_label = Clase CSS para cuadro de texto
 deffield_css_label = Clase de CSS para el campo de definición
+textfield_data_attr_label = Atributos data adicionales para el campo de descripción
+deffield_data_attr_label = Atributos data adicionales para el campo de definición
 
 notice_term_field = Los términos también pueden contener etiquetas HTML y deben ingresarse exactamente como aparecen en la página. por ejemplo CO <sub>2</sub> equilibrio de aplicaciones. Las variantes se pueden ingresar en el campo Términos alternativos.
 
@@ -73,6 +79,7 @@ use_cache_infotext = La activación de la memoria caché puede acelerar la confi
 glossar_exclude_by_meta_field_note = El valor del campo de Metainfo seleccionada determina si un artículo debe proporcionarse con términos del glosario o no. La información pretende ser una declaración de exclusión. La especificación es opcional. Si no se debe excluir ningún artículo sobre Metainfo, simplemente no seleccione nada. 404 páginas (establecidas en el sistema o yrewrite) se excluyen automáticamente de la edición.
 
 glossar_deffield_css_note = Aquí se puede depositar una clase CSS adecuada para seleccionar el editor deseado y sobrescribir la configuración actual. markitupEditor-multiglossar o redactorEditor2-multiglossar
+glossar_deffield_data_attr_note = Aquí se pueden definir atributos data adicionales para el campo de definición. Solo se aplican atributos data-*. Ejemplo: data-profile="tinyMCE-text" data-editor="tinymce4"
 
 glossar_cache_exclude_articles_label = Excluir elementos de la búsqueda
 
@@ -85,6 +92,7 @@ glossar_endtag_note = Las etiquetas de inicio y final pueden contener expresione
 glossar_ignoretags_note = Se pueden especificar etiquetas adicionales para ignorar aquí (por ejemplo, ul, a un lado). Por defecto, los términos en a, h1 ... h6, script, style, svg, dfn y figcaption son ignorados. Separe las etiquetas adicionales con una coma. También es posible especificar clases que se ignorarán, como .glossignore
 
 glossar_textfield_css_note = Aquí se puede depositar una clase CSS adecuada para seleccionar el editor deseado y sobrescribir la configuración actual. markitupEditor-multiglossar o redactorEditor2-multiglossar
+glossar_textfield_data_attr_note = Aquí se pueden definir atributos data adicionales para el campo de descripción. Solo se aplican atributos data-*. Ejemplo: data-profile="tinyMCE-text" data-editor="tinymce4"
 
 glossar_exclude_by_meta_field_label = Metainfo para la exclusión del etiquetado con términos del glosario
 
@@ -101,3 +109,5 @@ use_turbocache_infotext = El turbo caché es un caché experimental basado en la
 
 glossar_article_complete_label = Artículos completos con tiradores de glosario.
 glossar_article_complete_note = Aquí puede introducir artículos en los que todo el artículo debe vincularse con los términos del glosario.
+glossar_articles_exclude_label = Excluir artículos de la marcación con términos del glosario
+glossar_articles_exclude_note = Aquí puede introducir artículos que no deben marcarse con términos del glosario (por ejemplo, páginas legales, búsqueda, formularios de contacto o páginas de error).

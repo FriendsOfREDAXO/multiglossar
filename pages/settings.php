@@ -16,7 +16,7 @@ if (rex_post('formsubmit', 'string') == '1') {
         foreach ($domains as $domain) {
             if (!$domain->getId()) continue;
             $this->setConfig(rex_post('config', [
-                ['article_'.$domain->getId(), 'string'],
+                ['article_' . $domain->getId(), 'string'],
             ]));
         }
     } else {
@@ -28,7 +28,13 @@ if (rex_post('formsubmit', 'string') == '1') {
         ['textfield_css', 'string'],
     ]));
     $this->setConfig(rex_post('config', [
+        ['textfield_data_attr', 'string'],
+    ]));
+    $this->setConfig(rex_post('config', [
         ['deffield_css', 'string'],
+    ]));
+    $this->setConfig(rex_post('config', [
+        ['deffield_data_attr', 'string'],
     ]));
     $this->setConfig(rex_post('config', [
         ['replace_definition', 'string'],
@@ -36,15 +42,15 @@ if (rex_post('formsubmit', 'string') == '1') {
     $this->setConfig(rex_post('config', [
         ['glossar_starttag', 'string'],
     ]));
-    
+
     $this->setConfig(rex_post('config', [
         ['glossar_endtag', 'string'],
     ]));
-    
+
     $this->setConfig(rex_post('config', [
         ['glossar_ignoretags', 'string'],
     ]));
-    
+
     $this->setConfig(rex_post('config', [
         ['use_cache', 'string'],
     ]));
@@ -69,37 +75,37 @@ if (rex_post('formsubmit', 'string') == '1') {
     $this->setConfig(rex_post('config', [
         ['exclude_by_meta_condition', 'string'],
     ]));
-    
+
     glossar_cache::clear();
-    
+
     echo rex_view::success($this->i18n('glossar_config_saved'));
 }
 
-$content .= '<fieldset><legend>' . $this->i18n('glossar_info_settings_title') . '</legend>';
+$content .= '<fieldset><legend>' . $this->i18n('glossar_settings_section_general') . '</legend>';
 
 
 if (rex_addon::get('yrewrite')->isAvailable()) {
     foreach ($domains as $domain) {
-  //      dump($domain->getId());
-        
+        //      dump($domain->getId());
+
         if (!$domain->getId()) continue;
         // Glossar Artikel
         $formElements = [];
         $artname = '';
-        $art = rex_article::get($this->getConfig('article_'.$domain->getId()));
+        $art = rex_article::get($this->getConfig('article_' . $domain->getId()));
         if ($art) {
             $artname = $art->getValue('name');
         }
         $n = [];
-        $n['label'] = '<label for="REX_LINK_'.$domain->getId().'_NAME">' . $this->i18n('config_article') . ' - ' . $domain->getName() . '</label>';
+        $n['label'] = '<label for="REX_LINK_' . $domain->getId() . '_NAME">' . $this->i18n('config_article') . ' - ' . $domain->getName() . '</label>';
         $n['field'] = '
         <div class="rex-js-widget rex-js-widget-link">
             <div class="input-group">	
-                <input class="form-control" type="text" name="REX_LINK_NAME['.$domain->getId().']" value="' . $artname . '" id="REX_LINK_'.$domain->getId().'_NAME" readonly="readonly" />
-                <input type="hidden" name="config[article_'.$domain->getId().']" id="REX_LINK_'.$domain->getId().'" value="' . $this->getConfig('article_'.$domain->getId()) . '" />
+                <input class="form-control" type="text" name="REX_LINK_NAME[' . $domain->getId() . ']" value="' . $artname . '" id="REX_LINK_' . $domain->getId() . '_NAME" readonly="readonly" />
+                <input type="hidden" name="config[article_' . $domain->getId() . ']" id="REX_LINK_' . $domain->getId() . '" value="' . $this->getConfig('article_' . $domain->getId()) . '" />
                 <span class="input-group-btn">
-                        <a href="#" class="btn btn-popup" onclick="openLinkMap(\'REX_LINK_'.$domain->getId().'\', \'&clang=1&category_id=1\');return false;" title="' . $this->i18n('var_link_open') . '"><i class="rex-icon rex-icon-open-linkmap"></i></a>
-                        <a href="#" class="btn btn-popup" onclick="deleteREXLink('.$domain->getId().');return false;" title="' . $this->i18n('var_link_delete') . '"><i class="rex-icon rex-icon-delete-link"></i></a>
+                        <a href="#" class="btn btn-popup" onclick="openLinkMap(\'REX_LINK_' . $domain->getId() . '\', \'&clang=1&category_id=1\');return false;" title="' . $this->i18n('var_link_open') . '"><i class="rex-icon rex-icon-open-linkmap"></i></a>
+                        <a href="#" class="btn btn-popup" onclick="deleteREXLink(' . $domain->getId() . ');return false;" title="' . $this->i18n('var_link_delete') . '"><i class="rex-icon rex-icon-delete-link"></i></a>
                 </span>
             </div>
         </div>
@@ -142,7 +148,7 @@ if (rex_addon::get('yrewrite')->isAvailable()) {
 $formElements = [];
 $n = [];
 $n['label'] = '<label for="glossar_starttag">' . $this->i18n('glossar_starttag') . '</label>';
-$n['field'] = '<input class="form-control" type="text" id="glossar_starttag" name="config[glossar_starttag]" value="' . $this->getConfig('glossar_starttag') . '"/>';
+$n['field'] = '<input class="form-control" type="text" id="glossar_starttag" name="config[glossar_starttag]" value="' . rex_escape((string) $this->getConfig('glossar_starttag')) . '"/>';
 $formElements[] = $n;
 $fragment = new rex_fragment();
 $fragment->setVar('elements', $formElements, false);
@@ -152,7 +158,7 @@ $content .= $fragment->parse('core/form/container.php');
 $formElements = [];
 $n = [];
 $n['label'] = '<label for="glossar_endtag">' . $this->i18n('glossar_endtag') . '</label>';
-$n['field'] = '<input class="form-control" type="text" id="glossar_endtag" name="config[glossar_endtag]" value="' . $this->getConfig('glossar_endtag') . '"/>';
+$n['field'] = '<input class="form-control" type="text" id="glossar_endtag" name="config[glossar_endtag]" value="' . rex_escape((string) $this->getConfig('glossar_endtag')) . '"/>';
 $n['note'] = $this->i18n('glossar_endtag_note');
 $formElements[] = $n;
 $fragment = new rex_fragment();
@@ -163,7 +169,7 @@ $content .= $fragment->parse('core/form/container.php');
 $formElements = [];
 $n = [];
 $n['label'] = '<label for="glossar_ignoretags">' . $this->i18n('glossar_ignoretags') . '</label>';
-$n['field'] = '<input class="form-control" type="text" id="glossar_ignoretags" name="config[glossar_ignoretags]" value="' . $this->getConfig('glossar_ignoretags') . '"/>';
+$n['field'] = '<input class="form-control" type="text" id="glossar_ignoretags" name="config[glossar_ignoretags]" value="' . rex_escape((string) $this->getConfig('glossar_ignoretags')) . '"/>';
 $n['note'] = $this->i18n('glossar_ignoretags_note');
 $formElements[] = $n;
 $fragment = new rex_fragment();
@@ -171,47 +177,30 @@ $fragment->setVar('elements', $formElements, false);
 $content .= $fragment->parse('core/form/container.php');
 
 
-// Css Class für Textfeld
-$formElements = [];
-$n = [];
-$n['label'] = '<label for="glossar_textfield_css">' . $this->i18n('textfield_css_label') . '</label>';
-$n['field'] = '<input class="form-control" type="text" id="glossar_textfield_css" name="config[textfield_css]" value="' . $this->getConfig('textfield_css') . '"/>';
-$n['note'] = $this->i18n('glossar_textfield_css_note');
-$formElements[] = $n;
-$fragment = new rex_fragment();
-$fragment->setVar('elements', $formElements, false);
-$content .= $fragment->parse('core/form/container.php');
-
-// Css Class für Definition Feld
-$formElements = [];
-$n = [];
-$n['label'] = '<label for="glossar_deffield_css">' . $this->i18n('deffield_css_label') . '</label>';
-$n['field'] = '<input class="form-control" type="text" id="glossar_deffield_css" name="config[deffield_css]" value="' . $this->getConfig('deffield_css') . '"/>';
-$n['note'] = $this->i18n('glossar_deffield_css_note');
-$formElements[] = $n;
-$fragment = new rex_fragment();
-$fragment->setVar('elements', $formElements, false);
-$content .= $fragment->parse('core/form/container.php');
+$content .= '</fieldset><fieldset><legend>' . $this->i18n('glossar_settings_section_replace') . '</legend>';
 
 // Replace Text
 $formElements = [];
 $n = [];
 $n['label'] = '<label for="glossar_replace_definition">' . $this->i18n('glossar_replace_definition') . '</label>';
-$n['field'] = '<input class="form-control" type="text" id="glossar_replace_definition" name="config[replace_definition]" value=\'' . $this->getConfig('replace_definition') . '\'/>';
+$n['field'] = '<input class="form-control" type="text" id="glossar_replace_definition" name="config[replace_definition]" value="' . rex_escape((string) $this->getConfig('replace_definition')) . '"/>';
 $n['note'] = $this->i18n('glossar_replace_definition_note');
 $formElements[] = $n;
 $fragment = new rex_fragment();
 $fragment->setVar('elements', $formElements, false);
 $content .= $fragment->parse('core/form/container.php');
 
+
+$content .= '</fieldset><fieldset><legend>' . $this->i18n('glossar_settings_section_exclude') . '</legend>';
+
 // Template vom Glossar ausschließen
 $formElements = [];
 $n = [];
 $n['label'] = '<label for="glossar_exclude_by_template">' . $this->i18n('glossar_exclude_by_template_label') . '</label>';
 $n['field'] = '<select id="glossar_exclude_by_template" name="config[exclude_by_template][]" class="selectpicker" multiple="multiple">';
-$options = rex_sql::factory()->getArray('SELECT name, id FROM '.rex::getTable('template'));
+$options = rex_sql::factory()->getArray('SELECT name, id FROM ' . rex::getTable('template'));
 foreach ($options as $opt) {
-    $n['field'] .= '<option value="'.$opt['id'].'"'.(in_array($opt['id'],is_array($this->getConfig('exclude_by_template')) ? $this->getConfig('exclude_by_template') : [$this->getConfig('exclude_by_template')]) ? ' selected="selected"' : '').'>'.$opt['name'].' - ['.$opt['id'].']</option>';
+    $n['field'] .= '<option value="' . $opt['id'] . '"' . (in_array($opt['id'], is_array($this->getConfig('exclude_by_template')) ? $this->getConfig('exclude_by_template') : [$this->getConfig('exclude_by_template')]) ? ' selected="selected"' : '') . '>' . $opt['name'] . ' - [' . $opt['id'] . ']</option>';
 }
 $n['field'] .= '</select>';
 $n['note'] = $this->i18n('glossar_exclude_by_template_note');
@@ -225,9 +214,9 @@ $formElements = [];
 $n = [];
 $n['label'] = '<label for="glossar_exclude_by_meta_field">' . $this->i18n('glossar_exclude_by_meta_field_label') . '</label>';
 $n['field'] = '<select id="glossar_exclude_by_meta_field" name="config[exclude_by_meta_field]" class="selectpicker"><option value="">--- Bitte auswählen ---</option>';
-$options = rex_sql::factory()->getArray('SELECT name, title FROM '.rex::getTable('metainfo_field').' WHERE name LIKE :name',['name'=>'art_%']);
+$options = rex_sql::factory()->getArray('SELECT name, title FROM ' . rex::getTable('metainfo_field') . ' WHERE name LIKE :name', ['name' => 'art_%']);
 foreach ($options as $opt) {
-    $n['field'] .= '<option value="'.$opt['name'].'"'.($opt['name'] == $this->getConfig('exclude_by_meta_field') ? ' selected="selected"' : '').'>'.$opt['title'].' - ['.$opt['name'].']</option>';
+    $n['field'] .= '<option value="' . $opt['name'] . '"' . ($opt['name'] == $this->getConfig('exclude_by_meta_field') ? ' selected="selected"' : '') . '>' . $opt['title'] . ' - [' . $opt['name'] . ']</option>';
 }
 $n['field'] .= '</select>';
 $n['note'] = $this->i18n('glossar_exclude_by_meta_field_note');
@@ -243,9 +232,9 @@ $formElements = [];
 $n = [];
 $n['label'] = '<label for="glossar_exclude_by_meta_condition">' . $this->i18n('glossar_exclude_by_meta_condition_label') . '</label>';
 $n['field'] = '<select class="selectpicker" id="glossar_exclude_by_meta_condition" name="config[exclude_by_meta_condition]">';
-$options = ['kleiner 0'=>'<0','gleich 0'=>'=0','größer 0'=>'>0'];
-foreach ($options as $k=>$v) {
-    $n['field'] .= '<option value="'.$v.'"'.($v == $this->getConfig('exclude_by_meta_condition') ? ' selected="selected"' : '').'>'.$k.'</option>';
+$options = ['kleiner 0' => '<0', 'gleich 0' => '=0', 'größer 0' => '>0'];
+foreach ($options as $k => $v) {
+    $n['field'] .= '<option value="' . $v . '"' . ($v == $this->getConfig('exclude_by_meta_condition') ? ' selected="selected"' : '') . '>' . $k . '</option>';
 }
 $n['field'] .= '</select>';
 
@@ -258,8 +247,8 @@ $content .= $fragment->parse('core/form/container.php');
 // Artikel vom Glossar ausschließen
 $formElements = [];
 $n = [];
-$n['label'] = '<label>'.$this->i18n('glossar_articles_exclude_label').'</label>';
-$n['field'] = rex_var_linklist::getWidget(1, 'config[articles_exclude]',$this->getConfig('articles_exclude'));
+$n['label'] = '<label>' . $this->i18n('glossar_articles_exclude_label') . '</label>';
+$n['field'] = rex_var_linklist::getWidget(1, 'config[articles_exclude]', $this->getConfig('articles_exclude'));
 $n['note'] = $this->i18n('glossar_articles_exclude_note');
 $formElements[] = $n;
 $fragment = new rex_fragment();
@@ -270,13 +259,55 @@ $content .= $fragment->parse('core/form/container.php');
 // Artikel, die komplett (also nicht nur 1x) mit Glossarbegriffen versehen werden sollen
 $formElements = [];
 $n = [];
-$n['label'] = '<label>'.$this->i18n('glossar_article_complete_label').'</label>';
-$n['field'] = rex_var_linklist::getWidget(1, 'config[article_complete]',$this->getConfig('article_complete'));
+$n['label'] = '<label>' . $this->i18n('glossar_article_complete_label') . '</label>';
+$n['field'] = rex_var_linklist::getWidget(1, 'config[article_complete]', $this->getConfig('article_complete'));
 $n['note'] = $this->i18n('glossar_article_complete_note');
 $formElements[] = $n;
 $fragment = new rex_fragment();
 $fragment->setVar('elements', $formElements, false);
 $content .= $fragment->parse('core/form/container.php');
+
+$content .= '</fieldset><fieldset><legend>' . $this->i18n('glossar_settings_section_editor') . '</legend>';
+
+// Eingabefelder / Editoren: Beschreibungsfeld (2 Felder nebeneinander)
+$content .= '<h4>' . $this->i18n('glossar_label_description') . '</h4>';
+$content .= '<div class="row">';
+$content .= '  <div class="col-sm-6">';
+$content .= '    <div class="form-group">';
+$content .= '      <label for="glossar_textfield_css">' . $this->i18n('textfield_css_label') . '</label>';
+$content .= '      <input class="form-control" type="text" id="glossar_textfield_css" name="config[textfield_css]" value="' . rex_escape((string) $this->getConfig('textfield_css')) . '"/>';
+$content .= '      <p class="help-block">' . $this->i18n('glossar_textfield_css_note') . '</p>';
+$content .= '    </div>';
+$content .= '  </div>';
+$content .= '  <div class="col-sm-6">';
+$content .= '    <div class="form-group">';
+$content .= '      <label for="glossar_textfield_data_attr">' . $this->i18n('textfield_data_attr_label') . '</label>';
+$content .= '      <input class="form-control" type="text" id="glossar_textfield_data_attr" name="config[textfield_data_attr]" value="' . rex_escape((string) $this->getConfig('textfield_data_attr')) . '"/>';
+$content .= '      <p class="help-block">' . $this->i18n('glossar_textfield_data_attr_note') . '</p>';
+$content .= '    </div>';
+$content .= '  </div>';
+$content .= '</div>';
+
+// Eingabefelder / Editoren: Definitionsfeld (2 Felder nebeneinander)
+$content .= '<h4>' . $this->i18n('glossar_label_definition') . '</h4>';
+$content .= '<div class="row">';
+$content .= '  <div class="col-sm-6">';
+$content .= '    <div class="form-group">';
+$content .= '      <label for="glossar_deffield_css">' . $this->i18n('deffield_css_label') . '</label>';
+$content .= '      <input class="form-control" type="text" id="glossar_deffield_css" name="config[deffield_css]" value="' . rex_escape((string) $this->getConfig('deffield_css')) . '"/>';
+$content .= '      <p class="help-block">' . $this->i18n('glossar_deffield_css_note') . '</p>';
+$content .= '    </div>';
+$content .= '  </div>';
+$content .= '  <div class="col-sm-6">';
+$content .= '    <div class="form-group">';
+$content .= '      <label for="glossar_deffield_data_attr">' . $this->i18n('deffield_data_attr_label') . '</label>';
+$content .= '      <input class="form-control" type="text" id="glossar_deffield_data_attr" name="config[deffield_data_attr]" value="' . rex_escape((string) $this->getConfig('deffield_data_attr')) . '"/>';
+$content .= '      <p class="help-block">' . $this->i18n('glossar_deffield_data_attr_note') . '</p>';
+$content .= '    </div>';
+$content .= '  </div>';
+$content .= '</div>';
+
+$content .= '</fieldset>';
 
 
 

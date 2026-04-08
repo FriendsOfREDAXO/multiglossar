@@ -1,21 +1,21 @@
 package: multiglossar
-version: '3.0.0.beta2'
+version: "3.0.0.beta2"
 author: Friends Of REDAXO
 supportpage: https://github.com/FriendsOfREDAXO/multiglossar
 compile: 0
 
 page:
-  title: 'translate:glossar'
+  title: "translate:glossar"
   perm: multiglossar[general]
   pjax: true
   icon: rex-icon fa-font
   subpages:
-        main: { title: 'translate:glossar' }
+    main: { title: "translate:glossar" }
 
 requires:
-  redaxo: '^5.10'
+  redaxo: "^5.10"
   php:
-    version: '>=8.1'
+    version: ">=8.1"
 
 installer_ignore:
-    - .github
+  - .github

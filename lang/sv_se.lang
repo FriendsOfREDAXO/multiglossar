@@ -24,6 +24,10 @@ glossar_status_activated = Bidrag aktiverades
 glossar_status_deactivated = Bidrag deaktiverades
 
 glossar_info_settings_title = Konfiguration
+glossar_settings_section_general = Allmänna inställningar
+glossar_settings_section_editor = Inmatningsfält / redigerare
+glossar_settings_section_replace = Ersättning
+glossar_settings_section_exclude = Exkluderingar
 
 glossar_func_header = Status / funktioner
 
@@ -64,6 +68,8 @@ config_save = Spara
 
 textfield_css_label = CSS klass till textfält
 deffield_css_label = CSS klass för definition fält
+textfield_data_attr_label = Extra data-attribut för beskrivningsfält
+deffield_data_attr_label = Extra data-attribut för definitionsfält
 
 notice_term_field = Villkoren kan också innehålla HTML-taggar och måste anges exakt som de visas på sidan. t.ex. CO <sub> 2 </ sub>bilansering applikationer. Varianter kan anges i fältet Alternativa termer.
 
@@ -73,6 +79,7 @@ use_cache_infotext = Aktivering av cacheminnet kan påskynda sidinstallationen. 
 glossar_exclude_by_meta_field_note = Värdet av det valda metainfo-fältet bestämmer huruvida en artikel ska förses med ordlistor eller ej. Informationen är avsedd som ett uttalande om uteslutning. Specifikationen är valfri. Om ingen artikel om Metainfo ska uteslutas här väljer du ingenting. 404 sidor (sätt på i systemet eller yrewrite) utesluts automatiskt från redigering.
 
 glossar_deffield_css_note = Här kan en lämplig CSS-klass deponeras för att välja önskad redigerare och skriva över den aktuella inställningen. markitupEditor-multiglossar eller redactorEditor2-multiglossar
+glossar_deffield_data_attr_note = Här kan extra data-attribut anges för definitionsfältet. Endast data-*-attribut används. Exempel: data-profile="tinyMCE-text" data-editor="tinymce4"
 
 glossar_cache_exclude_articles_label = Exkludera objekt från sökning
 
@@ -85,6 +92,7 @@ glossar_endtag_note = Start- och slutkoder kan innehålla regelbundna uttryck. T
 glossar_ignoretags_note = Ytterligare taggar som kan ignoreras kan anges här (t ex ul, aside). Som standard ignoreras termen i a, h1 ... h6, script, style, svg, dfn och figcaption. Separera ytterligare taggar med ett komma. Det är också möjligt att ange klasser som ska ignoreras, t.ex. .glossignore
 
 glossar_textfield_css_note = Här kan en lämplig CSS-klass deponeras för att välja önskad redigerare och skriva över den aktuella inställningen. markitupEditor-multiglossar eller redactorEditor2-multiglossar
+glossar_textfield_data_attr_note = Här kan extra data-attribut anges för beskrivningsfältet. Endast data-*-attribut används. Exempel: data-profile="tinyMCE-text" data-editor="tinymce4"
 
 glossar_exclude_by_meta_field_label = Metainfo för uteslutning från märkning med ordlistor
 
@@ -101,3 +109,5 @@ use_turbocache_infotext = Turbo cachen är en experimentell cache baserat på sa
 
 glossar_article_complete_label = Kompletta artiklar med glossor
 glossar_article_complete_note = Här kan du skriva in artiklar där hela artikeln ska kopplas till ordlistor.
+glossar_articles_exclude_label = Exkludera artiklar från markering med ordlistetermer
+glossar_articles_exclude_note = Här kan du ange artiklar som inte ska markeras med ordlistetermer (t.ex. juridiska sidor, sökresultat, kontaktformulär eller felsidor).
