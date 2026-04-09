@@ -24,6 +24,10 @@ glossar_status_activated = Entry was activated
 glossar_status_deactivated = Entry was disabled
 
 glossar_info_settings_title = Settings
+glossar_settings_section_general = General settings
+glossar_settings_section_editor = Input fields / editors
+glossar_settings_section_replace = Replacement
+glossar_settings_section_exclude = Exclusions
 
 glossar_func_header = Status / functions
 
@@ -64,6 +68,8 @@ config_save = Save
 
 textfield_css_label = CSS class for text field
 deffield_css_label = CSS class for definition field
+textfield_data_attr_label = Additional data attributes for description field
+deffield_data_attr_label = Additional data attributes for definition field
 
 notice_term_field = Terms can include HTML tags and have to be entered exactly as they are displayed on a page. Ex. CO<sub>2</sub>-levels. In the alternative terms field variants can be entered.
 
@@ -73,6 +79,7 @@ use_cache_infotext = Activating the cache can accelerate page loading. Pages usi
 glossar_exclude_by_meta_field_note = The value of the selected Metainfo field defines if an article is parsed for glossary terms. If set, the article will not be parsed. Setting the value is optional. If no article should be excluded leave blank. 404 pages (set in system settings or in yrewrite) will be excluded automatically.
 
 glossar_deffield_css_note = Enter a CSS class to load a specific editor and to overwrite the current setting. Ex. markitupEditor-multiglossar or redactorEditor2-multiglossar
+glossar_deffield_data_attr_note = Enter additional data attributes for the definition field. Only data-* attributes will be applied. Example: data-profile="tinyMCE-text" data-editor="tinymce4"
 
 glossar_cache_exclude_articles_label = Exclude articles from cache
 
@@ -85,6 +92,7 @@ glossar_endtag_note = Start and end tags can contain regular expressions. Ex. <b
 glossar_ignoretags_note = Enter tags to be ignored (ex. ul, aside). By default terms inside a, h1...h6, script, style, svg, dfn and figcaption will be ignored. Additional tags can be entered comma separated. Classes to ignored can also be entered, ex. .glossignore
 
 glossar_textfield_css_note = Enter a CSS class to load a specific editor and to overwrite the current setting. Ex. markitupEditor-multiglossar or redactorEditor2-multiglossar
+glossar_textfield_data_attr_note = Enter additional data attributes for the description field. Only data-* attributes will be applied. Example: data-profile="tinyMCE-text" data-editor="tinymce4"
 
 glossar_exclude_by_meta_field_label = Metainfo to exclude from parsing for glossary terms
 
@@ -101,3 +109,5 @@ use_turbocache_infotext = Turbocache is an experimental caching mechanism based 
 
 glossar_article_complete_label = Parse full article(s) for glossary terms
 glossar_article_complete_note = Enter the articles here, where the full article should be parsed for glossary terms
+glossar_articles_exclude_label = Exclude articles from glossary term parsing
+glossar_articles_exclude_note = Enter articles that should not be marked with glossary terms (e.g. terms pages, search, contact forms, error pages).

@@ -18,7 +18,48 @@ class Parser
     private $header = '<?xml encoding="UTF-8"><html><head><meta content="text/html; charset=utf-8" http-equiv="Content-Type"></head><body>';
     private $footer = '</body></html>';
     private $url_key = 'gloss_id';
-//    private $replace = true;
+    //    private $replace = true;
+
+    private function resolveUrlKey(): string
+    {
+        $fallback = 'gloss_id_' . \rex_clang::getCurrentId();
+        $tableName = \rex::getTable('multiglossar');
+
+        if (!\rex_addon::get('url')->isAvailable()) {
+            return $fallback;
+        }
+
+        try {
+            if (class_exists('\\Url\\Profile')) {
+                $profiles = \Url\Profile::getByArticleId((int) $this->glossar_id, \rex_clang::getCurrentId());
+                foreach ($profiles as $profile) {
+                    if ($profile->getTableName() === $tableName) {
+                        $namespace = trim((string) $profile->getNamespace());
+                        if ($namespace !== '') {
+                            return $namespace;
+                        }
+                    }
+                }
+            }
+
+            $sql = \rex_sql::factory();
+            $query = 'SELECT `namespace` FROM ' . \rex::getTable('url_generator_profile') . ' WHERE `article_id` = :article_id AND `table_name` LIKE :table_name AND (`clang_id` = :clang_id OR `clang_id` = 0) ORDER BY CASE WHEN `clang_id` = :clang_id THEN 0 ELSE 1 END, id DESC LIMIT 1';
+            $sql->setQuery($query, [
+                'article_id' => (int) $this->glossar_id,
+                'table_name' => '%' . $tableName . '%',
+                'clang_id' => \rex_clang::getCurrentId(),
+            ]);
+
+            $namespace = trim((string) $sql->getValue('namespace'));
+            if ($namespace !== '') {
+                return $namespace;
+            }
+        } catch (\Throwable $e) {
+            // Fallback verwenden, wenn URL-Profile nicht gelesen werden können.
+        }
+
+        return $fallback;
+    }
 
 
     public function init_dom($source)
@@ -27,7 +68,15 @@ class Parser
 
         // Als Starttag kann über die Konfiguration auch z.B. <article> gesetzt werden. Standard ist <body ...>
 
-        $this->article_complete = explode(',', $addon->getConfig('article_complete'));
+        $this->article_complete = array_map(
+            'intval',
+            array_filter(
+                explode(',', (string) $addon->getConfig('article_complete')),
+                static function ($articleId) {
+                    return '' !== trim((string) $articleId);
+                }
+            )
+        );
 
         if (rex_addon::get('yrewrite')->isAvailable()) {
             $domain_id = \rex_yrewrite::getCurrentDomain()->getId();
@@ -39,21 +88,33 @@ class Parser
         $starttag = $addon->getConfig('glossar_starttag') ? $addon->getConfig('glossar_starttag') : '<body.*?>';
         $endtag = $addon->getConfig('glossar_endtag') ? $addon->getConfig('glossar_endtag') : '</body>';
 
+        $this->original_header = '';
+        $this->original_footer = '';
+        $content = $source;
 
-        preg_match('|' . $starttag . '|', $source, $starttag);
-        preg_match('|' . $endtag . '|', $source, $endtag);
+        $starttagMatch = [];
+        $endtagMatch = [];
 
-        $starttag = $starttag[0];
-        $endtag = $endtag[0];
+        if (@preg_match('|' . $starttag . '|', $source, $starttagMatch) && @preg_match('|' . $endtag . '|', $source, $endtagMatch) && isset($starttagMatch[0], $endtagMatch[0])) {
+            $starttag = $starttagMatch[0];
+            $endtag = $endtagMatch[0];
+            $starttagPattern = preg_quote($starttag, '%');
+            $endtagPattern = preg_quote($endtag, '%');
 
-        preg_match('%(.*?)(' . $starttag . ')(.*?)' . $endtag . '%s', $source, $matches);
-        $this->original_header = $matches[1];
-        $content = $matches[3];
+            $matches = [];
+            if (preg_match('%^(.*?)(' . $starttagPattern . ')(.*?)' . $endtagPattern . '%s', $source, $matches) && isset($matches[1], $matches[3])) {
+                $this->original_header = $matches[1];
+                $content = $matches[3];
+            }
+
+            $matches = [];
+            if (preg_match('%' . $endtagPattern . '(.*)$%s', $source, $matches) && isset($matches[1])) {
+                $this->original_footer = $matches[1];
+            }
+        }
+
         $content = str_replace('<!--exclude-->', '<exclude>', $content);
         $content = str_replace('<!--endexclude-->', '</exclude>', $content);
-
-        preg_match('%' . $endtag . '(.*)%s', $source, $matches);
-        $this->original_footer = $matches[1];
 
 
         //        dump($content); exit;
@@ -69,13 +130,13 @@ class Parser
         $sql->setQuery($query, ['active' => 1, 'clang_id' => \rex_clang::getCurrentId()]);
 
         $this->glossar = $sql->getArray();
-        $this->url_key = 'gloss_id_'.\rex_clang::getCurrentId();
+        $this->url_key = $this->resolveUrlKey();
 
         foreach ($this->glossar as $i => $gloss) {
-            $this->glossar[$i]['gloss_url'] = rex_getUrl($this->glossar_id,'',[$this->url_key => $gloss['pid']]);
+            $this->glossar[$i]['gloss_url'] = rex_getUrl($this->glossar_id, \rex_clang::getCurrentId(), [$this->url_key => $gloss['pid']]);
         }
 
-//        dump($this->glossar); exit;
+        //        dump($this->glossar); exit;
 
         // gesperrte Tags initialisieren
         // kann sowohl Elemente als auch css Klassen enthalten
@@ -139,8 +200,22 @@ class Parser
             $newText = $this->text_replace($originalText);
 
             if ($originalText !== $newText) {
+                $tmpDom = new \DOMDocument('1.0', 'UTF-8');
+                @$tmpDom->loadHTML('<?xml encoding="UTF-8"><div id="mg-fragment">' . $newText . '</div>', LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
+                $container = $tmpDom->getElementsByTagName('div')->item(0);
+
+                if (!$container) {
+                    return;
+                }
+
                 $fragment = $this->dom->createDocumentFragment();
-                @$fragment->appendXML($newText); // kann auch Tags enthalten
+                foreach (iterator_to_array($container->childNodes) as $child) {
+                    $fragment->appendChild($this->dom->importNode($child, true));
+                }
+
+                if (!$fragment->hasChildNodes()) {
+                    return;
+                }
 
                 // Neue Nodes vorbereiten für spätere Rekursion
                 $newNodes = [];
@@ -176,8 +251,12 @@ class Parser
     {
         //        dump($content);
         $term_searched = [];
+        $replacementMap = [];
+        $replacementIndex = 0;
+        $currentArticleId = \rex_article::getCurrentId();
+        $replaceAllInCurrentArticle = in_array($currentArticleId, $this->article_complete, true);
 
-        $dfn_template = \rex_config::get('multiglossar','replace_definition') ?: '<dfn class="glossarlink" title="---DEFINITION---" data-toggle="tooltip" rel="tooltip"><a href="---URL---">---TERM---</a></dfn>';
+        $dfn_template = \rex_config::get('multiglossar', 'replace_definition') ?: '<dfn class="glossarlink" title="---DEFINITION---" data-toggle="tooltip" rel="tooltip"><a href="---URL---">---TERM---</a></dfn>';
 
         foreach ($this->glossar as $i => $gloss_item) {
 
@@ -190,10 +269,10 @@ class Parser
 
             $marker = $gloss_item['term'];
 
-            $casesensitive = $gloss_item['casesensitive'];
+            $casesensitive = (string) ($gloss_item['casesensitive'] ?? '');
             $markers = explode('|', trim($marker));
             $search_term = $markers[0];
-            $markers = array_merge($markers, preg_split('/\R/', $gloss_item['term_alt']));
+            $markers = array_merge($markers, preg_split('/\R/', (string) ($gloss_item['term_alt'] ?? '')));
             foreach ($markers as $search) {
                 if (!$search) {
                     continue;
@@ -206,20 +285,53 @@ class Parser
                 $term_searched[] = $search;
 
                 //                dump($search);
-                $search = str_replace(['(', ')'], ['', ''], $search);
+                $search = trim($search);
                 $search_term = $search;
 
-                $replace = str_replace(['---DEFINITION---','---URL---','---TERM---'],
-//                    [$gloss_item['definition'],rex_getUrl($this->glossar_id, '', [$this->url_key => $gloss_item['pid']]),$search_term],
-                    [$gloss_item['definition'],$gloss_item['gloss_url'],$search_term],
-                     $dfn_template);
-                    // '<dfn class="glossarlink" title="' . $gloss_item['definition'] . '" data-toggle="tooltip" rel="tooltip"><a href="' . rex_getUrl($this->glossar_id, '', ['gloss_id' => $gloss_item['pid']]) . '">' . $search_term . '</a></dfn>';
+                $definitionRaw = (string) ($gloss_item['definition'] ?? '');
+                $definitionText = html_entity_decode($definitionRaw, ENT_QUOTES | ENT_HTML5, 'UTF-8');
+                $definitionText = strip_tags($definitionText);
+                $definitionText = preg_replace('/\s+/u', ' ', $definitionText) ?? $definitionText;
+                $definitionText = trim($definitionText);
+                $urlRaw = (string) ($gloss_item['gloss_url'] ?? '');
+                $termRaw = (string) $search_term;
+
+                $definitionEsc = htmlspecialchars($definitionText, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+                $urlEsc = htmlspecialchars($urlRaw, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+                $termEsc = htmlspecialchars($termRaw, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+
+                $replace = str_replace(
+                    ['---DEFINITION_RAW---', '---URL_RAW---', '---TERM_RAW---', '---DEFINITION---', '---URL---', '---TERM---'],
+                    //                    [$gloss_item['definition'],rex_getUrl($this->glossar_id, '', [$this->url_key => $gloss_item['pid']]),$search_term],
+                    [$definitionRaw, $urlRaw, $termRaw, $definitionEsc, $urlEsc, $termEsc],
+                    $dfn_template
+                );
+
+                $replace = str_replace(
+                    [
+                        'data-uk-tooltip="' . $definitionEsc . '"',
+                        'uk-tooltip="' . $definitionEsc . '"',
+                        "data-uk-tooltip='" . $definitionEsc . "'",
+                        "uk-tooltip='" . $definitionEsc . "'",
+                    ],
+                    [
+                        'uk-tooltip="title: ' . $definitionEsc . '"',
+                        'uk-tooltip="title: ' . $definitionEsc . '"',
+                        "uk-tooltip='title: " . $definitionEsc . "'",
+                        "uk-tooltip='title: " . $definitionEsc . "'",
+                    ],
+                    $replace
+                );
+
+                $replacementToken = '__MULTIGLOSSAR_REPLACEMENT_' . $replacementIndex++ . '__';
+                $replacementMap[$replacementToken] = $replace;
+                // '<dfn class="glossarlink" title="' . $gloss_item['definition'] . '" data-toggle="tooltip" rel="tooltip"><a href="' . rex_getUrl($this->glossar_id, '', ['gloss_id' => $gloss_item['pid']]) . '">' . $search_term . '</a></dfn>';
 
                 //                $search = '\b' . $search . '\b([^äüöß])';
-                $search = '\b' . $search . '\b';
+                $search = '\b' . preg_quote($search, '~') . '\b';
 
 
-                if (trim($casesensitive, '|') == 1) {
+                if (trim($casesensitive, '|') == '1') {
                     //                    $regEx = '~(?!((<.*?)))' . $search . '(?!(([^<>]*?)>))~s';
                     $regEx = '~' . $search . '~s';
                 } else {
@@ -230,16 +342,18 @@ class Parser
                 //                dump($regEx); exit;
 
                 // Wenn der ganze Artikel mit Glossarbegriffen versehen werden soll (Einstellung in Settings article_complete) alle Fundstellen ersetzen
-                if (in_array(\rex_article::getCurrentId(), $this->article_complete)) {
-                    $content = preg_replace($regEx, $replace . '\1', $content, 1);
-                } else {
-                    // Standard: nur die erste Stelle ersetzen
-                    $content = preg_replace($regEx, $replace . '\1', $content, 1);
-                }
+                $replaceLimit = $replaceAllInCurrentArticle ? -1 : 1;
+                $content = preg_replace_callback($regEx, static function () use ($replacementToken) {
+                    return $replacementToken;
+                }, $content, $replaceLimit) ?? $content;
             }
-            if ($old_content != $content && !in_array(\rex_article::getCurrentId(), $this->article_complete)) {
+            if ($old_content != $content && !$replaceAllInCurrentArticle) {
                 $this->glossar[$i]['found'] = true;
             }
+        }
+
+        if ($replacementMap) {
+            $content = strtr($content, $replacementMap);
         }
 
         return $content;
