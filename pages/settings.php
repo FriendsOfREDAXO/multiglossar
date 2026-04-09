@@ -102,7 +102,7 @@ if (rex_addon::get('yrewrite')->isAvailable()) {
         <div class="rex-js-widget rex-js-widget-link">
             <div class="input-group">	
                 <input class="form-control" type="text" name="REX_LINK_NAME[' . $domain->getId() . ']" value="' . rex_escape($artname) . '" id="REX_LINK_' . $domain->getId() . '_NAME" readonly="readonly" />
-                <input type="hidden" name="config[article_' . $domain->getId() . ']" id="REX_LINK_' . $domain->getId() . '" value="' . $this->getConfig('article_' . $domain->getId()) . '" />
+                <input type="hidden" name="config[article_' . $domain->getId() . ']" id="REX_LINK_' . $domain->getId() . '" value="' . rex_escape((string) $this->getConfig('article_' . $domain->getId())) . '" />
                 <span class="input-group-btn">
                         <a href="#" class="btn btn-popup" onclick="openLinkMap(\'REX_LINK_' . $domain->getId() . '\', \'&clang=1&category_id=1\');return false;" title="' . $this->i18n('var_link_open') . '"><i class="rex-icon rex-icon-open-linkmap"></i></a>
                         <a href="#" class="btn btn-popup" onclick="deleteREXLink(' . $domain->getId() . ');return false;" title="' . $this->i18n('var_link_delete') . '"><i class="rex-icon rex-icon-delete-link"></i></a>

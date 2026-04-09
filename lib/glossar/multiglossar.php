@@ -46,7 +46,7 @@ class Parser
             $query = 'SELECT `namespace` FROM ' . \rex::getTable('url_generator_profile') . ' WHERE `article_id` = :article_id AND `table_name` LIKE :table_name AND (`clang_id` = :clang_id OR `clang_id` = 0) ORDER BY CASE WHEN `clang_id` = :clang_id THEN 0 ELSE 1 END, id DESC LIMIT 1';
             $sql->setQuery($query, [
                 'article_id' => (int) $this->glossar_id,
-                'table_name' => '%' . $tableName,
+                'table_name' => '%' . $tableName . '%',
                 'clang_id' => \rex_clang::getCurrentId(),
             ]);
 
