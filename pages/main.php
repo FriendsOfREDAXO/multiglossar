@@ -10,8 +10,8 @@ $term_id  = rex_request('term_id', 'int');
 $func     = rex_request('func', 'string');
 $start    = rex_request('start', 'int'); // Pagination
 $clang_id = (int)str_replace('clang', '', rex_be_controller::getCurrentPagePart(3));
-if ($clang_id == '') {
-  $clang_id = '1';
+if ($clang_id <= 0) {
+  $clang_id = 1;
 }
 $oid      = rex_request('oid', 'int', -1);
 
@@ -168,7 +168,7 @@ if ($func == '') {
     $descriptionClass = 'tiny5-editor';
   }
   $field->setAttribute('class', $descriptionClass);
-  $field->setAttribute('id', ' value-1');
+  $field->setAttribute('id', 'value-1');
   if ('' === trim($text_field_data_attr)) {
     $field->setAttribute('data-profile', 'text');
   }
@@ -196,8 +196,19 @@ if (!rex::getUser()->isAdmin() and !rex::getUser()->getComplexPerm('clang')->has
 }
 ?>
 <script language="javascript" type="text/javascript">
+  $(document).ready(function() {
+    // HTML5-Validierung für TinyMCE-Felder deaktivieren
+    $('form[name^="rex-form-"]').attr('novalidate', 'novalidate');
+  });
+
+  // Nach REDAXO-Initialisierung: Required-Attribute von TinyMCE-Feldern entfernen
+  $(document).on('rex:ready', function() {
+    $('#def').removeAttr('required');
+    $('textarea[required][style*="display: none"]').removeAttr('required');
+  });
+
   if ($('#def').length && $('#def').val().length) {
-    $limit = 250;
+    const $limit = 250;
     var currentleft = $limit - $("#def").val().length;
     $("#remain").val(currentleft);
   }

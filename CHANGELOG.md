@@ -7,10 +7,10 @@
 - Fix: Konfigurationsfelder in den Settings werden HTML-sicher ausgegeben, damit Werte wie `</body>` korrekt gespeichert bleiben.
 - Fix: Deprecated-Warnung `trim(): Passing null` bei `casesensitive` behoben.
 - Fix: Ersetzung robuster gemacht (Platzhalter-Strategie), damit bereits erzeugtes Glossar-Markup nicht erneut innerhalb von Attributen ersetzt wird.
-- Fix: UIkit-Tooltip-Syntax in Ersetzungstemplates stabilisiert (`uk-tooltip="title: ..."`).
 - Fix: Parser gegen fehlerhafte Start-/Endtag-Konfiguration abgesichert (Fallback ohne Offsets/Warnings).
 - Fix: `article_complete` korrekt als ID-Liste normalisiert und vollständige Ersetzung für betroffene Artikel umgesetzt.
 - Fix: Suchbegriffe werden regex-sicher verarbeitet, ohne Klammern aus Begriffen zu entfernen.
+- Fix: URL-Addon - es muss nur noch ein Profil angelegt werden, Verwendung der Sprach-Spalte in der Datenbank, um Sprache zu identifizieren
 - Fix: Glossar-Link-Parameter wird bei aktivem URL-Addon aus dem passenden URL-Profil-Namespace (`article_id` + `clang_id`) ermittelt; ohne URL-Addon oder ohne passendes Profil greift automatisch der Fallback `gloss_id_<clang_id>`.
 - Refactor: Doppelte Ersetzungslogik vereinheitlicht und wiederholte Artikel-ID-Prüfungen reduziert.
 

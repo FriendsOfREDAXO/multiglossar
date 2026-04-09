@@ -97,11 +97,11 @@ if (rex_addon::get('yrewrite')->isAvailable()) {
             $artname = $art->getValue('name');
         }
         $n = [];
-        $n['label'] = '<label for="REX_LINK_' . $domain->getId() . '_NAME">' . $this->i18n('config_article') . ' - ' . $domain->getName() . '</label>';
+        $n['label'] = '<label for="REX_LINK_' . $domain->getId() . '_NAME">' . $this->i18n('config_article') . ' - ' . rex_escape($domain->getName()) . '</label>';
         $n['field'] = '
         <div class="rex-js-widget rex-js-widget-link">
             <div class="input-group">	
-                <input class="form-control" type="text" name="REX_LINK_NAME[' . $domain->getId() . ']" value="' . $artname . '" id="REX_LINK_' . $domain->getId() . '_NAME" readonly="readonly" />
+                <input class="form-control" type="text" name="REX_LINK_NAME[' . $domain->getId() . ']" value="' . rex_escape($artname) . '" id="REX_LINK_' . $domain->getId() . '_NAME" readonly="readonly" />
                 <input type="hidden" name="config[article_' . $domain->getId() . ']" id="REX_LINK_' . $domain->getId() . '" value="' . $this->getConfig('article_' . $domain->getId()) . '" />
                 <span class="input-group-btn">
                         <a href="#" class="btn btn-popup" onclick="openLinkMap(\'REX_LINK_' . $domain->getId() . '\', \'&clang=1&category_id=1\');return false;" title="' . $this->i18n('var_link_open') . '"><i class="rex-icon rex-icon-open-linkmap"></i></a>
@@ -200,7 +200,9 @@ $n['label'] = '<label for="glossar_exclude_by_template">' . $this->i18n('glossar
 $n['field'] = '<select id="glossar_exclude_by_template" name="config[exclude_by_template][]" class="selectpicker" multiple="multiple">';
 $options = rex_sql::factory()->getArray('SELECT name, id FROM ' . rex::getTable('template'));
 foreach ($options as $opt) {
-    $n['field'] .= '<option value="' . $opt['id'] . '"' . (in_array($opt['id'], is_array($this->getConfig('exclude_by_template')) ? $this->getConfig('exclude_by_template') : [$this->getConfig('exclude_by_template')]) ? ' selected="selected"' : '') . '>' . $opt['name'] . ' - [' . $opt['id'] . ']</option>';
+    $escapedId = rex_escape($opt['id']);
+    $escapedName = rex_escape($opt['name']);
+    $n['field'] .= '<option value="' . $escapedId . '"' . (in_array($opt['id'], is_array($this->getConfig('exclude_by_template')) ? $this->getConfig('exclude_by_template') : [$this->getConfig('exclude_by_template')]) ? ' selected="selected"' : '') . '>' . $escapedName . ' - [' . $escapedId . ']</option>';
 }
 $n['field'] .= '</select>';
 $n['note'] = $this->i18n('glossar_exclude_by_template_note');
@@ -216,7 +218,7 @@ $n['label'] = '<label for="glossar_exclude_by_meta_field">' . $this->i18n('gloss
 $n['field'] = '<select id="glossar_exclude_by_meta_field" name="config[exclude_by_meta_field]" class="selectpicker"><option value="">--- Bitte auswählen ---</option>';
 $options = rex_sql::factory()->getArray('SELECT name, title FROM ' . rex::getTable('metainfo_field') . ' WHERE name LIKE :name', ['name' => 'art_%']);
 foreach ($options as $opt) {
-    $n['field'] .= '<option value="' . $opt['name'] . '"' . ($opt['name'] == $this->getConfig('exclude_by_meta_field') ? ' selected="selected"' : '') . '>' . $opt['title'] . ' - [' . $opt['name'] . ']</option>';
+    $n['field'] .= '<option value="' . rex_escape($opt['name']) . '"' . ($opt['name'] == $this->getConfig('exclude_by_meta_field') ? ' selected="selected"' : '') . '>' . rex_escape($opt['title']) . ' - [' . rex_escape($opt['name']) . ']</option>';
 }
 $n['field'] .= '</select>';
 $n['note'] = $this->i18n('glossar_exclude_by_meta_field_note');
