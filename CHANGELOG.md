@@ -1,16 +1,17 @@
 ### Changelog
 
-### 08.04.2026 Version 3.0.0 beta 2
+### 09.04.2026 Version 3.0.0 beta 2
 
 - Feature: Konfigurierbare HTML5 data-Attribute für z.b. tinymce-Editoren (Definition und Beschreibung) hinzugefügt.
 - Feature: Umfassendere Backend-Settings-Seite mit logischer Gliederung in 4 Fieldsets (Allgemein, Ersetzung, Ausschlüsse, Eingabefelder).
+- Fix: Kompatibilität Markitup Editor (Namespace-Problematik für Version ab 4.x) behoben.
 - Fix: Konfigurationsfelder in den Settings werden HTML-sicher ausgegeben, damit Werte wie `</body>` korrekt gespeichert bleiben.
 - Fix: Deprecated-Warnung `trim(): Passing null` bei `casesensitive` behoben.
 - Fix: Ersetzung robuster gemacht (Platzhalter-Strategie), damit bereits erzeugtes Glossar-Markup nicht erneut innerhalb von Attributen ersetzt wird.
 - Fix: Parser gegen fehlerhafte Start-/Endtag-Konfiguration abgesichert (Fallback ohne Offsets/Warnings).
 - Fix: `article_complete` korrekt als ID-Liste normalisiert und vollständige Ersetzung für betroffene Artikel umgesetzt.
 - Fix: Suchbegriffe werden regex-sicher verarbeitet, ohne Klammern aus Begriffen zu entfernen.
-- Fix: URL-Addon - es muss nur noch ein Profil angelegt werden, Verwendung der Sprach-Spalte in der Datenbank, um Sprache zu identifizieren
+- Fix: Geschwindigkeitsoptimierung bei Verwendung des Url Addons (es muss nur noch ein Profil angelegt werden, Verwendung der Sprach-Spalte in der Datenbank, um Sprache zu identifizieren).
 - Fix: Glossar-Link-Parameter wird bei aktivem URL-Addon aus dem passenden URL-Profil-Namespace (`article_id` + `clang_id`) ermittelt; ohne URL-Addon oder ohne passendes Profil greift automatisch der Fallback `gloss_id_<clang_id>`.
 - Refactor: Doppelte Ersetzungslogik vereinheitlicht und wiederholte Artikel-ID-Prüfungen reduziert.
 

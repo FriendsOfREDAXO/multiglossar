@@ -5,8 +5,9 @@ $editor = '';
 
 //  MarkItUp
 if(rex_addon::get('markitup')->isAvailable()) {
-  if (!markitup::profileExists('multiglossar')) {
-  markitup::insertProfile ('multiglossar', $this->i18n('glossar_markitupinfo'), 'textile', 300, 800, 'relative', 'bold,italic,underline,deleted,quote,sub,sup,code,unorderedlist,grouplink[internal|external|mailto]');
+  $markitupClass = class_exists('\FriendsOfRedaxo\MarkItUp\MarkItUp') ? '\FriendsOfRedaxo\MarkItUp\MarkItUp' : 'markitup';
+  if (!$markitupClass::profileExists('multiglossar')) {
+    $markitupClass::insertProfile('multiglossar', $this->i18n('glossar_markitupinfo'), 'textile', 300, 800, 'relative', 'bold,italic,underline,deleted,quote,sub,sup,code,unorderedlist,grouplink[internal|external|mailto]');
   }
   $editor = 'markitupEditor-multiglossar';
 }

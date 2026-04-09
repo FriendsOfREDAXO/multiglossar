@@ -61,8 +61,10 @@ Es ist nur ein Bereich möglich.
 
 Im erzeugten Link stehen die CSS-Class glossarlink und weitere Attribute für die Gestaltung und JS-Programmierung zur Verfügung. Auf dieser Basis lassen sich leicht entsprechende Lösungen für eine Tooltip-Darstellung realisieren. Die (Kurz-)Definition findet sich im Title-Attribut. 
 
+**Wichtig (seit V3.0):** Der HTML-Code für die Ersetzung kann in den AddOn-Einstellungen frei konfiguriert werden! Sie können dort die Platzhalter `---DEFINITION---`, `---URL---` und `---TERM---` verwenden. Der Standardausgabecode sieht folgendermaßen aus:
+
 ```html
-<dfn class="glossarlink" title="Definitionstext" data-toggle="tooltip" rel="tooltip"><a href="/link/zum/artikel">Begriff</a></dfn>
+<dfn class="glossarlink" title="---DEFINITION---" data-toggle="tooltip" rel="tooltip"><a href="---URL---">---TERM---</a></dfn>
 ```
 **Beispiel für Bootstrap-Nutzer**
 
@@ -75,45 +77,21 @@ $(document).ready(function(){
 </script>
 ```
 
-### Metainfo
+### Artikel vom Glossar ausschließen
 
-Es ist möglich einzelne Artikel gezielt von der Kennzeichnung mit Glossarbegriffen auszunehmen. Das ist sinnvoll bei AGBs, dem Impressum, Formularseiten usw. Wenn dies gewünscht ist, kann eine Artikel-Metainfo angelegt werden, die einen beliebigen Wert zurückgeben kann. Die Definition, wie der Wert ausgewertet wird, erfolgt in den Einstellungen des AddOns. Möglich sind hier <0, =0 oder >0. Wenn die Bedingung erfüllt ist, wird der Artikel von der Kennzeichnung der Glossarbegriffe ausgenommen.
+Es ist direkt über die AddOn-Einstellungen möglich, kommaseparierte Artikel-IDs anzugeben, auf denen das Glossar nicht angewendet werden soll.
 
-Die über das System oder yrewrite definierten 404-Seiten werden immer vom Glossar ausgenommen.
+**Ausschluss über Metainfos**
+Darüber hinaus können Artikel auch über Metainfos gezielt ausgenommen werden. Das ist sinnvoll bei AGBs, dem Impressum, Formularseiten usw. Wenn dies gewünscht ist, kann eine Artikel-Metainfo angelegt werden, die einen beliebigen Wert zurückgeben kann. Die Definition, wie der Wert ausgewertet wird, erfolgt in den Einstellungen des AddOns. Möglich sind hier <0, =0 oder >0. Wenn die Bedingung erfüllt ist, wird der Artikel von der Kennzeichnung der Glossarbegriffe ausgenommen.
 
-### Cache (in V3 entfernt)
-
-Bei vielen Glossareinträgen und/oder komplexen Websites kann das Glossar zu Verzögerungen im Seitenaufbau führen. Diese Verzögerungen können verhindert werden, indem der Glossarcache aktiviert wird. Im Glossarcache wird der Seiteninhalt komplett abgelegt. Der Glossarcache hat im Moment noch Entwicklungsstatus, sollte also in Produktivseiten noch nicht eingesetzt werden.
-
-Generell werden keine Seiten im Glossarcache abgelegt, die mit POST Parametern aufgerufen werden. Get Parameter werden vom Cache berücksichtigt. Von der Indexierung durch search-it aufgerufene Seiten werden nicht gecached.
-
-In den Einstellungen können Seiten angegeben werden, die vom Glossarcache ausgenommen werden. Hier sollten auf jeden Fall die Fehlerseiten eingetragen werden. Ebenso Suchergebnisseiten.
-
-Der Cache wird für einzelne Seiten regeneriert, wenn Seiten bearbeitet oder der Status geändert wird. Ebenso wird der Cache gelöscht, wenn der REDAXO Cache über das System gelöscht wird. Der Cache wird ebenfalls komplett gelöscht, wenn Glossareinträge bearbeitet werden. Es empfiehlt sich also im Livebetrieb Glossareinträge en Block zu bearbeiten.
-
-Der Cache sollte bei der Entwicklung immer ausgeschaltet sein, da eventuelle Codeänderungen sonst keine Wirkung haben.
-
-### Turbocache (in V3 entfernt)
-
-Der Turbocache ist ein experimenteller Cache, der auf der gleichen Technik beruht wie der Glossarcache selbst. Allerdings wird er früher aktiviert. Bereits am Extensionpoint PACKAGES_INCLUDED wird geprüft, ob für den Artikel ein Cachedatensatz existiert. Wenn dies der Fall ist, wird der Datensatz ausgegeben und die weitere Bearbeitung abgebrochen (exit). Dadurch werden auch Modulinhalte gecached. Der Cache beschleunigt nicht nur die Ausgabe des Glossars sondern jegliche Ausgabe von REDAXO Artikeln. Der Glossarcache wird per rex_extension::LATE generiert. Daher ist beispielsweise sprog (rex_extension::NORMAL) bereits durchgelaufen und wird mit gecached.
-
-Die Regeln für den Neuaufbau des Turbocache sind vergleichbar mit denen des REDAXO Cache. Wenn also ein Artikel bearbeitet, verschoben oder gelöscht wird, wird auch der Cache dieses Artikels bei einem neuen Aufruf der Seite regeneriert.
-
-### YForm und url
-
-Wenn Datensätze einer YForm Tabelle geändert oder gelöscht werden, wird geprüft, ob das Url AddOn vorhanden ist und ob die Tabelle des geänderten Datensatzes mit einem Redaxo Artikel in Verbindung steht. Ist dies der Fall, wird für diesen Artikel der Cache regeneriert.
-
-### Für Programmierer: Cache selbst leeren (in V3 entfernt)
-
-Der Glossarcache kann in eigenen Aktionen gelöscht werden. `glossar_cache::clear()` löscht den gesamten Glossarcache. `glossar_cache::clear(27)` löscht den Glossarcache für den Artikel mit der Id 27 in allen Sprachen. `glossar_cache::clear(29,1)` löscht den Glossarcache für den Artikel mit der Id 29 der ersten Sprache. 
-
+Die über das System oder yrewrite definierten Fehlerseiten (z. B. 404-Seiten) werden automatisch vom Glossar ausgenommen.
 
 ### Credits
 
 * [Friends Of REDAXO](https://github.com/FriendsOfREDAXO) Gemeinsame REDAXO-Entwicklung!
 * [Thomas Blum](https://github.com/tbaddade) für die vielen Tipps und Sprog
-* [Andreas Eberhard ](https://github.com/aeberhard) für den XOutputFilter
-* [Oliver Kreischer ](http://concedra.de)
+* [Andreas Eberhard](https://github.com/aeberhard) für den XOutputFilter
+* [Oliver Kreischer](http://concedra.de)
 
 ---
 
