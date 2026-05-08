@@ -1,5 +1,12 @@
 ### Changelog
 
+### 08.05.2026
+
+- Fix: Buttons werden standardmäßig nicht mehr mit Glossarbegriffen markiert.
+- Fix: Wortgrenzen-Erkennung berücksichtigt nun Umlaute und Bindestriche korrekt — Begriffe wie „RoS" matchen nicht mehr in „Büros", und „E-Mail" wird in „E-Mail-Adresse" nicht mehr als Treffer gewertet.
+- Fix: Bei direkter Nachbarschaft von Abkürzung und Langform (oder beliebigen Alt-Begriffen) wird nur noch eine Variante pro Begriffsgruppe markiert.
+- Feature: Container mit dem Attribut `data-multiglossar-self="<pid>"` werden vom Parser als Render-Bereich des jeweiligen Eintrags erkannt — der eigene Begriff (inkl. Alt-Begriffe) wird in diesem Bereich nicht markiert, andere Glossar-Querverweise bleiben aktiv. Das mitgelieferte Beispiel-Listenansicht-Modul nutzt dieses Attribut bereits.
+
 ### 09.04.2026 Version 3.0.0 beta 2
 
 - Feature: Konfigurierbare HTML5 data-Attribute für z.b. tinymce-Editoren (Definition und Beschreibung) hinzugefügt.

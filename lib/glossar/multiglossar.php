@@ -15,6 +15,7 @@ class Parser
     private $locked_classes = [];
     private $article_complete;
     private $glossar_id;
+    private $self_pid_stack = [];
     private $header = '<?xml encoding="UTF-8"><html><head><meta content="text/html; charset=utf-8" http-equiv="Content-Type"></head><body>';
     private $footer = '</body></html>';
     private $url_key = 'gloss_id';
@@ -141,7 +142,7 @@ class Parser
         // gesperrte Tags initialisieren
         // kann sowohl Elemente als auch css Klassen enthalten
 
-        $ignoreTags = array_merge(['a', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'figcaption', 'exclude', 'script', 'style', 'svg', 'dfn'], explode(',', \rex_config::get('multiglossar', 'glossar_ignoretags') ?: ''));
+        $ignoreTags = array_merge(['a', 'button', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'figcaption', 'exclude', 'script', 'style', 'svg', 'dfn'], explode(',', \rex_config::get('multiglossar', 'glossar_ignoretags') ?: ''));
         foreach ($ignoreTags as $t) {
             $t = trim($t);
             if (strpos($t, '.') === 0) {
@@ -194,52 +195,73 @@ class Parser
             }
         }
 
-        // Textnode ersetzen
-        if ($node->nodeType === XML_TEXT_NODE) {
-            $originalText = $node->wholeText;
-            $newText = $this->text_replace($originalText);
-
-            if ($originalText !== $newText) {
-                $tmpDom = new \DOMDocument('1.0', 'UTF-8');
-                @$tmpDom->loadHTML('<?xml encoding="UTF-8"><div id="mg-fragment">' . $newText . '</div>', LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
-                $container = $tmpDom->getElementsByTagName('div')->item(0);
-
-                if (!$container) {
-                    return;
+        // data-multiglossar-self: Wir rendern hier den Glossar-Eintrag selbst.
+        // Der eigene Begriff (inkl. Alt-Begriffe) wird in diesem Bereich nicht markiert,
+        // andere Glossar-Querverweise bleiben aktiv.
+        $pushedSelfPid = false;
+        if ($node->nodeType === XML_ELEMENT_NODE && $node->hasAttributes()) {
+            $selfAttr = $node->attributes->getNamedItem('data-multiglossar-self');
+            if ($selfAttr) {
+                $selfPid = (int) $selfAttr->nodeValue;
+                if ($selfPid > 0) {
+                    $this->self_pid_stack[] = $selfPid;
+                    $pushedSelfPid = true;
                 }
-
-                $fragment = $this->dom->createDocumentFragment();
-                foreach (iterator_to_array($container->childNodes) as $child) {
-                    $fragment->appendChild($this->dom->importNode($child, true));
-                }
-
-                if (!$fragment->hasChildNodes()) {
-                    return;
-                }
-
-                // Neue Nodes vorbereiten für spätere Rekursion
-                $newNodes = [];
-                foreach ($fragment->childNodes as $n) {
-                    $newNodes[] = $n->cloneNode(true);
-                }
-
-                if ($node->parentNode) {
-                    $node->parentNode->replaceChild($fragment, $node);
-                }
-
-                // Rekursiv weiter in den neu eingefügten Knoten
-                foreach ($newNodes as $newNode) {
-                    $this->parse_childs($newNode);
-                }
-
-                return; // Wichtig: Nicht weiter mit alten Kindern fortfahren
             }
         }
 
-        // Rekursion auf Kindknoten
-        if ($node->hasChildNodes()) {
-            foreach (iterator_to_array($node->childNodes) as $child) {
-                $this->parse_childs($child);
+        try {
+            // Textnode ersetzen
+            if ($node->nodeType === XML_TEXT_NODE) {
+                $originalText = $node->wholeText;
+                $newText = $this->text_replace($originalText);
+
+                if ($originalText !== $newText) {
+                    $tmpDom = new \DOMDocument('1.0', 'UTF-8');
+                    @$tmpDom->loadHTML('<?xml encoding="UTF-8"><div id="mg-fragment">' . $newText . '</div>', LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD);
+                    $container = $tmpDom->getElementsByTagName('div')->item(0);
+
+                    if (!$container) {
+                        return;
+                    }
+
+                    $fragment = $this->dom->createDocumentFragment();
+                    foreach (iterator_to_array($container->childNodes) as $child) {
+                        $fragment->appendChild($this->dom->importNode($child, true));
+                    }
+
+                    if (!$fragment->hasChildNodes()) {
+                        return;
+                    }
+
+                    // Neue Nodes vorbereiten für spätere Rekursion
+                    $newNodes = [];
+                    foreach ($fragment->childNodes as $n) {
+                        $newNodes[] = $n->cloneNode(true);
+                    }
+
+                    if ($node->parentNode) {
+                        $node->parentNode->replaceChild($fragment, $node);
+                    }
+
+                    // Rekursiv weiter in den neu eingefügten Knoten
+                    foreach ($newNodes as $newNode) {
+                        $this->parse_childs($newNode);
+                    }
+
+                    return; // Wichtig: Nicht weiter mit alten Kindern fortfahren
+                }
+            }
+
+            // Rekursion auf Kindknoten
+            if ($node->hasChildNodes()) {
+                foreach (iterator_to_array($node->childNodes) as $child) {
+                    $this->parse_childs($child);
+                }
+            }
+        } finally {
+            if ($pushedSelfPid) {
+                array_pop($this->self_pid_stack);
             }
         }
     }
@@ -261,6 +283,12 @@ class Parser
         foreach ($this->glossar as $i => $gloss_item) {
 
             if (isset($gloss_item['found']) && $gloss_item['found']) {
+                continue;
+            }
+
+            // Innerhalb eines `data-multiglossar-self`-Containers den eigenen Eintrag
+            // (Hauptbegriff + alle Alt-Begriffe) überspringen — Querverweise bleiben aktiv.
+            if ($this->self_pid_stack && in_array((int) $gloss_item['pid'], $this->self_pid_stack, true)) {
                 continue;
             }
 
@@ -327,28 +355,31 @@ class Parser
                 $replacementMap[$replacementToken] = $replace;
                 // '<dfn class="glossarlink" title="' . $gloss_item['definition'] . '" data-toggle="tooltip" rel="tooltip"><a href="' . rex_getUrl($this->glossar_id, '', ['gloss_id' => $gloss_item['pid']]) . '">' . $search_term . '</a></dfn>';
 
-                //                $search = '\b' . $search . '\b([^äüöß])';
-                $search = '\b' . preg_quote($search, '~') . '\b';
+                // Unicode-aware Wortgrenze: Buchstaben, Ziffern, Unterstrich und Bindestrich
+                // gelten als zusammenhängendes "Wort". Damit matcht z.B. "RoS" nicht in "Büros"
+                // (vor `r` steht `ü` ∈ \p{L}) und "E-Mail" matcht nicht in "E-Mail-Adresse".
+                $wordChar = '[\p{L}\p{N}_\-]';
+                $search = '(?<!' . $wordChar . ')' . preg_quote($search, '~') . '(?!' . $wordChar . ')';
 
 
                 if (trim($casesensitive, '|') == '1') {
-                    //                    $regEx = '~(?!((<.*?)))' . $search . '(?!(([^<>]*?)>))~s';
-                    $regEx = '~' . $search . '~s';
+                    $regEx = '~' . $search . '~su';
                 } else {
-                    $regEx = '~' . $search . '~si';
-                    //                    $regEx = '~(?!((<.*?)))' . $search . '(?!(([^<>]*?)>))~si';
+                    $regEx = '~' . $search . '~siu';
                 }
-
-                //                dump($regEx); exit;
 
                 // Wenn der ganze Artikel mit Glossarbegriffen versehen werden soll (Einstellung in Settings article_complete) alle Fundstellen ersetzen
                 $replaceLimit = $replaceAllInCurrentArticle ? -1 : 1;
                 $content = preg_replace_callback($regEx, static function () use ($replacementToken) {
                     return $replacementToken;
                 }, $content, $replaceLimit) ?? $content;
-            }
-            if ($old_content != $content && !$replaceAllInCurrentArticle) {
-                $this->glossar[$i]['found'] = true;
+
+                // Pro Begriffsgruppe nur einen Treffer markieren — wenn Haupt- und Alt-Begriff
+                // direkt nebeneinander stehen ("ABC (Alpha Beta Cell)"), wird nur der erste markiert.
+                if ($old_content !== $content && !$replaceAllInCurrentArticle) {
+                    $this->glossar[$i]['found'] = true;
+                    break;
+                }
             }
         }
 

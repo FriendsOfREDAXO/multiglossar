@@ -33,6 +33,11 @@ Das AddOn erkennt ob meherere Domains in YRewrite hinterlegt wurden. Es ist dahe
 ### Alternative Begriffe
 Zusätzlich zum Hauptbegriff können alternative Begriffe angegeben werden. Diese werden bei der Ersetzung wie zusätzliche Einträge mit gleicher Definition behandelt. Wird beispielsweise "Schach" als Glossarbegriff definiert und "Schachspiel" als alternativer Begriff und es kommen beide Begriffe auf der Seite vor, so werden auch beide Begriffe markiert.
 
+Pro Stelle wird allerdings nur eine Variante markiert — wenn z. B. eine Abkürzung und ihre Langform direkt nebeneinander stehen ("ABC (Alpha Beta Cell)"), wird nur der erste Treffer als Glossar-Link ausgegeben.
+
+### Eigene Begriffe im Glossar-Eintrag nicht doppelt markieren
+Wer auf einer Seite einen Glossar-Eintrag selbst rendert (z. B. in der Listenansicht eines Glossars), kann den Wrapper-Container mit `data-multiglossar-self="<pid>"` versehen — dabei ist `<pid>` die `pid` des aktuell gerenderten Eintrags aus der Tabelle `rex_multiglossar`. Das AddOn überspringt dann genau diesen Eintrag bei der automatischen Markierung — Querverweise auf andere Glossarbegriffe innerhalb des Eintrags bleiben aktiv. Das mitgelieferte Beispiel-Modul für die Listenansicht nutzt das Attribut bereits.
+
 ### Administration
 - Der gewünschte WYSIWYG-Editor kann per CSS-Class durch den Administrator definiert werden. 
 - Es können Start- und End-Tags definiert werden
@@ -49,7 +54,7 @@ _Für weitere Informationen kontaktieren Sie Ihren Webmaster_
 
 In der aktuellen Version findet die Ersetzung zum Teil über DOMDocument statt, das heißt der gesamte Ausgabecode wird geparst, um die Ersetzung genauer zu steuern.
 
-Standardmäßig werden Glossarbegriffe in den Tags h1 bis h6, a und figcaption nicht markiert. Zusätzlich können Textteile mit <!--exclude-->...<!--endexclude--> von der Ersetzung ausgeschlossen werden.
+Standardmäßig werden Glossarbegriffe in den Tags `h1` bis `h6`, `a`, `button`, `figcaption`, `script`, `style`, `svg` und `dfn` nicht markiert. Zusätzlich können Textteile mit <!--exclude-->...<!--endexclude--> von der Ersetzung ausgeschlossen werden.
 
 In den Einstellungen können *zusätzliche Tags* angegeben werden, in denen Glossarbegriffe nicht markiert werden. Beispielsweise ul,aside,nav usw.
 
