@@ -111,3 +111,5 @@ glossar_article_complete_label = Parse full article(s) for glossary terms
 glossar_article_complete_note = Enter the articles here, where the full article should be parsed for glossary terms
 glossar_articles_exclude_label = Exclude articles from glossary term parsing
 glossar_articles_exclude_note = Enter articles that should not be marked with glossary terms (e.g. terms pages, search, contact forms, error pages).
+glossar_categories_exclude_label = Exclude categories from glossary term parsing
+glossar_categories_exclude_note = Enter categories whose articles should not be marked with glossary terms. The exclusion applies to the selected category including all its subcategories, and therefore also to articles created there later.

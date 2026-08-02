@@ -17,6 +17,7 @@ $counter = $bcounter = 1;
 if (count($sql)) {
   foreach($sql as $row) {
     $id = $row->getValue("id");
+    $pid = $row->getValue("pid");
     $begriff = $row->getValue("term");
     $char = strtoupper(substr($begriff,0,1)); // Erster character
     $beschreibung = $row->getValue("definition");
@@ -28,7 +29,7 @@ if (count($sql)) {
     } else {$character  = "";}
 
     $out .= $character .'
-      <div class="panel panel-default">
+      <div class="panel panel-default" data-multiglossar-self="'.$pid.'">
         <div class="panel-heading">
           <a data-toggle="collapse" data-parent="#accordionREX_SLICE_ID" href="#collapse'.$counter.'">'.$begriff.'</a>
         </div>
