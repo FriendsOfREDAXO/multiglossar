@@ -63,7 +63,18 @@ if ($func == 'setstatus') {
 // ausgabe der einträge
 if ($func == '') {
   $title = $this->i18n('glossar_title');
-  $list = rex_list::factory('SELECT `pid`, `id`, `term`, `definition`, `description`, `active` FROM ' . rex::getTable('multiglossar') . ' WHERE `clang_id`="' . $clang_id . '" ORDER BY id DESC');
+  // Die Standardsortierung gehört als $defaultSort in die factory und nicht als
+  // ORDER BY in die Query: rex_list::prepareQuery() hängt seine eigene Sortierung
+  // nur an, wenn die Query noch kein ORDER BY enthält. Andernfalls werden die
+  // Sortier-Links in den Spaltenköpfen wirkungslos.
+  $list = rex_list::factory(
+    'SELECT `pid`, `id`, `term`, `definition`, `description`, `active` FROM ' . rex::getTable('multiglossar') . ' WHERE `clang_id`="' . $clang_id . '"',
+    30,
+    null,
+    false,
+    1,
+    ['id' => 'desc']
+  );
 
   $list->addTableAttribute('class', 'table-striped');
 
