@@ -1,5 +1,9 @@
 ### Changelog
 
+### 02.08.2026
+
+- Fix: Klick auf die Spaltenköpfe der Begriffsliste sortiert wieder. Die Standardsortierung stand seit dem Initial Commit als `ORDER BY` in der an `rex_list::factory()` übergebenen Query. `rex_list::prepareQuery()` hängt seine eigene Sortierung aber nur an, wenn die Query noch kein `ORDER BY` enthält — dadurch blieben die Sortier-Links wirkungslos, obwohl die README das Sortieren beschreibt. Die Standardsortierung wird jetzt über den `$defaultSort`-Parameter der factory gesetzt. Hinweis: Unter REDAXO 5.21.2 verhindert zusätzlich ein Core-Fehler jede Spaltensortierung; dafür wird mindestens REDAXO 5.21.3 benötigt.
+
 ### 09.04.2026 Version 3.0.0 beta 2
 
 - Feature: Konfigurierbare HTML5 data-Attribute für z.b. tinymce-Editoren (Definition und Beschreibung) hinzugefügt.
