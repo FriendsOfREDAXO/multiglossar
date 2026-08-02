@@ -67,6 +67,9 @@ if (rex_post('formsubmit', 'string') == '1') {
         ['articles_exclude', 'string'],
     ]));
     $this->setConfig(rex_post('config', [
+        ['categories_exclude', 'array'],
+    ]));
+    $this->setConfig(rex_post('config', [
         ['exclude_by_meta_field', 'string'],
     ]));
     $this->setConfig(rex_post('config', [
@@ -252,6 +255,23 @@ $n = [];
 $n['label'] = '<label>' . $this->i18n('glossar_articles_exclude_label') . '</label>';
 $n['field'] = rex_var_linklist::getWidget(1, 'config[articles_exclude]', $this->getConfig('articles_exclude'));
 $n['note'] = $this->i18n('glossar_articles_exclude_note');
+$formElements[] = $n;
+$fragment = new rex_fragment();
+$fragment->setVar('elements', $formElements, false);
+$content .= $fragment->parse('core/form/container.php');
+
+// Kategorien (inkl. Unterkategorien) vom Glossar ausschließen
+$formElements = [];
+$n = [];
+$n['label'] = '<label for="glossar_categories_exclude">' . $this->i18n('glossar_categories_exclude_label') . '</label>';
+$select = new rex_category_select(false, false, false, false);
+$select->setId('glossar_categories_exclude');
+$select->setName('config[categories_exclude][]');
+$select->setMultiple(true);
+$select->setAttribute('class', 'selectpicker');
+$select->setSelected(array_map('intval', (array) $this->getConfig('categories_exclude')));
+$n['field'] = $select->get();
+$n['note'] = $this->i18n('glossar_categories_exclude_note');
 $formElements[] = $n;
 $fragment = new rex_fragment();
 $fragment->setVar('elements', $formElements, false);

@@ -115,3 +115,5 @@ glossar_article_complete_label = Ganze Artikel mit Glossarbegriffen versehen
 glossar_article_complete_note = Hier können Artikel eingetragen werden, bei denen der gesamte Artikel mit Glossarbegriffen verlinkt werden soll.
 glossar_articles_exclude_label = Artikel von der Kennzeichnung mit Glossarbegriffen ausschließen
 glossar_articles_exclude_note = Hier können Artikel eingetragen werden, die nicht mit Glossarbegriffen versehen werden sollen (z.B. AGB, Suche, Kontaktformulare, Fehlerseiten).
+glossar_categories_exclude_label = Kategorien von der Kennzeichnung mit Glossarbegriffen ausschließen
+glossar_categories_exclude_note = Hier können Kategorien eingetragen werden, deren Artikel nicht mit Glossarbegriffen versehen werden sollen. Der Ausschluss gilt jeweils für die gewählte Kategorie inklusive aller Unterkategorien und damit auch für später dort angelegte Artikel.
