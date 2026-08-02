@@ -57,6 +57,16 @@ if (rex::isFrontend()) {
             return $source;
         }
 
+        // Über Settings exkludierte Kategorien (inkl. Unterkategorien) ausschließen
+        $categoriesExclude = array_map('intval', (array) $this->getConfig('categories_exclude'));
+        if ($categoriesExclude) {
+            foreach (rex_article::getCurrent()->getParentTree() as $category) {
+                if (in_array($category->getId(), $categoriesExclude, true)) {
+                    return $source;
+                }
+            }
+        }
+
 
         
         // Template prüfen und ggf. Artikel ausschließen
