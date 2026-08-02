@@ -82,9 +82,12 @@ $(document).ready(function(){
 </script>
 ```
 
-### Artikel vom Glossar ausschließen
+### Artikel und Kategorien vom Glossar ausschließen
 
 Es ist direkt über die AddOn-Einstellungen möglich, kommaseparierte Artikel-IDs anzugeben, auf denen das Glossar nicht angewendet werden soll.
+
+**Ausschluss über Kategorien**
+In den AddOn-Einstellungen lassen sich außerdem ganze Kategorien auswählen, deren Artikel nicht mit Glossarbegriffen versehen werden sollen. Der Ausschluss gilt für die gewählte Kategorie inklusive aller Unterkategorien. Dadurch sind auch Artikel erfasst, die dort erst später angelegt werden — praktisch für ganze Kapitel wie Aktuelles, Karriere oder Kontakt.
 
 **Ausschluss über Metainfos**
 Darüber hinaus können Artikel auch über Metainfos gezielt ausgenommen werden. Das ist sinnvoll bei AGBs, dem Impressum, Formularseiten usw. Wenn dies gewünscht ist, kann eine Artikel-Metainfo angelegt werden, die einen beliebigen Wert zurückgeben kann. Die Definition, wie der Wert ausgewertet wird, erfolgt in den Einstellungen des AddOns. Möglich sind hier <0, =0 oder >0. Wenn die Bedingung erfüllt ist, wird der Artikel von der Kennzeichnung der Glossarbegriffe ausgenommen.

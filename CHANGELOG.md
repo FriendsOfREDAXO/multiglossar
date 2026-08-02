@@ -1,5 +1,9 @@
 ### Changelog
 
+### 02.08.2026
+
+- Feature: Kategorien können in den Einstellungen vom Glossar ausgeschlossen werden. Der Ausschluss gilt jeweils inklusive aller Unterkategorien und greift damit auch für später dort angelegte Artikel.
+
 ### 08.05.2026
 
 - Fix: Buttons werden standardmäßig nicht mehr mit Glossarbegriffen markiert.
